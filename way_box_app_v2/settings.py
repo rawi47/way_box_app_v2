@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
+from socket import gethostname, gethostbyname 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'du6828i+vd3^0t)3d7a--_1n(o3tpv(faw_hv9xy38@ad85n3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ] 
 
 
 # Application definition
@@ -126,7 +127,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), 
 ]
-
+LOG_DIR = os.path.join(BASE_DIR, "static/log"), 
 
 CRONJOBS = [
     ('*/1 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),

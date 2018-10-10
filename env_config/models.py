@@ -42,13 +42,10 @@ class Hostapd(models.Model):
 
 
 	def __str__(self):
-		return "hostapd-" + self.interface
+		return self.name
 
-	interface = models.CharField(max_length=200,default="wlan0")
-	ssid = models.CharField(max_length=200,default="Way-Box_FREEWIFI")
-	hw_mode = models.CharField(max_length=200,default="g")
-	channel = models.CharField(max_length=200,default="11")
-	macaddr_acl = models.CharField(max_length=200,default="0")
+	name = models.CharField(max_length=200,default="")
+	params = models.TextField(default="")
 	dest = models.CharField(max_length=200,default="name")
 
 class Dnsmasq(models.Model):
@@ -58,15 +55,7 @@ class Dnsmasq(models.Model):
 		return self.name
 
 	name = models.CharField(max_length=200,default="")
-	interface = models.CharField(max_length=200,default="wlan0")
-	listen_address = models.CharField(max_length=200,default="192.168.220.2")
-	bind_interfaces = models.CharField(max_length=200,default="g")
-	server = models.CharField(max_length=200,default="8.8.8.8")
-	domain_needed = models.CharField(max_length=200,default="True")
-	bogus_priv = models.CharField(max_length=200,default="True")
-	dhcp_range = models.CharField(max_length=200,default="192.168.220.20,192.168.220.150,12h")
-	address = models.CharField(max_length=200,default="/w.zone/192.168.220.2")
-	ipset = models.CharField(max_length=200,default="/way-connect.com/use.fontawesome.com/fonts.googleapis.com/storage.googleapis.com/wc")
+	params = models.TextField(default="")
 	dest = models.CharField(max_length=200,default="")
 
 
