@@ -58,7 +58,7 @@ def _initiate():
 			#Creation fichier hostapd.conf
 			hostapd_obj = Hostapd.objects.order_by('id')[0]
 			hostapd_source = settings.STATICFILES_DIRS[0] + "/config/hostapd/hostapd.conf"
-			Cmd._create_file(hostapd_source,hostapd_obj.params,user_obj,lst)
+			Cmd._create_file(hostapd_source,hostapd_obj.params,"w")
 
 		#fichier dnsmasq
 		dnsmasq_obj =  Dnsmasq.objects.filter(name__contains=app_mode)[0]
