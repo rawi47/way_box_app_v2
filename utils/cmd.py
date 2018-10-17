@@ -1,27 +1,32 @@
 from django.db import models
 import subprocess
 import datetime
-
+import shlex
 
 class Cmd(models.Model):
 
 
-	def run(cmd,user,lst,printLog=True):
+	def run(self,command,user,lst,printLog=True,getDate=True,shell=False):
 		sudo_password = user.password
-		command = cmd
 		command = command.split()
+
+
 		try:
+	
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
-			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE)
+			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
+
+	
 
 
 			while True:
 				line = popen.stdout.readline()
 
 				if len(line) > 0:
-					#the real code does filtering here
-
-					lst.append(str(datetime.datetime.now()) + " - " + line.decode().strip() )
+					getD = ""
+					if getDate:
+						getD = str(datetime.datetime.now()) + " - " 
+					lst.append(getD + line.decode().strip() )
 				else:
 					break
 			
@@ -29,9 +34,9 @@ class Cmd(models.Model):
 
 
 		except Exception as e:
-		    print ("OSError > " + str(e))
+		    lst.append ("OSError > " + str(e))
 		except:
-		    print ("Error > ")
+		    lst.append ("Error > ")
 
 		
 		return
@@ -40,6 +45,17 @@ class Cmd(models.Model):
 		file = open(source,right) 
 		file.write(content) 
 		file.close() 
+
+	def _read_file(self,file,user,lst):
+		cmds = []
+		cmds.append("cat " + file)
+		for line in cmds:
+			self.run(line,user,lst,getDate=False)
+
+		return lst
+
+
+
 
 
 

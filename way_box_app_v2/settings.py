@@ -26,7 +26,7 @@ SECRET_KEY = 'du6828i+vd3^0t)3d7a--_1n(o3tpv(faw_hv9xy38@ad85n3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ] 
+ALLOWED_HOSTS = [] 
 
 
 # Application definition
@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'costumLogging.apps.CostumloggingConfig',
     'utils.apps.UtilsConfig',
+    'dashboard.apps.DashboardConfig',
+    'network.apps.NetworkConfig',
     'django_crontab',
+    'bootstrap3',
+    'jquery',
+    'crispy_forms',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +66,7 @@ ROOT_URLCONF = 'way_box_app_v2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,3 +138,5 @@ LOG_DIR = os.path.join(BASE_DIR, "static/log"),
 CRONJOBS = [
     ('*/1 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),
 ]
+
+LOGIN_REDIRECT_URL = '/dashboard'
