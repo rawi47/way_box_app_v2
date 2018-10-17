@@ -1,0 +1,29 @@
+<html>
+<head>
+
+	{% load static %}
+	{% load bootstrap3 %}
+	{% bootstrap_css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+	<!------ Include the above in your HEAD tag ---------->
+</head>
+<body id="LoginForm">
+	<div class="container">
+		<div class="login-form">
+			<div class="main-div">
+
+				{% block content %}
+
+
+				{% endblock %}
+				
+			</div>
+			<p class="botto-text"> Designed by Way-connect</p>
+		</div></div></div>
+
+
+	</body>
+	<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"> </script>
+	{% bootstrap_javascript %}
+	</html> 
