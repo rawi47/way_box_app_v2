@@ -8,8 +8,7 @@ from env_config.models import EnvSerializer,Env,SettingApp,InstalledSoftwares
 from user.models import User
 import json
 from django.conf import settings
-import subprocess
-import shlex
+import  _thread, time,threading
 
 lst = []
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
@@ -55,7 +54,7 @@ def _run_main_prog():
 
 		commands = []
 		for line in setting_app_obj:
-			if line.api_mode in [app_mode, "commun"] :
+			if line.api_mode in [app_mode, "commun"]:
 				source = static_path + line.origine
 				content = line.params
 				args = [source,line.dest]
@@ -67,20 +66,32 @@ def _run_main_prog():
 					cmmd = cmmd.replace("arg" + str(i), arg)
 					cmmd_next = cmmd_next.replace("arg" + str(i), arg)
 					i += 1
-				commands.append(cmmd)
+				commands.append((cmmd,line.command_type))
 				if len(cmmd_next) > 2:
-					commands.append(cmmd_next)
+					commands.append((cmmd_next,line.command_type))
 				
 				Cmd._create_file(source,content,"w")		
-
+	
 		for line in commands:
-			print(line)
-			shell = False
 			
-			cmd.run(line,user_obj,lst,shell=shell)
+				# run thread from install class
+				try:
+					
+					if line[1] == "cmd":
+						t = _thread.start_new_thread( cmd.run, (line[0],user_obj,lst,) )
+					else:
+						src = static_path + 'temp.sh'
+						Cmd._create_file(src,line[0],"w")
+						t = _thread.start_new_thread( cmd.run, ("chmod +x " + src,user_obj,lst,) )
+						t = _thread.start_new_thread( cmd.run_sh, (src,user_obj,lst,) )
 
-		cm = "sudo " + static_path + 'test.sh param1 param2'
-		subprocess.call(shlex.split(cm))
+					
+				except Exception as e:
+					print("Python exception : " + str(e))
+				
+
+		
+		#subprocess.call(shlex.split(cm))
 
 		for line in lst:
 			print(line)

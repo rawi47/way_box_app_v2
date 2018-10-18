@@ -9,16 +9,9 @@ class Cmd(models.Model):
 	def run(self,command,user,lst,printLog=True,getDate=True,shell=False):
 		sudo_password = user.password
 		command = command.split()
-
-
 		try:
-	
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
 			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
-
-	
-
-
 			while True:
 				line = popen.stdout.readline()
 
@@ -32,13 +25,37 @@ class Cmd(models.Model):
 			
 			popen.wait()
 
+		except Exception as e:
+		    lst.append ("OSError > " + str(e))
+		except:
+		    lst.append ("Error > ")
+
+		return
+
+	def run_sh(self,command,user,lst,printLog=True,getDate=True,shell=False):
+		sudo_password = user.password
+		command = shlex.split(command)
+		try:
+			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
+			popen = subprocess.call(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
+			while True:
+				line = popen.stdout.readline()
+
+				if len(line) > 0:
+					getD = ""
+					if getDate:
+						getD = str(datetime.datetime.now()) + " - " 
+					lst.append(getD + line.decode().strip() )
+				else:
+					break
+			
+			popen.wait()
 
 		except Exception as e:
 		    lst.append ("OSError > " + str(e))
 		except:
 		    lst.append ("Error > ")
 
-		
 		return
 
 	def _create_file(source,content,right):
