@@ -6,7 +6,6 @@ After=network.target
 User=pi
 Group=www-data
 WorkingDirectory=/home/pi/Way-way_box_app_v2/middleware
-EnvironmentFile=/home/pi/env
 ExecStart=/usr/local/bin/gunicorn way_box_app_v2.wsgi
 
 ExecReload=/bin/kill -s HUP $MAINPID

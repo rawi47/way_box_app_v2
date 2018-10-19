@@ -1,20 +1,16 @@
 apt-get update
 apt-get -y upgrade
-apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev nginx-common nginx
-
-rm /var/lib/dpkg/info/pi-bluetooth*
-apt-get install --reinstall pi-bluetooth
-apt-get install -y jq
+apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx
 
 cd nodogsplash/
 make && make install
 cd ../
 
 cd middleware/
-python -m pip install -r requirements.txt
+pip3 install -r requirements.txt
+cd ../
 
-
-cp -R static/config/* /etc/
+cp -R config/* /etc/
 cp -R w.zone/ /var/www/
 ln -s /etc/nginx/sites-available/middleware.conf /etc/nginx/sites-enabled
 ln -s /etc/nginx/sites-available/wc.com.conf /etc/nginx/sites-enabled
