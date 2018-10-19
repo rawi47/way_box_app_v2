@@ -10,6 +10,7 @@ import json
 from django.conf import settings
 import  _thread, time,threading
 
+
 lst = []
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 
@@ -73,7 +74,7 @@ def _run_main_prog():
 				if len(cmmd_next) > 2:
 					commands.append((cmmd_next,line.command_type,line.active))
 				
-				Cmd._create_file(source,content,"w")		
+				Cmd._create_file_conf(source,content,"w")		
 	
 		for line in commands:
 			if line[2]:

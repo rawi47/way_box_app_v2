@@ -58,6 +58,12 @@ class Cmd(models.Model):
 
 		return
 
+	def _create_file_conf(source,content,right):
+		file = open(source,right) 
+		for line in content.splitlines():
+			file.write(line + "\n") 
+		file.close() 
+
 	def _create_file(source,content,right):
 		file = open(source,right) 
 		file.write(content) 

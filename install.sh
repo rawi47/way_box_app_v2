@@ -2,6 +2,10 @@ apt-get update
 apt-get -y upgrade
 apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev nginx-common nginx
 
+rm /var/lib/dpkg/info/pi-bluetooth*
+apt-get install --reinstall pi-bluetooth
+apt-get install -y jq
+
 cd nodogsplash/
 make && make install
 cd ../
