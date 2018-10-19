@@ -114,6 +114,7 @@ class SettingApp(models.Model):
 	cmd = models.CharField(max_length=200,default="")
 	cmd_next = models.CharField(max_length=200,default="")
 	sequence = models.IntegerField(default=0)
+	active = models.BooleanField(default=True)
 
 
 class InstalledSoftwares(models.Model):

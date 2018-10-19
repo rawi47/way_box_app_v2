@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User=pi
 Group=www-data
-WorkingDirectory=/home/pi/way_box_app_v2/middleware
+WorkingDirectory=/home/pi/Way-way_box_app_v2/middleware
 EnvironmentFile=/home/pi/env
-ExecStart=/usr/local/bin/gunicorn --workers 2 --bind unix:/home/pi/Way-way_box_app_v2/middleware/middleware.sock wsgi:app
+ExecStart=/usr/local/bin/gunicorn way_box_app_v2.wsgi
 
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID

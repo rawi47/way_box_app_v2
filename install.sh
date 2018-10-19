@@ -1,13 +1,13 @@
 apt-get update
 apt-get -y upgrade
-apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx
+apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev nginx-common nginx
 
 cd nodogsplash/
 make && make install
 cd ../
 
 cd middleware/
-pip3 install -r requirements.txt
+python -m pip install -r requirements.txt
 
 
 cp -R static/config/* /etc/

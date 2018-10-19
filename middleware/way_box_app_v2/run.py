@@ -44,13 +44,16 @@ def _run_main_prog():
 			headers['Host'] = API_HOST
 			headers['X-API-Key'] = API_KEY
 			headers['X-API-Sign'] = signature
-			httpHandler = HttpHandler()
-			res = httpHandler._catch_all(url,data,params,headers,method)
-				
-			res_obj = json.loads(res[0])
-			name = res_obj['name']
-			if env_obj.name != name:
-				Env.objects.filter(pk=env_obj.id).update(name=name)
+			try:
+				httpHandler = HttpHandler()
+				res = httpHandler._catch_all(url,data,params,headers,method)
+					
+				res_obj = json.loads(res[0])
+				name = res_obj['name']
+				if env_obj.name != name:
+					Env.objects.filter(pk=env_obj.id).update(name=name)
+			except Exception as e:
+				print(str(e))
 
 		commands = []
 		for line in setting_app_obj:
@@ -66,14 +69,15 @@ def _run_main_prog():
 					cmmd = cmmd.replace("arg" + str(i), arg)
 					cmmd_next = cmmd_next.replace("arg" + str(i), arg)
 					i += 1
-				commands.append((cmmd,line.command_type))
+				commands.append((cmmd,line.command_type,line.active))
 				if len(cmmd_next) > 2:
-					commands.append((cmmd_next,line.command_type))
+					commands.append((cmmd_next,line.command_type,line.active))
 				
 				Cmd._create_file(source,content,"w")		
 	
 		for line in commands:
-			
+			if line[2]:
+				print(line[0])
 				# run thread from install class
 				try:
 					
@@ -88,10 +92,6 @@ def _run_main_prog():
 					
 				except Exception as e:
 					print("Python exception : " + str(e))
-				
-
-		
-		#subprocess.call(shlex.split(cm))
 
 		for line in lst:
 			print(line)
