@@ -6,6 +6,6 @@ netifaces
 memory_profiler
 requests
 django-bootstrap3
-jquery
-crispy_forms
-widget_tweaks
+django-jquery
+django-crispy-forms
+django-widget-tweaks

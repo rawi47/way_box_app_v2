@@ -1,0 +1,1 @@
+ln -sf /home/bouraoui/test_proj/way_box_app_v2/middleware/static/config/iptables.eth.ipv4.nat iptables.eth.ipv4.nat
