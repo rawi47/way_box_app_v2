@@ -9,6 +9,7 @@ from user.models import User
 import json
 from django.conf import settings
 import  _thread, time,threading
+import datetime
 
 
 lst = []
@@ -20,10 +21,12 @@ setting_app_obj = SettingApp.objects.order_by('sequence')
 static_path = settings.STATICFILES_DIRS[0] + "/config/"
 
 def _run_main_prog():
+	getD = str(datetime.datetime.now()) + " - "
 	try:
 		
 		user_obj = User.objects.order_by('id')[0]
 		env_obj = Env.objects.order_by('api_key')[0]
+		
 			
 
 		app_mode = env_obj.api_mode
@@ -53,8 +56,9 @@ def _run_main_prog():
 				name = res_obj['name']
 				if env_obj.name != name:
 					Env.objects.filter(pk=env_obj.id).update(name=name)
+				lst.append(getD + name)
 			except Exception as e:
-				print(str(e))
+				lst.append(getD + str(e))
 
 		commands = []
 		for line in setting_app_obj:
@@ -72,11 +76,12 @@ def _run_main_prog():
 					i += 1
 				commands.append((cmmd,line.command_type,line.active))
 				if len(cmmd_next) > 2:
-					commands.append((cmmd_next,line.command_type,line.active))
+					commands.append((cmmd_next,line.command_type_next,line.active))
 				
 				Cmd._create_file_conf(source,content,"w")		
 	
 		for line in commands:
+
 			if line[2]:
 				print(line[0])
 				# run thread from install class
@@ -96,5 +101,7 @@ def _run_main_prog():
 
 		for line in lst:
 			print(line)
+		
 	except Exception as e:
-		print(str(e))
+		lst.append(getD + str(e))
+	return lst

@@ -10,9 +10,7 @@ https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
-from django.conf import settings
-import configparser 
-from . import cron
+from django.conf import settings 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
-cron._initiate()
 application = get_wsgi_application()

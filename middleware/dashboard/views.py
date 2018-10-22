@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 
 import os
 from memory_profiler import memory_usage
+import json
+from way_box_app_v2 import run
 
 cmd = Cmd()
 user_obj = User.objects.order_by('id')[0]
@@ -111,10 +113,12 @@ def installed_software(request):
     listSo = {}
     for soft in InstalledSoftwares_objs:
         listS = []
-        print(soft.name)
-        cmd.run(soft.name + " -version" ,user_obj,listS,getDate=False)
+
+        cmd.run(soft.command ,user_obj,listS)
  
         listSo[soft.name] = listS
+
+    print (listSo)
 
 
     context = { 
@@ -123,11 +127,10 @@ def installed_software(request):
     }
     return HttpResponse(template.render(context, request))
 
-def thirty_day_registrations():
-    final_data = []
-
-    cmd.run("echo /proc/meminfo" ,user_obj,final_data,getDate=False)
-
-
-
-    return final_data
+@login_required
+def run_config(request):
+    response_data = []
+    response_data = run._run_main_prog()
+    
+    
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

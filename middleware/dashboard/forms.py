@@ -12,3 +12,4 @@ class ConfigForm(forms.Form):
 	    widget=forms.Select()
 	)
 
+

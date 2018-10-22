@@ -10,7 +10,7 @@ cd middleware/
 pip3 install -r requirements.txt
 cd ../
 
-cp -R config/* /etc/
+cp -R middleware/static/config/* /etc/
 cp -R w.zone/ /var/www/
 ln -s /etc/nginx/sites-available/middleware.conf /etc/nginx/sites-enabled
 ln -s /etc/nginx/sites-available/wc.com.conf /etc/nginx/sites-enabled

@@ -8,6 +8,7 @@ urlpatterns = [
     path('systemctl', views.systemctl_stat, name='systemctl_stats'),
     path('configFiles', views.config_files, name='config_filess'),
     path('installed_software', views.installed_software, name='installed_software'),
+    path('run_config', views.run_config, name='run_config'),
 ]
  
 

@@ -104,15 +104,21 @@ class SettingApp(models.Model):
 	    choices=types,
 	)
 
+	
+	origine = models.CharField(max_length=200,default="")
+	dest = models.CharField(max_length=200,default="")
+	cmd = models.CharField(max_length=200,default="")
 	command_type = models.CharField(
 	    max_length=200,
 	    choices=shell_types,
 	    default="cmd"
 	)
-	origine = models.CharField(max_length=200,default="")
-	dest = models.CharField(max_length=200,default="")
-	cmd = models.CharField(max_length=200,default="")
 	cmd_next = models.CharField(max_length=200,default="")
+	command_type_next = models.CharField(
+	    max_length=200,
+	    choices=shell_types,
+	    default="cmd"
+	)
 	sequence = models.IntegerField(default=0)
 	active = models.BooleanField(default=True)
 
@@ -123,3 +129,4 @@ class InstalledSoftwares(models.Model):
 		return self.name
 
 	name = models.CharField(max_length=200,default="")
+	command = models.CharField(max_length=200,default="")

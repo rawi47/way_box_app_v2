@@ -1,1 +1,1 @@
-ln -sf /home/bouraoui/test_proj/way_box_app_v2/middleware/static/config/ipset.ipv4.nat /etc/ipset.ipv4.nat
+iptables-restore < /home/bouraoui/test_proj/way_box_app_v2/middleware/static/config/iptables.wlan.ipv4.nat
