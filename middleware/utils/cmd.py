@@ -8,6 +8,7 @@ class Cmd(models.Model):
 
 	def run(self,command,user,lst,printLog=True,getDate=True,shell=False):
 		sudo_password = user.password
+		#lst.append(command)
 		command = command.split()
 		try:
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
@@ -34,6 +35,7 @@ class Cmd(models.Model):
 
 	def run_sh(self,command,user,lst,printLog=True,getDate=True,shell=False):
 		sudo_password = user.password
+		#lst.append(command)
 		command = shlex.split(command)
 		try:
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)

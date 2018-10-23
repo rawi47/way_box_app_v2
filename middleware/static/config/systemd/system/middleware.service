@@ -5,7 +5,6 @@ After=network.target
 [Service]
 User=pi
 Group=www-data
-EnvironmentFile=/home/pi/env
 WorkingDirectory=/home/pi/Way-way_box_app_v2/middleware
 ExecStart=/usr/local/bin/gunicorn way_box_app_v2.wsgi
 

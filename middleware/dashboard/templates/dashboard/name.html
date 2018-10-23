@@ -20,7 +20,9 @@
 	<div class="col-sm-12">
 		<h3> Run configuration</h3>
 	
-		<input type="button" value="Run !" class="btn btn-info" id="run">
+		<input type="button" value="Configure !" class="btn btn-info" id="conf">
+
+		<input type="button" value="run !" class="btn btn-danger" id="run">
 
 		<div class="col-sm-12 well output">
 		</div>
@@ -31,7 +33,7 @@
 	<script type="text/javascript">   
 	var lines = [];
     $( document ).ready(function() {
-    	 $( "#run" ).click(function() {
+    	 $( "#conf" ).click(function() {
     	 	$(".output").html();
     	 	$(".output").html("wait...");
             $.getJSON('/dashboard/run_config',
@@ -45,7 +47,23 @@
                     
                     });
     
-    });
+    	});
+
+    	 $( "#run" ).click(function() {
+    	 	$(".output").html();
+    	 	$(".output").html("wait...");
+            $.getJSON('/dashboard/run_prog',
+                    function (data) {
+
+                        $(".output").html();
+                        $.each(data, function (index, value) {
+                        	 $(".output").append("<p>" + value + "</p>");
+				
+					    });
+                    
+                    });
+    
+    	});
     });
 
 	</script>

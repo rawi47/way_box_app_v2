@@ -12,15 +12,71 @@ import  _thread, time,threading
 import datetime
 
 
-lst = []
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 
 cmd = Cmd()
-user_obj = User.objects.order_by('id')[0]
-setting_app_obj = SettingApp.objects.order_by('sequence')
-static_path = settings.STATICFILES_DIRS[0] + "/config/"
+
+def _config_main_prog():
+	lst = []
+	user_obj = User.objects.order_by('id')[0]
+	setting_app_obj = SettingApp.objects.order_by('sequence')
+	static_path = settings.STATICFILES_DIRS[0] + "/config/"
+	getD = str(datetime.datetime.now()) + " - "
+	try:
+		
+		user_obj = User.objects.order_by('id')[0]
+		env_obj = Env.objects.order_by('api_key')[0]
+
+		app_mode = env_obj.api_mode
+		httpHandler = HttpHandler()
+
+		commands = []
+		for line in setting_app_obj:
+			if line.api_mode in [app_mode, "commun"]:
+				source = static_path + line.origine
+				content = line.params
+				args = [source,line.dest]
+				cmmd = line.cmd
+
+				i = 0
+				for arg in args:
+					cmmd = cmmd.replace("arg" + str(i), arg)
+					i += 1
+				commands.append((cmmd,line.command_type,line.active))
+				Cmd._create_file_conf(source,content,"w")		
+	
+		for line in commands:
+
+			if line[2]:
+				lst.append(line[0])
+				# run thread from install class
+				try:
+					
+					if line[1] == "cmd":
+						cmd.run(line[0],user_obj,lst)
+					else:
+						src = static_path + 'temp.sh'
+						Cmd._create_file(src,line[0],"w")
+						cmd.run("chmod +x " + src,user_obj,lst)
+						cmd.run_sh(src,user_obj,lst)
+						cmd.run("rm -rf " + src,user_obj,lst)
+
+					
+				except Exception as e:
+					print("Python exception : " + str(e))
+
+		for line in lst:
+			print(line)
+		
+	except Exception as e:
+		lst.append(getD + str(e))
+	return lst
 
 def _run_main_prog():
+	lst = []
+	user_obj = User.objects.order_by('id')[0]
+	setting_app_obj = SettingApp.objects.order_by('sequence')
+	static_path = settings.STATICFILES_DIRS[0] + "/config/"
 	getD = str(datetime.datetime.now()) + " - "
 	try:
 		
@@ -66,35 +122,29 @@ def _run_main_prog():
 				source = static_path + line.origine
 				content = line.params
 				args = [source,line.dest]
-				cmmd = line.cmd
 				cmmd_next = line.cmd_next
-
 				i = 0
 				for arg in args:
-					cmmd = cmmd.replace("arg" + str(i), arg)
 					cmmd_next = cmmd_next.replace("arg" + str(i), arg)
 					i += 1
-				commands.append((cmmd,line.command_type,line.active))
 				if len(cmmd_next) > 2:
 					commands.append((cmmd_next,line.command_type_next,line.active))
 				
 				Cmd._create_file_conf(source,content,"w")		
 	
 		for line in commands:
-
 			if line[2]:
-				print(line[0])
+				lst.append(line[0])
 				# run thread from install class
-				try:
-					
+				try:	
 					if line[1] == "cmd":
-						t = _thread.start_new_thread( cmd.run, (line[0],user_obj,lst,) )
+						cmd.run(line[0],user_obj,lst)
 					else:
 						src = static_path + 'temp.sh'
 						Cmd._create_file(src,line[0],"w")
-						t = _thread.start_new_thread( cmd.run, ("chmod +x " + src,user_obj,lst,) )
-						t = _thread.start_new_thread( cmd.run_sh, (src,user_obj,lst,) )
-
+						cmd.run("chmod +x " + src,user_obj,lst)
+						cmd.run_sh(src,user_obj,lst)
+						cmd.run("rm -rf " + src,user_obj,lst)
 					
 				except Exception as e:
 					print("Python exception : " + str(e))

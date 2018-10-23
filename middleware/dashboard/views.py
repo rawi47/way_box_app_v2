@@ -130,6 +130,14 @@ def installed_software(request):
 @login_required
 def run_config(request):
     response_data = []
+    response_data = run._config_main_prog()
+    
+    
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+def run_prog(request):
+    response_data = []
     response_data = run._run_main_prog()
     
     
