@@ -1,0 +1,3 @@
+[submodule "gitwatch"]
+	path = gitwatch
+	url = https://github.com/gitwatch/gitwatch.git

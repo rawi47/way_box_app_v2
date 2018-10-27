@@ -26,7 +26,7 @@ def catch_all(request,path):
     API_KEY = env_obj.api_key
     API_SECRET = env_obj.api_secret
     if path == 'box':
-        return API_KEY
+        return HttpResponse(API_KEY)
 
     url = API_URL + path
     data = {}
@@ -63,7 +63,6 @@ def catch_all(request,path):
 
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
-    #(resp.text, resp.status_code, resp.headers.items())
 
     res = HttpResponse(resp.text, status= resp.status_code)
 
