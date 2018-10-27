@@ -16,14 +16,24 @@
   {% bootstrap_css %}
 
   {% block extrahead %}{% endblock %}
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"> </script>
+  {% bootstrap_javascript %}
 
 
 </head>
 <body>
 
+  
+
      <div class="col-sm-12 bg-primary">
-      <div class="col-sm-11"></div>
-       <div class="col-sm-2">
+
+      <div class="col-sm-10">
+        <p>
+          <img src="{% static 'images/logo_white.png' %}" class="rounded"> Way-connect
+      </p>
+      </div>
+       <div class="col-sm-2 pull-right">
 
 
         <div class="dropdown pull-right">
@@ -50,6 +60,7 @@
     <li class="list-group-item"><a href="{% url 'systemctl_stats' %}">Systemctl status</a></li>
     <li class="list-group-item"><a href="{% url 'config_filess' %}">Configuration files</a></li>
     <li class="list-group-item"><a href="{% url 'installed_software' %}">Installed softwares</a></li>
+    <li class="list-group-item"><a href="{% url 'nds_ctl' %}">Nodogsplash</a></li>
     <li class="list-group-item"><a href="{% url 'env_configuration' %}">Configuration</a></li>
   </ul>
   <div class="sidenav-bg mask-strong"></div>
@@ -75,8 +86,7 @@
 
 <!-- SCRIPTS -->
 <!-- JQuery -->
-<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"> </script>
-{% bootstrap_javascript %}
+
 
 
 
