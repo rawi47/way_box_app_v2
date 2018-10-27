@@ -7,8 +7,17 @@ class ConfigForm(forms.Form):
 		(60,'1 heure')
 	)
 
+	modes = (
+		('wlan','wlan'),
+		('eth','eth')
+	)
+
 	client_session_timeout = forms.ChoiceField(
 	    choices=ts,
+	    widget=forms.Select()
+	)
+	api_mode = forms.ChoiceField(
+	    choices=modes,
 	    widget=forms.Select()
 	)
 

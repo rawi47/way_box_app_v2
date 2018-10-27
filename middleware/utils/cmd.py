@@ -2,6 +2,8 @@ from django.db import models
 import subprocess
 import datetime
 import shlex
+from django.http import HttpResponse
+from env_config.models import Env
 
 class Cmd(models.Model):
 
@@ -35,11 +37,10 @@ class Cmd(models.Model):
 
 	def run_sh(self,command,user,lst,printLog=True,getDate=True,shell=False):
 		sudo_password = user.password
-		#lst.append(command)
 		command = shlex.split(command)
 		try:
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
-			popen = subprocess.call(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
+			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
 			while True:
 				line = popen.stdout.readline()
 
@@ -54,7 +55,7 @@ class Cmd(models.Model):
 			popen.wait()
 
 		except Exception as e:
-		    lst.append ("OSError > " + str(e))
+		    lst.append ("OSError sh> " + str(e))
 		except:
 		    lst.append ("Error > ")
 
@@ -62,7 +63,9 @@ class Cmd(models.Model):
 
 	def _create_file_conf(source,content,right):
 		file = open(source,right) 
+		env_obj = Env.objects.order_by('api_key')[0]
 		for line in content.splitlines():
+			line.replace("WAY_BOX",env_obj.name)
 			file.write(line + "\n") 
 		file.close() 
 
@@ -70,7 +73,6 @@ class Cmd(models.Model):
 		file = open(source,right) 
 		file.write(content) 
 		file.close() 
-
 	def _read_file(self,file,user,lst):
 		cmds = []
 		cmds.append("cat " + file)
@@ -78,10 +80,3 @@ class Cmd(models.Model):
 			self.run(line,user,lst,getDate=False)
 
 		return lst
-
-
-
-
-
-
-

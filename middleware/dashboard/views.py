@@ -17,28 +17,28 @@ import os
 from memory_profiler import memory_usage
 import json
 from way_box_app_v2 import run
+import logging
+log = logging.getLogger(__name__)
 
 cmd = Cmd()
 user_obj = User.objects.order_by('id')[0]
-env_obj = Env.objects.order_by('api_key')[0]
-setting_app_obj = SettingApp.objects.filter(api_mode__in=[env_obj.api_mode,'commun']).order_by('name')
+
+
 InstalledSoftwares_objs = InstalledSoftwares.objects.order_by('name')
 static_path = settings.STATICFILES_DIRS[0] + "/config/"
 
 @login_required
 def index(request):
+    env_obj = Env.objects.order_by('api_key')[0]
+    template = loader.get_template('dashboard/index.html')
 
-    template = loader.get_template('dashboard/index.html')	
-    
     serializerEnv = EnvSerializer(env_obj)
     networksutil = NetworksUtils()
 
-
-    mem_usage = memory_usage(-1, interval=.2, timeout=1)
     ctx_data = []
-    print(mem_usage)
 
-    context = {	
+
+    context = {
     	'env_obj' : serializerEnv.data,
     	'netwrk_obj' : networksutil._get_interfaces(),
         'ctx_data' : ctx_data
@@ -57,7 +57,7 @@ def get_name(request):
         if form.is_valid():
             print (form.cleaned_data)
             env_obj = Env.objects.order_by('api_key')[0]
-            Env.objects.filter(pk=env_obj.id).update(client_session_timeout=form.cleaned_data['client_session_timeout'])
+            Env.objects.filter(pk=env_obj.id).update(client_session_timeout=form.cleaned_data['client_session_timeout'],api_mode=form.cleaned_data['api_mode'])
             return HttpResponseRedirect('/dashboard/')
 
 
@@ -69,61 +69,63 @@ def get_name(request):
 
 @login_required
 def systemctl_stat(request):
-    template = loader.get_template('dashboard/systemctl.html')  
+    template = loader.get_template('dashboard/systemctl.html')
 
     systemctl_status = []
 
     cmd.run("systemctl status",user_obj,systemctl_status,getDate=False)
 
-    context = { 
+    context = {
         'systemctl_status' : systemctl_status,
-      
+
     }
     return HttpResponse(template.render(context, request))
 
 @login_required
 def config_files(request):
-    template = loader.get_template('dashboard/configfile.html')  
+    template = loader.get_template('dashboard/configfile.html')
+    env_obj = Env.objects.order_by('api_key')[0]
+    setting_app_obj = SettingApp.objects.filter(api_mode__in=[env_obj.api_mode,'commun']).order_by('name')
 
     configs = {}
-    for line in setting_app_obj:  
+    for line in setting_app_obj:
         listR = []
         cmd._read_file(line.dest,user_obj,listR)
-     
+
         configs[line.dest] = listR
 
     configsOrigin = {}
-    for line in setting_app_obj:  
+    for line in setting_app_obj:
         listRo = []
         cmd._read_file(static_path + line.origine,user_obj,listRo)
-     
+
         configsOrigin[line.origine] = listRo
 
-    context = { 
+    context = {
         'configs' : configs,
         'configsOrigin' : configsOrigin,
-      
+
     }
     return HttpResponse(template.render(context, request))
 
 @login_required
 def installed_software(request):
-    template = loader.get_template('dashboard/istalledSoftware.html')  
+    template = loader.get_template('dashboard/istalledSoftware.html')
 
     listSo = {}
     for soft in InstalledSoftwares_objs:
         listS = []
 
         cmd.run(soft.command ,user_obj,listS)
- 
+
         listSo[soft.name] = listS
 
     print (listSo)
 
 
-    context = { 
+    context = {
         'listSo' : listSo,
-      
+
     }
     return HttpResponse(template.render(context, request))
 
@@ -131,14 +133,72 @@ def installed_software(request):
 def run_config(request):
     response_data = []
     response_data = run._config_main_prog()
-    
-    
+
+
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @login_required
 def run_prog(request):
     response_data = []
     response_data = run._run_main_prog()
-    
-    
+
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+def nds_ctl(request):
+    template = loader.get_template('dashboard/nds_ctl.html')
+
+    context = {
+
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def nds_ctl_status(request):
+    ndsctl_status = []
+    cmd.run("ndsctl status",user_obj,ndsctl_status,getDate=False)
+    ndsctl_status_dict = {}
+    for line in ndsctl_status:
+        if ":" in line:
+            key = line.split(":")[0]
+            value = line.split(":")[1]
+
+            ndsctl_status_dict[key] = value
+
+    return HttpResponse(json.dumps(ndsctl_status_dict), content_type="application/json")
+
+
+@login_required
+def reboot(request):
+    response_data = []
+    cmd.run("reboot",user_obj,response_data,getDate=False)
+
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+def nds_stop(request):
+    response_data = []
+    cmd.run("ndsctl stop",user_obj,response_data,getDate=False)
+
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+def nds_start(request):
+    response_data = []
+    cmd.run("nodogsplash",user_obj,response_data,getDate=False)
+
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+def hostapd_restart(request):
+    response_data = []
+    cmd.run("systemctl restart hostapd",user_obj,response_data,getDate=False)
+
+
     return HttpResponse(json.dumps(response_data), content_type="application/json")
