@@ -1,0 +1,13 @@
+[Unit]
+Description=Watch file or directory and git commit all changes
+
+[Service]
+User=pi
+Group=pi
+ExecStart=/opt/gitwatch /home/pi/way_box_app_v2
+ExecStop=/bin/true
+
+
+
+[Install]
+WantedBy=multi-user.target
