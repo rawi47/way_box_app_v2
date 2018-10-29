@@ -4,7 +4,6 @@ import datetime
 import shlex
 from django.http import HttpResponse
 from env_config.models import Env
-import configparser
 
 class Cmd(models.Model):
 
