@@ -1,6 +1,6 @@
 apt-get update
 apt-get -y upgrade
-sudo apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx inotify-tools
+sudo apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx
 
 
 
@@ -12,9 +12,6 @@ cd middleware/
 pip3 install -r requirements.txt
 cd ../
 
-cd gitwatch/
-install -b gitwatch.sh /opt/gitwatch
-cd ../
 
 cp -R middleware/static/config/* /etc/
 cp -R w.zone/ /var/www/
