@@ -65,12 +65,12 @@ class Cmd(models.Model):
 	def _create_file_conf(self,source,content,right):
 		file = open(source,right)
 		env_obj = Env.objects.order_by('api_key')[0]
-
-		self._change_configuration(source)
-
 		for line in content.splitlines():
-
-			file.write(line + "\n")
+			if "WAY_BOX" in line:
+				env_obj = Env.objects.order_by('api_key')[0]
+				file.write("ssid=" + env_obj.name.upper() + env_obj.ssid_prefix + "\n")
+			else:
+				file.write(line + "\n")
 		file.close()
 
 	def _create_file(source,content,right):
@@ -86,12 +86,3 @@ class Cmd(models.Model):
 			self.run(line,user,lst,getDate=False)
 
 		return lst
-
-	def _change_configuration(self,filename):
-		config = configparser.ConfigParser()
-		config.read(filename)
-		print(config)
-		#
-		#
-		# with open(filename, 'wb') as handle:
-		#     cp.write(handle)
