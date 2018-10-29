@@ -12,6 +12,7 @@ from user.models import User
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
+from utils.httpHandler import HttpHandler
 
 import os
 from memory_profiler import memory_usage
@@ -21,6 +22,7 @@ import logging
 log = logging.getLogger(__name__)
 
 cmd = Cmd()
+httpHandler = HttpHandler()
 user_obj = User.objects.order_by('id')[0]
 
 
@@ -49,15 +51,25 @@ def index(request):
 
 @login_required
 def get_name(request):
+    lst = []
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ConfigForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            print (form.cleaned_data)
             env_obj = Env.objects.order_by('api_key')[0]
-            Env.objects.filter(pk=env_obj.id).update(client_session_timeout=form.cleaned_data['client_session_timeout'],api_mode=form.cleaned_data['api_mode'])
+            Env.objects.filter(pk=env_obj.id).update(
+                client_session_timeout=form.cleaned_data['client_session_timeout'],
+                name=form.cleaned_data['name'],
+                api_mode=form.cleaned_data['api_mode'],
+                api_key=form.cleaned_data['api_key'],
+                api_secret=form.cleaned_data['api_secret'],
+                )
+            httpHandler._set_establichement_name(env_obj.api_host,form.cleaned_data['api_key'],form.cleaned_data['api_secret'],lst)
+
+            for line in lst:
+                print(lst)
             return HttpResponseRedirect('/dashboard/')
 
 
@@ -65,7 +77,7 @@ def get_name(request):
     else:
         form = ConfigForm()
 
-    return render(request, 'dashboard/name.html', {'form': form})
+    return render(request, 'dashboard/configuration.html', {'form': form})
 
 @login_required
 def systemctl_stat(request):

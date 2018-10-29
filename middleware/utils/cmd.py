@@ -4,6 +4,7 @@ import datetime
 import shlex
 from django.http import HttpResponse
 from env_config.models import Env
+import configparser
 
 class Cmd(models.Model):
 
@@ -21,11 +22,11 @@ class Cmd(models.Model):
 				if len(line) > 0:
 					getD = ""
 					if getDate:
-						getD = str(datetime.datetime.now()) + " - " 
+						getD = str(datetime.datetime.now()) + " - "
 					lst.append(getD + line.decode().strip() )
 				else:
 					break
-			
+
 			popen.wait()
 
 		except Exception as e:
@@ -47,11 +48,11 @@ class Cmd(models.Model):
 				if len(line) > 0:
 					getD = ""
 					if getDate:
-						getD = str(datetime.datetime.now()) + " - " 
+						getD = str(datetime.datetime.now()) + " - "
 					lst.append(getD + line.decode().strip() )
 				else:
 					break
-			
+
 			popen.wait()
 
 		except Exception as e:
@@ -61,18 +62,23 @@ class Cmd(models.Model):
 
 		return
 
-	def _create_file_conf(source,content,right):
-		file = open(source,right) 
+	def _create_file_conf(self,source,content,right):
+		file = open(source,right)
 		env_obj = Env.objects.order_by('api_key')[0]
+
+		self._change_configuration(source)
+
 		for line in content.splitlines():
-			line.replace("WAY_BOX",env_obj.name)
-			file.write(line + "\n") 
-		file.close() 
+
+			file.write(line + "\n")
+		file.close()
 
 	def _create_file(source,content,right):
-		file = open(source,right) 
-		file.write(content) 
-		file.close() 
+		file = open(source,right)
+		file.write(content)
+		file.close()
+
+
 	def _read_file(self,file,user,lst):
 		cmds = []
 		cmds.append("cat " + file)
@@ -80,3 +86,12 @@ class Cmd(models.Model):
 			self.run(line,user,lst,getDate=False)
 
 		return lst
+
+	def _change_configuration(self,filename):
+		config = configparser.ConfigParser()
+		config.read(filename)
+		print(config)
+		#
+		#
+		# with open(filename, 'wb') as handle:
+		#     cp.write(handle)

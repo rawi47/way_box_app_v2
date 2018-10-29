@@ -26,8 +26,8 @@ class Env(models.Model):
 	api_host = models.CharField(max_length=200,default="api.way-connect.com")
 	api_key = models.CharField(max_length=200)
 	api_secret = models.CharField(max_length=200)
-	api_port = models.IntegerField(default=80) 
-	
+	api_port = models.IntegerField(default=80)
+
 	root_dir = models.CharField(max_length=200,default=str(Path.home()))
 	version = models.CharField(max_length=200,default="0.0.1")
 	patch = models.CharField(max_length=200,default="0.0.1")
@@ -69,6 +69,7 @@ class EnvSerializer(serializers.Serializer):
 
 	ssid_prefix = serializers.CharField(max_length=200)
 	client_session_timeout = serializers.IntegerField()
+	api_mode = serializers.CharField(max_length=200)
 
 
 
@@ -83,6 +84,7 @@ class SettingApp(models.Model):
 		('iptables','iptables'),
 		('dnsmasq','dnsmasq'),
 		('hostapd','hostapd'),
+		('hostapd_conf','hostapd config'),
 		('hosts','hosts'),
 		('interfaces','Network interfaces'),
 		('nodogsplash','Nodogsplash')
@@ -104,7 +106,7 @@ class SettingApp(models.Model):
 	    choices=types,
 	)
 
-	
+
 	origine = models.CharField(max_length=200,default="")
 	dest = models.CharField(max_length=200,default="")
 	cmd = models.CharField(max_length=200,default="")
