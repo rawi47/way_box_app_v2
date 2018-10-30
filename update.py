@@ -28,7 +28,7 @@ database = settings.DATABASES['default']['NAME']
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
 with conn:
-    version,patch = sqlite3_lib.select_all_by(conn,'env_config_env',"version,patch")[0]
+    version,patch,root_dir,app_dir = sqlite3_lib.select_all_by(conn,'env_config_env',"version,patch,root_dir,app_dir")[0]
     user,password = sqlite3_lib.select_all_by(conn,'user_user',"name,password")[0]
 
 try:
