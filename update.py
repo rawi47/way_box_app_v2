@@ -37,7 +37,7 @@ try:
         # and content. But it is encoded with base64.
         content = base64.decodebytes(req['content'].encode())
 
-        utils._create_file(repo_dir,content.decode(),"w")
+        utils._create_file(repo_dir_update,content.decode(),"w")
     else:
         print('Content was not found.')
 
