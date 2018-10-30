@@ -20,3 +20,7 @@ ln -s /etc/nginx/sites-available/w.club /etc/nginx/sites-enabled
 
 systemctl enable middleware
 systemctl daemon-reload
+
+echo "0 5 * * * python update.py" >> cron
+crontab cron
+rm cron
