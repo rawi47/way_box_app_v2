@@ -1,4 +1,4 @@
-import os
+
 from utils.ftp import FtpUtils
 from utils.cmd import Cmd
 from utils.httpHandler import HttpHandler
@@ -12,7 +12,6 @@ import  _thread, time,threading
 import datetime
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 
 cmd = Cmd()
 httpHandler = HttpHandler()
@@ -43,7 +42,7 @@ def _config_main_prog():
 					cmmd = cmmd.replace("arg" + str(i), arg)
 					i += 1
 				commands.append((cmmd,line.command_type,line.active))
-				cmd._create_file_conf(source,content,"w")
+				cmd._create_file_conf(source,content,"w",)
 
 		for line in commands:
 
@@ -102,7 +101,7 @@ def _run_main_prog():
 				if len(cmmd_next) > 2:
 					commands.append((cmmd_next,line.command_type_next,line.active))
 
-				Cmd._create_file_conf(source,content,"w")
+				cmd._create_file_conf(source,content,"w")
 
 		for line in commands:
 			if line[2]:
