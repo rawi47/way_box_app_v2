@@ -42,9 +42,9 @@ def update_by_id(conn,table,version,patch, id):
     :return:
     """
     cur = conn.cursor()
-    sql = "update " + table + " set version='" + version +  "' , patch='" + patch + "' where id=? "
+    sql = "update " + table + " set version='" + version +  "' , patch='" + patch + "' where id=1 "
     print(sql)
-    cur.execute(sql, (version,patch,id,))
+    cur.execute(sql, ())
     return cur.fetchall()
 
 
