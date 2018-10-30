@@ -60,7 +60,8 @@ try:
         print(remote_version)
         print(remote_patch)
         print(id)
-        sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
+        res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
+        print(res)
 
 
 
