@@ -5,13 +5,16 @@ from  python_libs import utils as utils
 import base64
 import requests
 import configparser
+import git
 
 version = remote_version = "0.0.0"
 patch = remote_patch = "0.0.0"
 
-repo_dir = "way-box-update.ini"
+repo_dir_update = "way-box-update.ini"
+repo_dir = "/way_box_app_v2_lock"
 
 url_update = 'https://api.github.com/repos/rawi47/way_box_app_v2/contents/way-box-update.ini'
+url = "https://github.com/rawi47/way_box_app_v2.git"
 
 
 database = settings.DATABASES['default']['NAME']
@@ -42,7 +45,8 @@ try:
     if patch < remote_patch:
         print("do patch")
     if version < remote_version:
-        print("do upgrade")
+        utils._create_dir(repo_dir + "/")
+        #git.Git(repo_dir).clone(url)
 
 except Exception as e:
     print(str(e))
