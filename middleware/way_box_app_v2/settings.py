@@ -26,7 +26,7 @@ SECRET_KEY = 'du6828i+vd3^0t)3d7a--_1n(o3tpv(faw_hv9xy38@ad85n3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.1.6']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.1.17']
 
 
 # Application definition
@@ -138,7 +138,7 @@ STATICFILES_DIRS = [
 LOG_DIR = os.path.join(BASE_DIR, "static/log"),
 
 CRONJOBS = [
-    ('*/1 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),
+    ('*/30 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),
 ]
 
 LOGIN_REDIRECT_URL = '/dashboard'

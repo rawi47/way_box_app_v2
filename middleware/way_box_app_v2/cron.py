@@ -12,5 +12,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 
 def _initiate():
 	print("############################ Starting main program #############################")
+	run._config_main_prog()
 	run._run_main_prog()
-

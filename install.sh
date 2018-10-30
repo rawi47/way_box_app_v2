@@ -19,5 +19,4 @@ ln -s /etc/nginx/sites-available/middleware /etc/nginx/sites-enabled
 ln -s /etc/nginx/sites-available/w.club /etc/nginx/sites-enabled
 
 systemctl enable middleware
-systemctl enable gitwatch
 systemctl daemon-reload

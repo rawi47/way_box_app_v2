@@ -1,4 +1,4 @@
-
+import os
 from utils.ftp import FtpUtils
 from utils.cmd import Cmd
 from utils.httpHandler import HttpHandler
@@ -10,8 +10,6 @@ import json
 from django.conf import settings
 import  _thread, time,threading
 import datetime
-
-
 
 cmd = Cmd()
 httpHandler = HttpHandler()
@@ -42,7 +40,7 @@ def _config_main_prog():
 					cmmd = cmmd.replace("arg" + str(i), arg)
 					i += 1
 				commands.append((cmmd,line.command_type,line.active))
-				cmd._create_file_conf(source,content,"w",)
+				cmd._create_file_conf(source,content,"w")
 
 		for line in commands:
 
@@ -85,7 +83,7 @@ def _run_main_prog():
 	try:
 
 		if app_mode == "wlan":
-			httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET)
+			httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
 
 		commands = []
 		for line in setting_app_obj:

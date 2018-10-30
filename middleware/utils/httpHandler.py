@@ -44,6 +44,6 @@ class HttpHandler(models.Model):
 				print(env_obj.name)
 				Env.objects.filter(pk=env_obj.id).update(name=new_name)
 
-			lst.append(getD + name)
+			lst.append(getD + new_name)
 		except Exception as e:
 			lst.append(getD + str(e))
