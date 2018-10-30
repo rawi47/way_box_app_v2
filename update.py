@@ -9,6 +9,8 @@ import git
 
 version = remote_version = "0.0.0"
 patch = remote_patch = "0.0.0"
+root_dir = ""
+app_dir = ""
 
 user = ""
 password = ""
