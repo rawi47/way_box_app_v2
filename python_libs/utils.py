@@ -27,16 +27,16 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
                 getD = ""
                 if getDate:
                     getD = str(datetime.datetime.now()) + " - "
-                lst.append(getD + line.decode().strip() )
+                print(getD + line.decode().strip() )
             else:
                 break
 
         popen.wait()
 
     except Exception as e:
-        lst.append ("OSError > " + str(e))
+        print ("OSError > " + str(e))
     except:
-        lst.append ("Error > ")
+        print ("Error > ")
 
     return
 
