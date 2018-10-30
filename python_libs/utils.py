@@ -22,7 +22,6 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
         popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
         while True:
             line = popen.stdout.readline()
-
             if len(line) > 0:
                 getD = ""
                 if getDate:
