@@ -39,4 +39,7 @@ def run(command,sudo_password,lst,printLog=True,getDate=True,shell=False):
     return
 
 def _clone_git(dir,url):
-    git.Git(dir).clone(url)
+    try:
+        git.Git(dir).clone(url)
+    except Exception as e:
+        lst.append ("OSError > " + str(e))
