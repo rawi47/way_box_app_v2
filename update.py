@@ -54,6 +54,7 @@ try:
     if version < remote_version:
         dir = root_dir + app_dir + repo_dir
         cmd = "mkdir " + dir
+        print (cmd)
         utils.run(cmd,password,output)
 
 except Exception as e:
