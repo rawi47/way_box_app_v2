@@ -14,7 +14,7 @@ def _create_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def run(command,sudo_password,lst,printLog=True,getDate=True,shell=False):
+def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     command = command.split()
     try:
