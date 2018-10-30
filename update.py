@@ -8,6 +8,7 @@ import configparser
 import git
 import  _thread, time,threading
 
+id = 0
 version = remote_version = "0.0.0"
 patch = remote_patch = "0.0.0"
 root_dir = ""
@@ -15,6 +16,7 @@ app_dir = ""
 
 user = ""
 password = ""
+
 output = []
 
 repo_dir_update = "way-box-update.ini"
@@ -29,7 +31,7 @@ database = settings.DATABASES['default']['NAME']
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
 with conn:
-    version,patch,root_dir,app_dir = sqlite3_lib.select_all_by(conn,'env_config_env',"version,patch,root_dir,app_dir")[0]
+    id,version,patch,root_dir,app_dir = sqlite3_lib.select_all_by(conn,'env_config_env',"id,version,patch,root_dir,app_dir")[0]
     user,password = sqlite3_lib.select_all_by(conn,'user_user',"name,password")[0]
 
 try:
