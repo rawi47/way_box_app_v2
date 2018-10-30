@@ -57,7 +57,7 @@ try:
     if version < remote_version:
         dir = root_dir + app_dir + repo_dir
         t = _thread.start_new_thread( utils._clone_git, (url,dir,) )
-        sqlite3_lib.update_by_id(conn,"env_config_env",remote_versionn,remote_patch,id)
+        sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
 
 
 
