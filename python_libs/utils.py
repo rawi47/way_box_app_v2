@@ -44,4 +44,4 @@ def _clone_git(dir,url):
     try:
         git.Git(dir).clone(url)
     except Exception as e:
-        lst.append ("OSError > " + str(e))
+        print ("OSError > " + str(e))
