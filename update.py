@@ -53,7 +53,7 @@ try:
         print("do patch")
     if version < remote_version:
         dir = root_dir + app_dir + repo_dir
-        cmd = "mkdir " + repo_dir
+        cmd = "mkdir " + dir
         utils.run(cmd,password,output)
 
 except Exception as e:
