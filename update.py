@@ -6,6 +6,7 @@ import base64
 import requests
 import configparser
 import git
+import  _thread, time,threading
 
 version = remote_version = "0.0.0"
 patch = remote_patch = "0.0.0"
