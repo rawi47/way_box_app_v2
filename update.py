@@ -63,7 +63,7 @@ try:
         res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
 
         cmd = "rm -rf " + dir + "/*"
-        utils.run(cmd,password,output)
+        utils.run(cmd,password)
 
 
 
