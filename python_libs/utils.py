@@ -12,9 +12,8 @@ def _create_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def run(command,user,lst,printLog=True,getDate=True,shell=False):
-    sudo_password = user.password
-    #lst.append(command)
+def run(command,sudo_password,lst,printLog=True,getDate=True,shell=False):
+
     command = command.split()
     try:
         cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
