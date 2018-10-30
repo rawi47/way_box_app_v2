@@ -34,6 +34,16 @@ def select_all_by(conn,table,values):
     return cur.fetchall()
 
 
+def update_by_id(conn,table,version,patch, id):
+    """
+    Query tasks by priority
+    :param conn: the Connection object
+    :param priority:
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("update " + table + " set version=? , patch=? where id=? ", (version,patch,id,))
+
 
 
 if __name__ == '__main__':
