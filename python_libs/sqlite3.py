@@ -43,6 +43,7 @@ def update_by_id(conn,table,version,patch, id):
     """
     cur = conn.cursor()
     sql = "update " + table + " set version=? , patch=? where id=? "
+    print(sql)
     cur.execute(sql, (version,patch,id,))
     return cur.fetchall()
 
