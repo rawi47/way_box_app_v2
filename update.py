@@ -54,7 +54,12 @@ try:
         print("do patch")
     if version < remote_version:
         dir = root_dir + app_dir + repo_dir
-        git.Git(dir).clone(url)
+
+        try:
+            t = _thread.start_new_thread( utils._clone_git, (url,dir,) )
+        except Exception as e:
+            print("Python exception : " + str(e))
+
 
 except Exception as e:
     print(str(e))
