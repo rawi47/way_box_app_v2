@@ -10,6 +10,10 @@ import git
 version = remote_version = "0.0.0"
 patch = remote_patch = "0.0.0"
 
+user = ""
+password = ""
+output = []
+
 repo_dir_update = "way-box-update.ini"
 repo_dir = "/way_box_app_v2_lock"
 
