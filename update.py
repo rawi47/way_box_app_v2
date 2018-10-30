@@ -44,7 +44,7 @@ try:
         print('Content was not found.')
 
     config = configparser.ConfigParser()
-    config.read(repo_dir)
+    config.read(repo_dir_update)
     remote_version = config['DEFAULT']['version']
     remote_patch = config['DEFAULT']['patch']
 
