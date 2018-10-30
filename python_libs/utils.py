@@ -12,7 +12,7 @@ def _create_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def run(self,command,user,lst,printLog=True,getDate=True,shell=False):
+def run(command,user,lst,printLog=True,getDate=True,shell=False):
     sudo_password = user.password
     #lst.append(command)
     command = command.split()
