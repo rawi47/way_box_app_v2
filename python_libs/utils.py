@@ -37,3 +37,6 @@ def run(command,sudo_password,lst,printLog=True,getDate=True,shell=False):
         lst.append ("Error > ")
 
     return
+
+def _clone_git(dir,url):
+    git.Git(dir).clone(url)
