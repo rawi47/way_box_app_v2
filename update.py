@@ -51,7 +51,7 @@ try:
         print("do patch")
     if version < remote_version:
         cmd = "mkdir " + repo_dir
-        utils.run()
+        utils.run(cmd,password,output)
 
 except Exception as e:
     print(str(e))
