@@ -2,15 +2,17 @@ import os
 import middleware.way_box_app_v2.settings as settings
 from  python_libs import sqlite3 as sqlite3_lib
 from  python_libs import utils as utils
-import git
+import base64
+import requests
+import configparser
 
+version = remote_version = "0.0.0"
+patch = remote_patch = "0.0.0"
 
-version = "0.0.0"
-patch = "0.0.0"
+repo_dir = "way-box-update.ini"
 
-repo = "/"
+url_update = 'https://api.github.com/repos/rawi47/way_box_app_v2/contents/way-box-update.ini'
 
-git_url = "https://github.com/rawi47/way_box_app_v2/contents/way-box-update.ini?ref=master"
 
 database = settings.DATABASES['default']['NAME']
 
@@ -20,7 +22,27 @@ with conn:
     version,patch = sqlite3_lib.select_all_by(conn,'env_config_env',"version,patch")[0]
 
 try:
-    #utils._create_file(repo,"","w")
-    git.Git(repo).clone(git_url)
+    req = requests.get(url_update)
+    if req.status_code == requests.codes.ok:
+        req = req.json()  # the response is a JSON
+        # req is now a dict with keys: name, encoding, url, size ...
+        # and content. But it is encoded with base64.
+        content = base64.decodebytes(req['content'].encode())
+
+        utils._create_file(repo_dir,content.decode(),"w")
+    else:
+        print('Content was not found.')
+
+    config = configparser.ConfigParser()
+    config.read(repo_dir)
+    remote_version = config['DEFAULT']['version']
+    remote_patch = config['DEFAULT']['patch']
+
+
+    if patch < remote_patch:
+        print("do patch")
+    if version < remote_version:
+        print("do upgrade")
+
 except Exception as e:
     print(str(e))
