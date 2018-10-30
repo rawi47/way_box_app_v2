@@ -2,6 +2,8 @@
 import os
 import subprocess
 import datetime
+import git
+
 
 def _create_file(source,content,right):
     file = open(source,right)
