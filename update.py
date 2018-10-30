@@ -66,7 +66,5 @@ try:
         utils.run(cmd,password)
 
 
-
-
 except Exception as e:
     print(str(e))
