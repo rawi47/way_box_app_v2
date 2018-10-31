@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import logging
 log = logging.getLogger(__name__)
+from utils.cmd import Cmd
 
 
 
@@ -71,3 +72,12 @@ def catch_all(request,path):
 
 
     return res
+
+def _is_connected(Request):
+    cmd = Cmd()
+    res = cmd._is_connected()
+    output = {
+    "connected" : res[0],
+    "message" : res[1]
+    }
+    return HttpResponse(json.dumps(output), content_type="application/json")

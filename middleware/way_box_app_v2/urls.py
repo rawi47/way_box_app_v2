@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('is_connected/', views._is_connected),
     path('<path:path>', views.catch_all),
 ]
