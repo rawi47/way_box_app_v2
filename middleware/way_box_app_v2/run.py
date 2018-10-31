@@ -1,8 +1,9 @@
-import os
+from os import path
 from utils.ftp import FtpUtils
 from utils.cmd import Cmd
 from utils.httpHandler import HttpHandler
 from env_config.models import EnvSerializer,Env,SettingApp,InstalledSoftwares
+
 
 
 from user.models import User
@@ -18,19 +19,27 @@ def _config_main_prog():
 	lst = []
 	user_obj = User.objects.order_by('id')[0]
 	setting_app_obj = SettingApp.objects.order_by('sequence')
-	static_path = settings.STATICFILES_DIRS[0] + "/config/"
+	env_obj = Env.objects.order_by('api_key')[0]
+	app_mode = env_obj.api_mode
+
+	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 	getD = str(datetime.datetime.now()) + " - "
 	try:
-
-		user_obj = User.objects.order_by('id')[0]
-		env_obj = Env.objects.order_by('api_key')[0]
-		app_mode = env_obj.api_mode
-
-
 		commands = []
 		for line in setting_app_obj:
 			if line.api_mode in [app_mode, "commun"]:
-				source = static_path + line.origine
+
+				source = path.join(static_path , line.origine)
+				if len(line.directory) > 2:
+					dir = path.join(static_path,line.directory);
+					cmd._create_dir(dir)
+					source = path.join(dir , line.origine)
+
+				if len(line.sub_directory) > 2:
+					dir = path.join(static_path,line.directory,line.sub_directory);
+					cmd._create_dir(dir)
+					source = path.join(dir , line.origine)
+					
 				content = line.params
 				args = [source,line.dest]
 				cmmd = line.cmd
@@ -39,8 +48,12 @@ def _config_main_prog():
 				for arg in args:
 					cmmd = cmmd.replace("arg" + str(i), arg)
 					i += 1
-				commands.append((cmmd,line.command_type,line.active))
+				if len(cmmd) > 2:
+					commands.append((cmmd,line.command_type,line.active))
+
+
 				cmd._create_file_conf(source,content,"w")
+
 
 		for line in commands:
 
@@ -73,9 +86,12 @@ def _run_main_prog():
 	lst = []
 	user_obj = User.objects.order_by('id')[0]
 	setting_app_obj = SettingApp.objects.order_by('sequence')
-	static_path = settings.STATICFILES_DIRS[0] + "/config/"
-	getD = str(datetime.datetime.now()) + " - "
 	env_obj = Env.objects.order_by('api_key')[0]
+
+	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
+
+	getD = str(datetime.datetime.now()) + " - "
+
 	app_mode = env_obj.api_mode
 	API_HOST = env_obj.api_host
 	API_KEY = env_obj.api_key
@@ -99,7 +115,6 @@ def _run_main_prog():
 				if len(cmmd_next) > 2:
 					commands.append((cmmd_next,line.command_type_next,line.active))
 
-				cmd._create_file_conf(source,content,"w")
 
 		for line in commands:
 			if line[2]:

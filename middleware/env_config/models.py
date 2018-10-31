@@ -32,7 +32,14 @@ class Env(models.Model):
 	version = models.CharField(max_length=200,default="0.0.1")
 	patch = models.CharField(max_length=200,default="0.0.1")
 	app_dir = models.CharField(max_length=200,default="Way-Connect_Box")
-	git_repo = models.CharField(max_length=200)
+
+	git_repo = models.CharField(max_length=200,default="")
+	git_repo_update = models.CharField(max_length=200,default="")
+	repo_dir_update = models.CharField(max_length=200,default="")
+	repo_dir = models.CharField(max_length=200,default="")
+	middleware_dir = models.CharField(max_length=200,default="middleware")
+	databases_backup_dir = models.CharField(max_length=200,default="databases_backups")
+	config_dir = models.CharField(max_length=200,default="opt/config/")
 
 	ftp_host = models.CharField(max_length=200,default="127.0.0.1")
 	ftp_user = models.CharField(max_length=200,default="user")
@@ -96,6 +103,8 @@ class SettingApp(models.Model):
 	)
 
 	name = models.CharField(max_length=200,default="")
+	directory = models.CharField(max_length=200,default="",blank=True)
+	sub_directory = models.CharField(max_length=200,default="",blank=True)
 	params = models.TextField(default="")
 	api_mode = models.CharField(
 	    max_length=200,
@@ -109,13 +118,13 @@ class SettingApp(models.Model):
 
 	origine = models.CharField(max_length=200,default="")
 	dest = models.CharField(max_length=200,default="")
-	cmd = models.CharField(max_length=200,default="")
+	cmd = models.CharField(max_length=200,default="",blank=True)
 	command_type = models.CharField(
 	    max_length=200,
 	    choices=shell_types,
 	    default="cmd"
 	)
-	cmd_next = models.CharField(max_length=200,default="")
+	cmd_next = models.CharField(max_length=200,default="",blank=True)
 	command_type_next = models.CharField(
 	    max_length=200,
 	    choices=shell_types,

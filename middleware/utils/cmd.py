@@ -4,6 +4,7 @@ import datetime
 import shlex
 from django.http import HttpResponse
 from env_config.models import Env
+import os
 
 class Cmd(models.Model):
 
@@ -85,3 +86,7 @@ class Cmd(models.Model):
 			self.run(line,user,lst,getDate=False)
 
 		return lst
+
+	def _create_dir(self,directory):
+	    if not os.path.exists(directory):
+	        os.makedirs(directory)
