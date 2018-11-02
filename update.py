@@ -60,7 +60,7 @@ try:
     if patch < remote_patch:
         print("do patch")
     if version < remote_version:
-        dir = root_dir + app_dir + repo_dir
+        dir = os.path.join(root_dir , app_dir , repo_dir)
         utils._create_dir(dir )
 
         utils._clone_git(dir,url)

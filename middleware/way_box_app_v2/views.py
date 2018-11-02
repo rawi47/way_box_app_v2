@@ -74,10 +74,15 @@ def catch_all(request,path):
     return res
 
 def _is_connected(Request):
-    cmd = Cmd()
-    res = cmd._is_connected()
-    output = {
-    "connected" : res[0],
-    "message" : res[1]
-    }
-    return HttpResponse(json.dumps(output), content_type="application/json")
+    url = "https://www.google.com"
+    method = "GET"
+    headers = {}
+    params = {}
+    data = {}
+
+    esreq = requests.Request(method=method, url=url, data=data, params=params, headers=headers)
+    resp = requests.Session().send(esreq.prepare())
+
+    res = HttpResponse(resp.text, status= resp.status_code)
+
+    return res

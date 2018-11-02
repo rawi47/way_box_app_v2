@@ -39,7 +39,7 @@ def _config_main_prog():
 					dir = path.join(static_path,line.directory,line.sub_directory);
 					cmd._create_dir(dir)
 					source = path.join(dir , line.origine)
-					
+
 				content = line.params
 				args = [source,line.dest]
 				cmmd = line.cmd

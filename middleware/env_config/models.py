@@ -85,11 +85,15 @@ class SettingTypes(models.Model):
 
 	name = models.CharField(max_length=200,default="")
 
+
 class SettingApp(models.Model):
 
 
 	def __str__(self):
 		return self.name
+
+	class Meta:
+		ordering = ('sequence',)
 
 
 	shell_types = (
@@ -123,6 +127,8 @@ class SettingApp(models.Model):
 	)
 	sequence = models.IntegerField(default=0)
 	active = models.BooleanField(default=True)
+	status = models.BooleanField(default=False)
+	cmd_status = models.CharField(max_length=200,default="systemctl status",blank=True)
 
 class SettingAppSerializer(serializers.Serializer):
 	name = serializers.CharField(max_length=200)
@@ -139,7 +145,8 @@ class SettingAppSerializer(serializers.Serializer):
 	command_type_next = serializers.CharField(max_length=200)
 	sequence = serializers.IntegerField()
 	active = serializers.BooleanField()
-
+	status = serializers.BooleanField()
+	cmd_status = serializers.CharField(max_length=200)
 
 class InstalledSoftwares(models.Model):
 

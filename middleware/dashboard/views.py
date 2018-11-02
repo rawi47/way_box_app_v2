@@ -66,8 +66,9 @@ def get_name(request):
                 api_mode=form.cleaned_data['api_mode'],
                 api_key=form.cleaned_data['api_key'],
                 api_secret=form.cleaned_data['api_secret'],
+                api_host=form.cleaned_data['api_host'],
                 )
-            httpHandler._set_establichement_name(env_obj.api_host,form.cleaned_data['api_key'],form.cleaned_data['api_secret'],lst)
+            httpHandler._set_establichement_name(form.cleaned_data['api_host'],form.cleaned_data['api_key'],form.cleaned_data['api_secret'],lst)
 
             for line in lst:
                 print(lst)
@@ -110,13 +111,19 @@ def config_files(request):
 
         if len(cnf["sub_directory"]) > 2:
             file = path.join(static_path,cnf["directory"],cnf['sub_directory'],cnf["origine"])
-            
+
         cmd._read_file(file,user_obj,listR)
         cnf["origine_file"] = listR
         listR = []
         cmd._read_file(cnf["dest"],user_obj,listR)
         cnf["dest_file"] = listR
         configs.append(cnf)
+        cnf["stat"] = []
+        if cnf["status"]:
+            lst = []
+            cmd.run(cnf["cmd_status"] + " " + cnf["setting_type"],user_obj,lst)
+            cnf["stat"] = lst
+
 
     context = {
         'configs' : configs,

@@ -19,6 +19,12 @@
 			</div>
 
 			<div class="form-group">
+				<label for="exampleInputEmail1">API host</label>
+				{{ form.api_host | add_class:"form-control"  }}
+				<small id="emailHelp" class="form-text text-muted">Hôte de l'api</small>
+			</div>
+
+			<div class="form-group">
 				<label for="exampleInputEmail1">API key</label>
 				{{ form.api_key | add_class:"form-control"  }}
 				<small id="emailHelp" class="form-text text-muted">Clé de l'api</small>

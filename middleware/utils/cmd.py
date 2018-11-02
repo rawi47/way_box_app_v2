@@ -91,12 +91,3 @@ class Cmd(models.Model):
 	def _create_dir(self,directory):
 	    if not os.path.exists(directory):
 	        os.makedirs(directory)
-
-	def _is_connected(self):
-	    try:
-	        # connect to the host -- tells us if the host is actually
-	        # reachable
-	        socket.create_connection(("www.google.com", 80))
-	        return True,"connected"
-	    except OSError as e:
-	        return False,str(e)

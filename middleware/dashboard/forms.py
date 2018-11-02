@@ -31,8 +31,13 @@ class ConfigForm(forms.Form):
 		env_obj = Env.objects.order_by('api_key')[0]
 		return env_obj.api_mode
 
+	def _get_api_host():
+		env_obj = Env.objects.order_by('api_key')[0]
+		return env_obj.api_host
+
 
 	name = forms.CharField( max_length=100,initial=_get_name)
+	api_host = forms.CharField( max_length=100,initial=_get_api_host)
 	api_key = forms.CharField( max_length=100,initial=_get_api_key)
 	api_secret = forms.CharField( max_length=100,initial=_get_api_secret)
 

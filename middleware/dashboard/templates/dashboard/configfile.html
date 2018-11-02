@@ -31,7 +31,15 @@
 				</div>
 			</div>
 			<p>Active : {{ line.active }}</p>
-			<p>Sequence : {{ line.sequence }}
+			<p>Sequence : {{ line.sequence }}</p>
+			<p>Commande de configuration : {{ line.cmd }}</p>
+			<p>Commande de lancement : {{ line.cmd_next }}</p>
+
+				<div class="col-sm-12 well">
+					{% for li in line.stat %}
+						<p>{{ li }}</p>
+					{% endfor %}
+				</div>
 
 		</div>
 	</div>

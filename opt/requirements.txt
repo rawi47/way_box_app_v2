@@ -10,3 +10,4 @@ django-jquery
 django-crispy-forms
 django-widget-tweaks
 django-cors-headers
+GitPython
