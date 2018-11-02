@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from env_config.models import EnvSerializer,Env,SettingApp,InstalledSoftwares
+from env_config.models import EnvSerializer,Env,SettingApp,InstalledSoftwares,SettingAppSerializer
 from itertools import groupby
 from django.contrib.auth.decorators import login_required
 from .forms import ConfigForm
@@ -19,6 +19,7 @@ from memory_profiler import memory_usage
 import json
 from way_box_app_v2 import run
 import logging
+from os import path
 log = logging.getLogger(__name__)
 
 cmd = Cmd()
@@ -97,26 +98,28 @@ def systemctl_stat(request):
 def config_files(request):
     template = loader.get_template('dashboard/configfile.html')
     env_obj = Env.objects.order_by('api_key')[0]
-    setting_app_obj = SettingApp.objects.filter(api_mode__in=[env_obj.api_mode,'commun']).order_by('name')
+    setting_app_obj = SettingApp.objects.filter(api_mode__in=[env_obj.api_mode,'commun']).order_by('sequence')
 
-    configs = {}
+    static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
+    configs = []
     for line in setting_app_obj:
+        settingAppSerializer = SettingAppSerializer(line)
+        cnf = settingAppSerializer.data
         listR = []
-        cmd._read_file(line.dest,user_obj,listR)
+        file = path.join(static_path,cnf["directory"],cnf["origine"])
 
-        configs[line.dest] = listR
-
-    configsOrigin = {}
-    for line in setting_app_obj:
-        listRo = []
-        cmd._read_file(static_path + line.origine,user_obj,listRo)
-
-        configsOrigin[line.origine] = listRo
+        if len(cnf["sub_directory"]) > 2:
+            file = path.join(static_path,cnf["directory"],cnf['sub_directory'],cnf["origine"])
+            
+        cmd._read_file(file,user_obj,listR)
+        cnf["origine_file"] = listR
+        listR = []
+        cmd._read_file(cnf["dest"],user_obj,listR)
+        cnf["dest_file"] = listR
+        configs.append(cnf)
 
     context = {
         'configs' : configs,
-        'configsOrigin' : configsOrigin,
-
     }
     return HttpResponse(template.render(context, request))
 

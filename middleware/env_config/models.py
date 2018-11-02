@@ -78,7 +78,12 @@ class EnvSerializer(serializers.Serializer):
 	client_session_timeout = serializers.IntegerField()
 	api_mode = serializers.CharField(max_length=200)
 
+class SettingTypes(models.Model):
 
+	def __str__(self):
+		return self.name
+
+	name = models.CharField(max_length=200,default="")
 
 class SettingApp(models.Model):
 
@@ -86,16 +91,6 @@ class SettingApp(models.Model):
 	def __str__(self):
 		return self.name
 
-	types = (
-		('ipset','ipset'),
-		('iptables','iptables'),
-		('dnsmasq','dnsmasq'),
-		('hostapd','hostapd'),
-		('hostapd_conf','hostapd config'),
-		('hosts','hosts'),
-		('interfaces','Network interfaces'),
-		('nodogsplash','Nodogsplash')
-	)
 
 	shell_types = (
 		('sh','Sh'),
@@ -110,11 +105,7 @@ class SettingApp(models.Model):
 	    max_length=200,
 	    choices=modes,
 	)
-	setting_type = models.CharField(
-	    max_length=200,
-	    choices=types,
-	)
-
+	setting_type = models.ForeignKey(SettingTypes, on_delete=models.CASCADE)
 
 	origine = models.CharField(max_length=200,default="")
 	dest = models.CharField(max_length=200,default="")
@@ -132,6 +123,22 @@ class SettingApp(models.Model):
 	)
 	sequence = models.IntegerField(default=0)
 	active = models.BooleanField(default=True)
+
+class SettingAppSerializer(serializers.Serializer):
+	name = serializers.CharField(max_length=200)
+	directory = serializers.CharField(max_length=200)
+	sub_directory = serializers.CharField(max_length=200)
+	params = serializers.CharField(max_length=200)
+	api_mode = serializers.CharField(max_length=200)
+	setting_type = serializers.CharField(max_length=200)
+	origine = serializers.CharField(max_length=200)
+	dest = serializers.CharField(max_length=200)
+	cmd =  serializers.CharField(max_length=200)
+	command_type = serializers.CharField(max_length=200)
+	cmd_next = serializers.CharField(max_length=200)
+	command_type_next = serializers.CharField(max_length=200)
+	sequence = serializers.IntegerField()
+	active = serializers.BooleanField()
 
 
 class InstalledSoftwares(models.Model):

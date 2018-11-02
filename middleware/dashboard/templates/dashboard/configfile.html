@@ -5,50 +5,36 @@
 <div class="page-header">
 	<h1>Configuration files</h1>
 </div>
+{% for line in configs %}
 <div class="col-sm-12">
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Fichiers de configuration origine</h3>
-			</div>
-			<div class="panel-body">
-				<!-- Table -->
-				{% for key,value in  configsOrigin.items %}
-				<h2> {{ key }} </h2>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
 
-				
-				<div class="col-sl-12 well">
-					{% for line in  value %}
-					<p> {{ line }}</p>
-					{% endfor %}
-				</div>
-				<hr>
-				{% endfor %}
-
-			</div>
+			<h3 class="panel-title">{{ line.name }}</h3>
 		</div>
-	</div>
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Fichiers de configuration destination</h3>
-			</div>
-			<div class="panel-body">
-				<!-- Table -->
-				{% for key,value in  configs.items %}
-				<h2> {{ key }} </h2>
-
-				
-				<div class="col-sl-12 well">
-					{% for line in  value %}
-					<p> {{ line }}</p>
+		<div class="panel-body">
+			<div class="col-sm-6 text-dark">
+				<h4 class="text-dark">{{ line.origine }}</h4>
+				<div class="col-sm-12 well">
+					{% for lines in line.origine_file %}
+						<p>{{ lines }}</p>
 					{% endfor %}
 				</div>
-				<hr>
-				{% endfor %}
-
 			</div>
+
+			<div class="col-sm-6  text-dark">
+				<h4 class="text-dark">{{ line.dest }}</h4>
+				<div class="col-sm-12 well">
+					{% for lines in line.dest_file %}
+						<p>{{ lines }}</p>
+					{% endfor %}
+				</div>
+			</div>
+			<p>Active : {{ line.active }}</p>
+			<p>Sequence : {{ line.sequence }}
+
 		</div>
 	</div>
 </div>
+{% endfor %}
 {% endblock %}
