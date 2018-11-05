@@ -84,11 +84,10 @@ def _run_main_prog():
 			"iptables-restore < /etc/iptables.ipv4.nat"
 		]
 
-		commands = ["nodogsplash"]
+		commands = []
 
-		if app_mode == "wlan":
-			commands.append("sleep 5")
-			commands.append("systemctl restart hostapd")
+		commands.append("nodogsplash")
+
 
 		for cmd_sh in commands_sh:
 			lst.append(cmd_sh)
@@ -103,6 +102,7 @@ def _run_main_prog():
 		for cmmd in commands:
 			lst.append(cmmd)
 			cmd.run(cmmd,user_obj,lst)
+
 
 
 	except Exception as e:
