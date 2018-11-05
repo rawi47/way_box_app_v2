@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 
 cmd = Cmd()
 httpHandler = HttpHandler()
-user_obj = User.objects.order_by('id')[0]
+
 
 
 InstalledSoftwares_objs = InstalledSoftwares.objects.order_by('name')
@@ -86,6 +86,7 @@ def systemctl_stat(request):
     template = loader.get_template('dashboard/systemctl.html')
 
     systemctl_status = []
+    user_obj = User.objects.order_by('id')[0]
 
     cmd.run("systemctl status",user_obj,systemctl_status,getDate=False)
 
@@ -108,7 +109,7 @@ def config_files(request):
         cnf = settingAppSerializer.data
         listR = []
         file = path.join(static_path,cnf["directory"],cnf["origine"])
-
+        user_obj = User.objects.order_by('id')[0]
         if len(cnf["sub_directory"]) > 2:
             file = path.join(static_path,cnf["directory"],cnf['sub_directory'],cnf["origine"])
 
@@ -133,7 +134,7 @@ def config_files(request):
 @login_required
 def installed_software(request):
     template = loader.get_template('dashboard/istalledSoftware.html')
-
+    user_obj = User.objects.order_by('id')[0]
     listSo = {}
     for soft in InstalledSoftwares_objs:
         listS = []
@@ -181,6 +182,7 @@ def nds_ctl(request):
 @login_required
 def nds_ctl_status(request):
     ndsctl_status = []
+    user_obj = User.objects.order_by('id')[0]
     cmd.run("ndsctl status",user_obj,ndsctl_status,getDate=False)
     ndsctl_status_dict = {}
     for line in ndsctl_status:
@@ -196,6 +198,7 @@ def nds_ctl_status(request):
 @login_required
 def reboot(request):
     response_data = []
+    user_obj = User.objects.order_by('id')[0]
     cmd.run("reboot",user_obj,response_data,getDate=False)
 
 
@@ -204,6 +207,7 @@ def reboot(request):
 @login_required
 def nds_stop(request):
     response_data = []
+    user_obj = User.objects.order_by('id')[0]
     cmd.run("ndsctl stop",user_obj,response_data,getDate=False)
 
 
@@ -212,6 +216,7 @@ def nds_stop(request):
 @login_required
 def nds_start(request):
     response_data = []
+    user_obj = User.objects.order_by('id')[0]
     cmd.run("nodogsplash",user_obj,response_data,getDate=False)
 
 
@@ -220,6 +225,7 @@ def nds_start(request):
 @login_required
 def hostapd_restart(request):
     response_data = []
+    user_obj = User.objects.order_by('id')[0]
     cmd.run("systemctl restart hostapd",user_obj,response_data,getDate=False)
 
 

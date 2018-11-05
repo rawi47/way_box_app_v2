@@ -1,6 +1,6 @@
 apt-get update
 apt-get -y upgrade
-sudo apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx gunicorn
+sudo apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx gunicorn  libpq-dev python-dev postgresql postgresql-contrib
 
 
 
