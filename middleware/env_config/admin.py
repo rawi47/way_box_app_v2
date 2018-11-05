@@ -1,7 +1,4 @@
 from django.contrib import admin
 
-from .models import Env,SettingTypes,InstalledSoftwares,SettingApp
+from .models import Env
 admin.site.register(Env)
-admin.site.register(SettingApp)
-admin.site.register(InstalledSoftwares)
-admin.site.register(SettingTypes)

@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from env_config.models import Env
 import os
 import socket
+from shutil import copy2
+from os import walk
+import fileinput
 
 class Cmd(models.Model):
 
@@ -91,3 +94,17 @@ class Cmd(models.Model):
 	def _create_dir(self,directory):
 	    if not os.path.exists(directory):
 	        os.makedirs(directory)
+
+	def _copy_file(self,source,dst):
+		copy2(source, dst)
+
+	def _list_dir(self,mypath):
+		f = []
+		for (dirpath, dirnames, filenames) in walk(mypath):
+		    f.extend(filenames)
+		return f
+
+	def _edit_files(self,filename,text_to_search,replacement_text):
+		with fileinput.FileInput(filename, inplace=True) as file:
+		    for line in file:
+		        print(line.replace(text_to_search, replacement_text), end='')

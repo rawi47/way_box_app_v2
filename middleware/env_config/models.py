@@ -40,6 +40,7 @@ class Env(models.Model):
 	middleware_dir = models.CharField(max_length=200,default="middleware")
 	databases_backup_dir = models.CharField(max_length=200,default="databases_backups")
 	config_dir = models.CharField(max_length=200,default="opt/config/")
+	origin_config_dir = models.CharField(max_length=200,default="opt/original files/")
 
 	ftp_host = models.CharField(max_length=200,default="127.0.0.1")
 	ftp_user = models.CharField(max_length=200,default="user")
@@ -77,81 +78,3 @@ class EnvSerializer(serializers.Serializer):
 	ssid_prefix = serializers.CharField(max_length=200)
 	client_session_timeout = serializers.IntegerField()
 	api_mode = serializers.CharField(max_length=200)
-
-class SettingTypes(models.Model):
-
-	def __str__(self):
-		return self.name
-
-	name = models.CharField(max_length=200,default="")
-
-
-class SettingApp(models.Model):
-
-
-	def __str__(self):
-		return self.name
-
-	class Meta:
-		ordering = ('sequence',)
-
-
-	shell_types = (
-		('sh','Sh'),
-		('cmd','cmd')
-	)
-
-	name = models.CharField(max_length=200,default="")
-	directory = models.CharField(max_length=200,default="",blank=True)
-	sub_directory = models.CharField(max_length=200,default="",blank=True)
-	params = models.TextField(default="")
-	api_mode = models.CharField(
-	    max_length=200,
-	    choices=modes,
-	)
-	setting_type = models.ForeignKey(SettingTypes, on_delete=models.CASCADE)
-
-	origine = models.CharField(max_length=200,default="")
-	dest = models.CharField(max_length=200,default="")
-	cmd = models.CharField(max_length=200,default="",blank=True)
-	command_type = models.CharField(
-	    max_length=200,
-	    choices=shell_types,
-	    default="cmd"
-	)
-	cmd_next = models.CharField(max_length=200,default="",blank=True)
-	command_type_next = models.CharField(
-	    max_length=200,
-	    choices=shell_types,
-	    default="cmd"
-	)
-	sequence = models.IntegerField(default=0)
-	active = models.BooleanField(default=True)
-	status = models.BooleanField(default=False)
-	cmd_status = models.CharField(max_length=200,default="systemctl status",blank=True)
-
-class SettingAppSerializer(serializers.Serializer):
-	name = serializers.CharField(max_length=200)
-	directory = serializers.CharField(max_length=200)
-	sub_directory = serializers.CharField(max_length=200)
-	params = serializers.CharField(max_length=200)
-	api_mode = serializers.CharField(max_length=200)
-	setting_type = serializers.CharField(max_length=200)
-	origine = serializers.CharField(max_length=200)
-	dest = serializers.CharField(max_length=200)
-	cmd =  serializers.CharField(max_length=200)
-	command_type = serializers.CharField(max_length=200)
-	cmd_next = serializers.CharField(max_length=200)
-	command_type_next = serializers.CharField(max_length=200)
-	sequence = serializers.IntegerField()
-	active = serializers.BooleanField()
-	status = serializers.BooleanField()
-	cmd_status = serializers.CharField(max_length=200)
-
-class InstalledSoftwares(models.Model):
-
-	def __str__(self):
-		return self.name
-
-	name = models.CharField(max_length=200,default="")
-	command = models.CharField(max_length=200,default="")

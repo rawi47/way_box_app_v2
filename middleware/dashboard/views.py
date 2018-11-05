@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from env_config.models import EnvSerializer,Env,SettingApp,InstalledSoftwares,SettingAppSerializer
+from env_config.models import EnvSerializer,Env
 from itertools import groupby
 from django.contrib.auth.decorators import login_required
 from .forms import ConfigForm
-from utils.networks import NetworksUtils
 from utils.cmd import Cmd
 from django.http import HttpResponseRedirect
 from user.models import User
@@ -27,23 +26,20 @@ httpHandler = HttpHandler()
 
 
 
-InstalledSoftwares_objs = InstalledSoftwares.objects.order_by('name')
 static_path = settings.STATICFILES_DIRS[0] + "/config/"
 
 @login_required
 def index(request):
-    env_obj = Env.objects.order_by('api_key')[0]
     template = loader.get_template('dashboard/index.html')
-
-    serializerEnv = EnvSerializer(env_obj)
-    networksutil = NetworksUtils()
-
     ctx_data = []
+    env_obj = Env.objects.order_by('api_key')
+    env_data = {}
+    if env_obj:
+        serializerEnv = EnvSerializer(env_obj[0])
 
-
+        env_data = serializerEnv.data
     context = {
-    	'env_obj' : serializerEnv.data,
-    	'netwrk_obj' : networksutil._get_interfaces(),
+    	'env_obj' : env_data,
         'ctx_data' : ctx_data
     }
     return HttpResponse(template.render(context, request))
@@ -96,61 +92,7 @@ def systemctl_stat(request):
     }
     return HttpResponse(template.render(context, request))
 
-@login_required
-def config_files(request):
-    template = loader.get_template('dashboard/configfile.html')
-    env_obj = Env.objects.order_by('api_key')[0]
-    setting_app_obj = SettingApp.objects.filter(api_mode__in=[env_obj.api_mode,'commun']).order_by('sequence')
 
-    static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
-    configs = []
-    for line in setting_app_obj:
-        settingAppSerializer = SettingAppSerializer(line)
-        cnf = settingAppSerializer.data
-        listR = []
-        file = path.join(static_path,cnf["directory"],cnf["origine"])
-        user_obj = User.objects.order_by('id')[0]
-        if len(cnf["sub_directory"]) > 2:
-            file = path.join(static_path,cnf["directory"],cnf['sub_directory'],cnf["origine"])
-
-        cmd._read_file(file,user_obj,listR)
-        cnf["origine_file"] = listR
-        listR = []
-        cmd._read_file(cnf["dest"],user_obj,listR)
-        cnf["dest_file"] = listR
-        configs.append(cnf)
-        cnf["stat"] = []
-        if cnf["status"]:
-            lst = []
-            cmd.run(cnf["cmd_status"] + " " + cnf["setting_type"],user_obj,lst)
-            cnf["stat"] = lst
-
-
-    context = {
-        'configs' : configs,
-    }
-    return HttpResponse(template.render(context, request))
-
-@login_required
-def installed_software(request):
-    template = loader.get_template('dashboard/istalledSoftware.html')
-    user_obj = User.objects.order_by('id')[0]
-    listSo = {}
-    for soft in InstalledSoftwares_objs:
-        listS = []
-
-        cmd.run(soft.command ,user_obj,listS)
-
-        listSo[soft.name] = listS
-
-    print (listSo)
-
-
-    context = {
-        'listSo' : listSo,
-
-    }
-    return HttpResponse(template.render(context, request))
 
 @login_required
 def run_config(request):

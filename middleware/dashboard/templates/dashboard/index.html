@@ -53,45 +53,12 @@
 
 							{% endfor %}
 						</ul>
-						
+
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 
-
-
-
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Network interfaces</h3>
-			</div>
-			<div class="panel-body">
-				<!-- Table -->
-				{% for key,value in  netwrk_obj.items %}
-				<h2> {{ key }} </h2>
-
-				{% for line in value %}
-				<ul class="list-group">
-					{% for k,v in  line.items %}
-
-
-
-					<li class="list-group-item">{{ k }} : {{ v }}</li>
-
-					
-					{% endfor %}
-				</ul>
-				<hr>
-				{% endfor %}
-				
-				{% endfor %}
-			</div>
-		</div>
-		
-	</div>
 </div>
 {% endblock %}
-

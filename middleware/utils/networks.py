@@ -1,8 +1,8 @@
 from django.db import models
 import netifaces
-from network.models import Networks,AfLinksSerializer,AfLinks
 
-class NetworksUtils(models.Model):  
+
+class NetworksUtils(models.Model):
 
 	def _all_interfaces(self):
 		interface_list = netifaces.interfaces()
@@ -14,12 +14,12 @@ class NetworksUtils(models.Model):
 
 	def _get_interfaces(self):
 		serializerNetworks = {}
-		af_list = [(netifaces.AF_LINK,'AF_LINK'),(netifaces.AF_INET,'AF_INET'),(netifaces.AF_INET6,'AF_INET6')]	
+		af_list = [(netifaces.AF_LINK,'AF_LINK'),(netifaces.AF_INET,'AF_INET'),(netifaces.AF_INET6,'AF_INET6')]
 		ifs = self._all_interfaces()['interface_list']
 		for i in ifs:
-		
-				
-			
+
+
+
 			addrs = netifaces.ifaddresses(i)
 			for af in af_list:
 				if af[0] in addrs:
@@ -27,7 +27,7 @@ class NetworksUtils(models.Model):
 					netmask = ""
 					broadcast = ""
 					peer = ""
-					name = i + "-" + str(af[1])	
+					name = i + "-" + str(af[1])
 
 
 					for addr in addrs[af[0]]:

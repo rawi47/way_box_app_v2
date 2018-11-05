@@ -16,9 +16,3 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 application = get_wsgi_application()
-
-import way_box_app_v2.run as rn
-try:
-    t = _thread.start_new_thread( rn._run_main_prog, () )
-except Exception as e:
-    print("Python exception : " + str(e))
