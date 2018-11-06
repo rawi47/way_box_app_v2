@@ -3,6 +3,7 @@ import os
 import subprocess
 import datetime
 import git
+from git import repo
 from shutil import copy2
 
 
@@ -43,8 +44,12 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def _clone_git(dir,url):
+def _clone_git(repo_dir,git_url):
     try:
-        git.Git(dir).clone(url)
-    except Exception as e:
-        print ("OSError > " + str(e))
+        repo = git.Repo()
+        repo.clone_from(git_url, repo_dir)
+        print("Done!")
+    except FileExistsError as e:
+        print(e)
+def _rename_folder(old_name, new_name):
+    os.rename(old_name,new_name)

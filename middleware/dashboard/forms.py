@@ -15,13 +15,6 @@ class ConfigForm(forms.Form):
 	def _get_name():
 		env_obj = Env.objects.order_by('api_key')[0]
 		return env_obj.name
-	def _get_api_key():
-		env_obj = Env.objects.order_by('api_key')[0]
-		return env_obj.api_key
-
-	def _get_api_secret():
-		env_obj = Env.objects.order_by('api_key')[0]
-		return env_obj.api_secret
 
 	def _get_client_session_timeout():
 		env_obj = Env.objects.order_by('api_key')[0]
@@ -31,15 +24,10 @@ class ConfigForm(forms.Form):
 		env_obj = Env.objects.order_by('api_key')[0]
 		return env_obj.api_mode
 
-	def _get_api_host():
-		env_obj = Env.objects.order_by('api_key')[0]
-		return env_obj.api_host
 
 
 	name = forms.CharField( max_length=100,initial=_get_name)
-	api_host = forms.CharField( max_length=100,initial=_get_api_host)
-	api_key = forms.CharField( max_length=100,initial=_get_api_key)
-	api_secret = forms.CharField( max_length=100,initial=_get_api_secret)
+
 
 	client_session_timeout = forms.ChoiceField(
 	    choices=ts,

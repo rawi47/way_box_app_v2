@@ -56,16 +56,20 @@ def get_name(request):
         # check whether it's valid:
         if form.is_valid():
             env_obj = Env.objects.order_by('api_key')[0]
+            old_mode = env_obj.api_mode
+            new_mode = form.cleaned_data['api_mode']
+
             Env.objects.filter(pk=env_obj.id).update(
                 client_session_timeout=form.cleaned_data['client_session_timeout'],
                 name=form.cleaned_data['name'],
-                api_mode=form.cleaned_data['api_mode'],
-                api_key=form.cleaned_data['api_key'],
-                api_secret=form.cleaned_data['api_secret'],
-                api_host=form.cleaned_data['api_host'],
+                api_mode=form.cleaned_data['api_mode']
                 )
-            httpHandler._set_establichement_name(form.cleaned_data['api_host'],form.cleaned_data['api_key'],form.cleaned_data['api_secret'],lst)
+            httpHandler._set_establichement_name(env_obj.api_host,env_obj.api_key,env_obj.api_secret,lst)
 
+            if old_mode != new_mode:
+                run._config_main_prog()
+                print("diffrent")
+                
             for line in lst:
                 print(lst)
             return HttpResponseRedirect('/dashboard/')

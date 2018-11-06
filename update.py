@@ -5,9 +5,11 @@ from  opt.python_libs import utils as utils
 import base64
 import requests
 import configparser
-import git
+import git,json
 import  _thread, time,threading
 import datetime
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 id = 0
 version = remote_version = "0.0.0"
@@ -29,27 +31,35 @@ databases_backup_dir = ""
 database = settings.DATABASES['default']['NAME']
 
 
+
+
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
 with conn:
     id,version,patch,root_dir,app_dir,url,url_update,repo_dir_update,repo_dir,middleware_dir,databases_backup_dir = sqlite3_lib.select_all_by(
         conn,
         'env_config_env',
+
         "id,version,patch,root_dir,app_dir,git_repo,git_repo_update,repo_dir_update,repo_dir,middleware_dir,databases_backup_dir"
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0]
 
 try:
-    req = requests.get(url_update)
-    if req.status_code == requests.codes.ok:
-        req = req.json()  # the response is a JSON
-        # req is now a dict with keys: name, encoding, url, size ...
-        # and content. But it is encoded with base64.
-        content = base64.decodebytes(req['content'].encode())
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
 
-        utils._create_file(repo_dir_update,content.decode(),"w")
-    else:
-        print('Content was not found.')
+
+    resp = session.get(url_update)
+
+    data = json.loads(resp.text)
+
+
+    content = base64.decodebytes(data['content'].encode())
+
+    utils._create_file(repo_dir_update,content.decode('utf-8'),"w")
 
     config = configparser.ConfigParser()
     config.read(repo_dir_update)
@@ -60,15 +70,20 @@ try:
     if patch < remote_patch:
         print("do patch")
     if version < remote_version:
-        dir = os.path.join(root_dir , app_dir , repo_dir)
-        utils._create_dir(dir )
+        dir = os.path.join(root_dir , repo_dir)
+        origin_dir = os.path.join(root_dir , app_dir)
 
+        utils._create_dir(dir)
         utils._clone_git(dir,url)
+        #utils._rename_folder(origin_dir,origin_dir + "_old")
+        utils._rename_folder(dir,origin_dir + "_new")
+        data_base_dest = os.path.join(origin_dir + "_new" ,middleware_dir,"db.sqlite3")
+        utils._copy_file(database,data_base_dest)
         with conn:
-            # res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
-            pass
+            res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
+            
 
 
 
-except Exception as e:
+except AssertionError as e:
     print(str(e))

@@ -28,6 +28,7 @@ def _config_main_prog():
 	API_HOST = env_obj.api_host
 	API_KEY = env_obj.api_key
 	API_SECRET = env_obj.api_secret
+	etc_dir = env_obj.etc_dir
 
 	if app_mode == "wlan":
 		interface = "wlan0"
@@ -56,8 +57,9 @@ def _config_main_prog():
 
 			cmd._edit_files(dest,"arg0",interface)
 			cmd._edit_files(dest,"arg1",ssid)
-			config_dst = path.join("/etc/",fl)
+			config_dst = path.join(etc_dir,fl)
 			if ln:
+
 				command = "ln -sf " + dest + " " + config_dst
 				lst.append(command)
 				cmd.run(command,user_obj,lst)

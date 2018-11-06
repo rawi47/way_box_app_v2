@@ -41,6 +41,7 @@ class Env(models.Model):
 	databases_backup_dir = models.CharField(max_length=200,default="databases_backups")
 	config_dir = models.CharField(max_length=200,default="opt/config/")
 	origin_config_dir = models.CharField(max_length=200,default="opt/original files/")
+	etc_dir = models.CharField(max_length=200,default="/etc")
 
 	ftp_host = models.CharField(max_length=200,default="127.0.0.1")
 	ftp_user = models.CharField(max_length=200,default="user")
@@ -59,22 +60,7 @@ class Env(models.Model):
 	)
 
 
-class EnvSerializer(serializers.Serializer):
-	name = serializers.CharField(max_length=200)
-	api_host = serializers.CharField(max_length=200)
-	api_key = serializers.CharField(max_length=200)
-	api_secret = serializers.CharField(max_length=200)
-	api_port = serializers.CharField(max_length=200)
-	root_dir = serializers.CharField(max_length=200)
-	version = serializers.CharField(max_length=200)
-	patch = serializers.CharField(max_length=200)
-	app_dir = serializers.CharField(max_length=200)
-	git_repo = serializers.CharField(max_length=200)
-
-	ftp_host = serializers.CharField(max_length=200)
-	ftp_user = serializers.CharField(max_length=200)
-	ftp_password = serializers.CharField(max_length=200)
-
-	ssid_prefix = serializers.CharField(max_length=200)
-	client_session_timeout = serializers.IntegerField()
-	api_mode = serializers.CharField(max_length=200)
+class EnvSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Env
+        fields = '__all__'
