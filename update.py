@@ -67,15 +67,7 @@ try:
         with conn:
             # res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
             pass
-        dest_database = os.path.join(dir,app_dir,middleware_dir,"db.sqlite3")
-        dest_database_backup =os.path.join(root_dir , repo_dir , databases_backup_dir , str(datetime.datetime.now()) + "_db.sqlite3" )
-        #Make backups of db
-        utils._copy_file(database,dest_database_backup)
-        #copy original db to update folder
-        utils._copy_file(database,dest_database)
 
-        # cmd = "rm -rf " + dir + "/*"
-        # utils.run(cmd,password)
 
 
 except Exception as e:
