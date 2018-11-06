@@ -78,10 +78,10 @@ try:
         #utils._rename_folder(origin_dir,origin_dir + "_old")
         utils._rename_folder(dir,origin_dir + "_new")
         data_base_dest = os.path.join(origin_dir + "_new" ,middleware_dir,"db.sqlite3")
-        utils._copy_file(database,data_base_dest)
+
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
-            
+        utils._copy_file(database,data_base_dest)
 
 
 

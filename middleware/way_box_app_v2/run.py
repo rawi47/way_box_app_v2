@@ -32,6 +32,11 @@ def _config_main_prog():
 
 	if app_mode == "wlan":
 		interface = "wlan0"
+		command = "systemctl enable hostapd"
+		cmd.run(command,user_obj,lst)
+	else:
+		command = "systemctl disable hostapd"
+		cmd.run(command,user_obj,lst)
 	try:
 		httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
 		files =[
