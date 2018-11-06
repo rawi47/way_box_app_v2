@@ -45,7 +45,7 @@ def _config_main_prog():
 			("dnsmasq.conf",True),
 			("dhcpcd.conf",True),
 			("nodogsplash/nodogsplash.conf",True),
-			("nodogsplash/htdocs/splash.html",False),
+			("nodogsplash/htdocs/splash.html",True),
 			("hostapd/hostapd.conf",do_hostapd),
 			("hostapd/hostapd",do_hostapd)
 		]
