@@ -29,7 +29,7 @@ def _config_main_prog():
 	API_KEY = env_obj.api_key
 	API_SECRET = env_obj.api_secret
 	etc_dir = env_obj.etc_dir
-
+	do_hostapd = True
 	if app_mode == "wlan":
 		interface = "wlan0"
 		command = "systemctl enable hostapd"
@@ -46,8 +46,8 @@ def _config_main_prog():
 			("dhcpcd.conf",True),
 			("nodogsplash/nodogsplash.conf",True),
 			("nodogsplash/htdocs/splash.html",False),
-			("hostapd/hostapd.conf",True),
-			("hostapd/hostapd",True)
+			("hostapd/hostapd.conf",do_hostapd),
+			("hostapd/hostapd",do_hostapd)
 		]
 		directories = ["nodogsplash","nodogsplash/htdocs","hostapd"]
 		for dr in directories:

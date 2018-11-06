@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 log = logging.getLogger(__name__)
 from utils.cmd import Cmd
+from django.shortcuts import render
+from django.template import loader
 
 
 
@@ -86,3 +88,12 @@ def _is_connected(Request):
     res = HttpResponse(resp.text, status= resp.status_code)
 
     return res
+
+def _error(request,status):
+        template = loader.get_template('dashboard/error.html')
+        context = {
+            "status" : status,
+            "message" :  "message"
+
+        }
+        return HttpResponse(template.render(context, request))
