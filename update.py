@@ -75,9 +75,12 @@ try:
 
         utils._create_dir(dir)
         utils._clone_git(dir,url)
-        #utils._rename_folder(origin_dir,origin_dir + "_old")
-        utils._rename_folder(dir,origin_dir + "_new")
-        data_base_dest = os.path.join(origin_dir + "_new" ,middleware_dir,"db.sqlite3")
+
+        data_base_dest = os.path.join(dir ,middleware_dir,"db.sqlite3")
+
+        cmmd = "rm -rf " + origin_dir
+        cmd.run(cmmd,user_obj,lst)
+        utils._rename_folder(dir,origin_dir)
 
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
