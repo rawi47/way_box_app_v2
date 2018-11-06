@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('connexion_status/', views._is_connected),
-    path('error/<str:status>', views._error),
+    path('connection_status/', views.connection_status),
+    path('error', views._error),
     path('<path:path>', views.catch_all),
 ]

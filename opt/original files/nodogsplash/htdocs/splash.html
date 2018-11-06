@@ -49,7 +49,7 @@ voucher
   var xhr = new XMLHttpRequest();
   console.log('UNSENT', xhr.status);
 
-  xhr.open('GET', 'http://w.zone:5000/connexion_status/', true);
+  xhr.open('GET', 'http://w.zone:5000/connection_status/', true);
   console.log('OPENED', xhr.status);
 
   xhr.onprogress = function () {
@@ -63,7 +63,7 @@ voucher
       window.location="http://portal.way-connect.com/#/portal/" + target + "/$clientmac/$tok"
     }
     else {
-      window.location="http://w.zone:5000/error/" + xhr.status
+      window.location="http://w.zone:5000/error"
 
     }
 

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'costumLogging.apps.CostumloggingConfig',
     'utils.apps.UtilsConfig',
     'dashboard.apps.DashboardConfig',
+    'SystemStatus.apps.SystemstatusConfig',
     'django_crontab',
     'bootstrap3',
     'jquery',

@@ -1,4 +1,5 @@
 from env_config.models import Env
+from user.models import User
 import json,hmac,hashlib
 import requests
 from django.http import HttpResponseRedirect
@@ -9,6 +10,7 @@ log = logging.getLogger(__name__)
 from utils.cmd import Cmd
 from django.shortcuts import render
 from django.template import loader
+from SystemStatus.models import SystemStatus,SystemStatusSerializer
 
 
 
@@ -30,6 +32,7 @@ def catch_all(request,path):
     API_SECRET = env_obj.api_secret
     if path == 'box':
         return HttpResponse(API_KEY)
+
 
     url = API_URL + path
     data = {}
@@ -75,25 +78,67 @@ def catch_all(request,path):
 
     return res
 
-def _is_connected(Request):
-    url = "https://www.google.com"
-    method = "GET"
-    headers = {}
-    params = {}
-    data = {}
+def connection_status(Request):
 
-    esreq = requests.Request(method=method, url=url, data=data, params=params, headers=headers)
-    resp = requests.Session().send(esreq.prepare())
+    cmd = Cmd()
+    user_obj = User.objects.order_by('id')[0]
+    infos = {}
+    pkgs = ["dhcpcd","dnsmasq","hostapd"]
+    for line in pkgs:
+        res = []
+        cmd._systemctl_status(line,user_obj,res)
 
-    res = HttpResponse(resp.text, status= resp.status_code)
+        message = {}
+        for ln in res:
+            if ":" in ln:
+                param = ln.split(":")
+                message[param[0]] = param[1]
 
-    return res
+        infos[line] = True,message
 
-def _error(request,status):
+
+    lst = []
+    cmd._ndsctl_status(user_obj,lst)
+
+    message = {}
+    for ln in lst:
+        if ":" in ln:
+            param = ln.split(":")
+            message[param[0]] = param[1]
+
+
+    infos["nodogsplash"] = True,message
+
+
+    internet_connection,internet_connection_message = cmd._is_connected("https://www.google.com")
+    infos["internet_connection"] = internet_connection,internet_connection_message
+
+
+    systemStatus = SystemStatus(
+        dhcpcd= infos["dhcpcd"][0],
+        dhcpcd_message= infos["dhcpcd"][1],
+        dnsmasq= infos["dnsmasq"][0],
+        dnsmasq_message= infos["dnsmasq"][1],
+        hostapd= infos["hostapd"][0],
+        hostapd_message= infos["hostapd"][1],
+        nodogsplash= infos["nodogsplash"][0],
+        nodogsplash_message= infos["nodogsplash"][1],
+        internet_connection= infos["internet_connection"][0],
+        internet_connection_message= infos["internet_connection"][1]
+    )
+    systemStatus.save()
+    systemStatusSerializer = SystemStatusSerializer(systemStatus)
+    response_data = systemStatusSerializer.data
+
+    return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
+
+
+def _error(request):
         template = loader.get_template('dashboard/error.html')
-        context = {
-            "status" : status,
-            "message" :  "message"
 
+        systemStatus_obj = SystemStatus.objects.latest('id')
+        systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
+        context = {
+        'res' : systemStatusSerializer.data
         }
         return HttpResponse(template.render(context, request))

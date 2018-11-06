@@ -9,6 +9,9 @@ import socket
 from shutil import copy2
 from os import walk
 import fileinput
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 class Cmd(models.Model):
 
@@ -19,15 +22,21 @@ class Cmd(models.Model):
 		command = command.split()
 		try:
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
-			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
+			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=shell)
 			while True:
 				line = popen.stdout.readline()
+				line_err = popen.stderr.readline()
 
 				if len(line) > 0:
 					getD = ""
 					if getDate:
 						getD = str(datetime.datetime.now()) + " - "
 					lst.append(getD + line.decode().strip() )
+				elif  len(line_err) > 0:
+					getD = ""
+					if getDate:
+						getD = str(datetime.datetime.now()) + " - "
+					lst.append(getD + line_err.decode().strip() )
 				else:
 					break
 
@@ -108,3 +117,26 @@ class Cmd(models.Model):
 		with fileinput.FileInput(filename, inplace=True) as file:
 		    for line in file:
 		        print(line.replace(text_to_search, replacement_text), end='')
+	def _systemctl_status(self,pkg,user,lst):
+		cmd = "systemctl status " + pkg
+		self.run(cmd,user,lst,getDate=False)
+
+		return lst
+
+	def _ndsctl_status(self,user,lst):
+		cmd = "ndsctl status"
+		self.run(cmd,user,lst,getDate=False)
+
+		return lst
+	def _is_connected(self,hostname):
+		try:
+			session = requests.Session()
+			retry = Retry(connect=3, backoff_factor=0.5)
+			adapter = HTTPAdapter(max_retries=retry)
+			session.mount('http://', adapter)
+			session.mount('https://', adapter)
+
+			resp = session.get(hostname)
+			return True,resp.status_code
+		except Exception as e:
+			return False,str(e)
