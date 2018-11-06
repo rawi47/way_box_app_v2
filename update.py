@@ -79,7 +79,7 @@ try:
         data_base_dest = os.path.join(dir ,middleware_dir,"db.sqlite3")
 
         cmmd = "rm -rf " + origin_dir
-        cmd.run(cmmd,user_obj,lst)
+        utils.run(cmmd,password)
         utils._rename_folder(dir,origin_dir)
 
         with conn:
