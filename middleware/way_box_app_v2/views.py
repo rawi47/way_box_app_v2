@@ -95,7 +95,7 @@ def connection_status(Request):
                 message[param[0]] = param[1]
         active = False
         if "active" in message:
-            if "inactive" not in message["active"]:
+            if "inactive" not in message["Active"]:
                 active = True
         infos[line] = active,message
 
@@ -147,10 +147,13 @@ def connection_status(Request):
 
 def _error(request):
         template = loader.get_template('dashboard/error.html')
+        systemStatusSerializer = {"internet_connection_message": ""}
 
         systemStatus_obj = SystemStatus.objects.latest('id')
-        systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
+        if systemStatus_obj:
+            systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
+            systemStatusSerializer = systemStatusSerializer.data
         context = {
-        'res' : systemStatusSerializer.data
+        'res' : systemStatusSerializer
         }
         return HttpResponse(template.render(context, request))

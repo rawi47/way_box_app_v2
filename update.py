@@ -85,6 +85,7 @@ try:
         cmmd = "rm -rf " + origin_dir + "_old"
         utils.run(cmmd,password)
 
+        conn = sqlite3_lib.create_connection(data_base_dest)
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
         utils._copy_file(database,data_base_dest)
