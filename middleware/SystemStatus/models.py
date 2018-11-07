@@ -19,6 +19,7 @@ class SystemStatus(models.Model):
     hostapd_message = models.TextField(default="")
 
     nodogsplash = models.BooleanField(default=False)
+    connected_clients = models.IntegerField(default=0)
     nodogsplash_message = models.TextField(default="")
 
     internet_connection = models.BooleanField(default=False)

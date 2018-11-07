@@ -12,6 +12,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from utils.httpHandler import HttpHandler
+from SystemStatus.models import SystemStatus,SystemStatusSerializer
 
 import os
 from memory_profiler import memory_usage
@@ -31,7 +32,15 @@ static_path = settings.STATICFILES_DIRS[0] + "/config/"
 @login_required
 def index(request):
     template = loader.get_template('dashboard/index.html')
-    ctx_data = []
+
+    systemStatus_obj = SystemStatus.objects.order_by('-id')[:10]
+    x_data = []
+    ctx_data = [1,3,6,18,2]
+    for line in systemStatus_obj:
+        x_data.append(line.date.strftime("%Y-%m-%d %H:%M:%S"))
+        ctx_data.append(line.connected_clients)
+
+    label = "Connected clients"
     env_obj = Env.objects.order_by('api_key')
     env_data = {}
     if env_obj:
@@ -40,7 +49,9 @@ def index(request):
         env_data = serializerEnv.data
     context = {
     	'env_obj' : env_data,
-        'ctx_data' : ctx_data
+        'ctx_data' : ctx_data,
+        'x_data' : x_data,
+        'label' : label
     }
     return HttpResponse(template.render(context, request))
 
@@ -69,7 +80,7 @@ def get_name(request):
             if old_mode != new_mode:
                 run._config_main_prog()
                 print("diffrent")
-                
+
             for line in lst:
                 print(lst)
             return HttpResponseRedirect('/dashboard/')
@@ -80,21 +91,6 @@ def get_name(request):
         form = ConfigForm()
 
     return render(request, 'dashboard/configuration.html', {'form': form})
-
-@login_required
-def systemctl_stat(request):
-    template = loader.get_template('dashboard/systemctl.html')
-
-    systemctl_status = []
-    user_obj = User.objects.order_by('id')[0]
-
-    cmd.run("systemctl status",user_obj,systemctl_status,getDate=False)
-
-    context = {
-        'systemctl_status' : systemctl_status,
-
-    }
-    return HttpResponse(template.render(context, request))
 
 
 
@@ -114,31 +110,6 @@ def run_prog(request):
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-@login_required
-def nds_ctl(request):
-    template = loader.get_template('dashboard/nds_ctl.html')
-
-    context = {
-
-    }
-
-    return HttpResponse(template.render(context, request))
-
-
-@login_required
-def nds_ctl_status(request):
-    ndsctl_status = []
-    user_obj = User.objects.order_by('id')[0]
-    cmd.run("ndsctl status",user_obj,ndsctl_status,getDate=False)
-    ndsctl_status_dict = {}
-    for line in ndsctl_status:
-        if ":" in line:
-            key = line.split(":")[0]
-            value = line.split(":")[1]
-
-            ndsctl_status_dict[key] = value
-
-    return HttpResponse(json.dumps(ndsctl_status_dict), content_type="application/json")
 
 
 @login_required
@@ -146,33 +117,6 @@ def reboot(request):
     response_data = []
     user_obj = User.objects.order_by('id')[0]
     cmd.run("reboot",user_obj,response_data,getDate=False)
-
-
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-@login_required
-def nds_stop(request):
-    response_data = []
-    user_obj = User.objects.order_by('id')[0]
-    cmd.run("ndsctl stop",user_obj,response_data,getDate=False)
-
-
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-@login_required
-def nds_start(request):
-    response_data = []
-    user_obj = User.objects.order_by('id')[0]
-    cmd.run("nodogsplash",user_obj,response_data,getDate=False)
-
-
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-@login_required
-def hostapd_restart(request):
-    response_data = []
-    user_obj = User.objects.order_by('id')[0]
-    cmd.run("systemctl restart hostapd",user_obj,response_data,getDate=False)
 
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")

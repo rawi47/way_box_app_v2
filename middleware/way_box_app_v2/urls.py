@@ -21,7 +21,7 @@ from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', include('dashboard.urls')),
+    path('', include('dashboard.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('connection_status/', views.connection_status),
     path('error', views._error),

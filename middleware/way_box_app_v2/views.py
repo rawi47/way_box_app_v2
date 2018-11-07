@@ -93,8 +93,11 @@ def connection_status(Request):
             if ":" in ln:
                 param = ln.split(":")
                 message[param[0]] = param[1]
-
-        infos[line] = True,message
+        active = False
+        if "active" in message:
+            if "inactive" not in message["active"]:
+                active = True
+        infos[line] = active,message
 
 
     lst = []
@@ -106,8 +109,16 @@ def connection_status(Request):
             param = ln.split(":")
             message[param[0]] = param[1]
 
+    active = False
+    connected = 0
 
-    infos["nodogsplash"] = True,message
+    if "active" in message:
+        active = True
+
+    if "Current clients" in message:
+        connected = message["Current"]
+
+    infos["nodogsplash"] = active,message,connected
 
 
     internet_connection,internet_connection_message = cmd._is_connected("https://www.google.com")
@@ -122,6 +133,7 @@ def connection_status(Request):
         hostapd= infos["hostapd"][0],
         hostapd_message= infos["hostapd"][1],
         nodogsplash= infos["nodogsplash"][0],
+        connected_clients= infos["nodogsplash"][2],
         nodogsplash_message= infos["nodogsplash"][1],
         internet_connection= infos["internet_connection"][0],
         internet_connection_message= infos["internet_connection"][1]

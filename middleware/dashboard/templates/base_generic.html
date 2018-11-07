@@ -15,10 +15,11 @@
   {% load bootstrap3 %}
   {% bootstrap_css %}
 
-  {% block extrahead %}{% endblock %}
+
   <link rel="icon" href="{% static 'images/favicon.ico' %}" />
   <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"> </script>
   {% bootstrap_javascript %}
+  {% block extrahead %}{% endblock %}
 
 
 </head>
@@ -57,7 +58,6 @@
 
   <ul class="list-group">
     <li class="list-group-item"><a href="{% url 'dashboard_index' %}">Dashboard</a></li>
-    <li class="list-group-item"><a href="{% url 'nds_ctl' %}">Nodogsplash</a></li>
     <li class="list-group-item"><a href="{% url 'env_configuration' %}">Configuration</a></li>
   </ul>
   <div class="sidenav-bg mask-strong"></div>

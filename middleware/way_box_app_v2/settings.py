@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'env_config.apps.EnvConfigConfig',
     'user.apps.UserConfig',
-    'costumLogging.apps.CostumloggingConfig',
     'utils.apps.UtilsConfig',
     'dashboard.apps.DashboardConfig',
     'SystemStatus.apps.SystemstatusConfig',
