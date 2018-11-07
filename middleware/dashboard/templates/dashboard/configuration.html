@@ -69,7 +69,7 @@
 		$( "#conf" ).click(function() {
 			$(".output").html();
 			$(".output").html("wait...");
-			$.getJSON('/dashboard/run_config',
+			$.getJSON('/run_config',
 			function (data) {
 
 				$(".output").html();
@@ -85,7 +85,7 @@
 		$( "#run" ).click(function() {
 			$(".output").html();
 			$(".output").html("wait...");
-			$.getJSON('/dashboard/run_prog',
+			$.getJSON('/run_prog',
 			function (data) {
 
 				$(".output").html();
@@ -100,7 +100,7 @@
 		$( "#reboot" ).click(function() {
 			$(".output").html();
 			$(".output").html("wait...");
-			$.getJSON('/dashboard/reboot',
+			$.getJSON('/reboot',
 			function (data) {
 
 				$(".output").html();
@@ -112,21 +112,7 @@
 			});
 
 		});
-		$( "#hostapd" ).click(function() {
-			$(".output").html();
-			$(".output").html("wait...");
-			$.getJSON('/dashboard/hostapd_restart',
-			function (data) {
 
-				$(".output").html();
-				$.each(data, function (index, value) {
-					$(".output").append("<p>" + value + "</p>");
-
-				});
-
-			});
-
-		});
 	});
 
 </script>
