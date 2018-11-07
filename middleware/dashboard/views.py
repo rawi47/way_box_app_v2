@@ -35,7 +35,7 @@ def index(request):
 
     systemStatus_obj = SystemStatus.objects.order_by('-id')[:10]
     x_data = []
-    ctx_data = [1,3,6,18,2]
+    ctx_data = []
     for line in systemStatus_obj:
         x_data.append(line.date.strftime("%Y-%m-%d %H:%M:%S"))
         ctx_data.append(line.connected_clients)

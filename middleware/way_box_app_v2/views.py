@@ -116,7 +116,7 @@ def connection_status(Request):
         active = True
 
     if "Current clients" in message:
-        connected = message["Current"]
+        connected = message["Current clients"]
 
     infos["nodogsplash"] = active,message,connected
 
