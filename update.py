@@ -78,9 +78,12 @@ try:
 
         data_base_dest = os.path.join(dir ,middleware_dir,"db.sqlite3")
 
-        cmmd = "rm -rf " + origin_dir
-        utils.run(cmmd,password)
+
+        utils._rename_folder(origin_dir,origin_dir + "_old")
         utils._rename_folder(dir,origin_dir)
+
+        cmmd = "rm -rf " + origin_dir + "_old"
+        utils.run(cmmd,password)
 
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
