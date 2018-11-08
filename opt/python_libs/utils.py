@@ -33,12 +33,12 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
                 getD = ""
                 if getDate:
                     getD = str(datetime.datetime.now()) + " - "
-                lst.append(getD + line.decode().strip() )
+                print(getD + line.decode().strip() )
             elif  len(line_err) > 0:
                 getD = ""
                 if getDate:
                     getD = str(datetime.datetime.now()) + " - "
-                lst.append(getD + line_err.decode().strip() )
+                print(getD + line_err.decode().strip() )
             else:
                 break
 

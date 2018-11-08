@@ -74,6 +74,9 @@ try:
         cmmd = "git stash"
         utils.run(cmmd,password)
 
+        cmmd = "git update-index --assume-unchanged middleware/db.sqlite3"
+        utils.run(cmmd,password)
+
 
 
         utils.pull_git(origin_dir)
