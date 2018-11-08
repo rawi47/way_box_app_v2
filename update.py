@@ -32,7 +32,6 @@ database = settings.DATABASES['default']['NAME']
 
 
 
-
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
 with conn:
@@ -42,7 +41,7 @@ with conn:
 
         "id,version,patch,root_dir,app_dir,git_repo,git_repo_update,repo_dir_update,repo_dir,middleware_dir,databases_backup_dir"
         )[0]
-    password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0]
+    password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
 
 try:
     session = requests.Session()
@@ -78,17 +77,21 @@ try:
 
         data_base_dest = os.path.join(dir ,middleware_dir,"db.sqlite3")
 
+        utils._copy_file(database,data_base_dest)
 
         utils._rename_folder(origin_dir,origin_dir + "_old")
         utils._rename_folder(dir,origin_dir)
 
         cmmd = "rm -rf " + origin_dir + "_old"
         utils.run(cmmd,password)
+        print(database)
 
-        conn = sqlite3_lib.create_connection(data_base_dest)
+        cmmd = "chown -R pi:www-data " + origin_dir
+        utils.run(cmmd,password)
+
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
-        utils._copy_file(database,data_base_dest)
+
 
 
 
