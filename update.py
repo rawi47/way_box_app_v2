@@ -69,25 +69,9 @@ try:
     if patch < remote_patch:
         print("do patch")
     if version < remote_version:
-        dir = os.path.join(root_dir , repo_dir)
         origin_dir = os.path.join(root_dir , app_dir)
 
-        utils._create_dir(dir)
-        utils._clone_git(dir,url)
-
-        data_base_dest = os.path.join(dir ,middleware_dir,"db.sqlite3")
-
-        utils._copy_file(database,data_base_dest)
-
-        utils._rename_folder(origin_dir,origin_dir + "_old")
-        utils._rename_folder(dir,origin_dir)
-
-        cmmd = "rm -rf " + origin_dir + "_old"
-        utils.run(cmmd,password)
-        print(database)
-
-        cmmd = "chown -R pi:www-data " + origin_dir
-        utils.run(cmmd,password)
+        utils.pull_git(origin_dir)
 
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)

@@ -51,11 +51,14 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def _clone_git(repo_dir,git_url):
+def pull_git(repo_dir):
     try:
-        repo = git.Repo()
-        repo.clone_from(git_url, repo_dir)
+        g = git.cmd.Git(repo_dir)
+         g.pull("--rebase")
         print("Done!")
+
+
+
     except FileExistsError as e:
         print(e)
 def _rename_folder(old_name, new_name):
