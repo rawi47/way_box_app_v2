@@ -71,6 +71,12 @@ try:
     if version < remote_version:
         origin_dir = os.path.join(root_dir , app_dir)
 
+        cmmd = "git fetch -all"
+        utils.run(cmmd,password)
+        cmmd = "git reset --hard origin/master"
+        utils.run(cmmd,password)
+
+
         utils.pull_git(origin_dir)
 
         with conn:
