@@ -71,13 +71,15 @@ try:
     if version < remote_version:
         origin_dir = os.path.join(root_dir , app_dir)
 
-        cmmd = "git fetch -all"
+        cmmd = "git stash"
         utils.run(cmmd,password)
-        cmmd = "git reset --hard origin/master"
-        utils.run(cmmd,password)
+
 
 
         utils.pull_git(origin_dir)
+
+        cmmd = "git stash pop"
+        utils.run(cmmd,password)
 
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
