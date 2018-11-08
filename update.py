@@ -71,9 +71,6 @@ try:
     if version < remote_version:
         origin_dir = os.path.join(root_dir , app_dir)
 
-        cmmd = "git stash"
-        utils.run(cmmd,password)
-
         cmmd = "git update-index --assume-unchanged middleware/db.sqlite3"
         utils.run(cmmd,password)
 
