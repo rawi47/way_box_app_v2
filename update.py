@@ -78,9 +78,6 @@ try:
 
         utils.pull_git(origin_dir)
 
-        cmmd = "git stash pop"
-        utils.run(cmmd,password)
-
         with conn:
             res = sqlite3_lib.update_by_id(conn,"env_config_env",remote_version,remote_patch,id)
 
