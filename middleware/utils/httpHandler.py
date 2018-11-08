@@ -27,23 +27,18 @@ class HttpHandler(models.Model):
 
 
 
-		try:
-			esreq = requests.Request(method=method, url=url, data=data, params=params, headers=headers)
-			resp = requests.Session().send(esreq.prepare())
 
-			res = (resp.text, resp.status_code, resp.headers.items())
+		esreq = requests.Request(method=method, url=url, data=data, params=params, headers=headers)
+		resp = requests.Session().send(esreq.prepare())
 
+		res = (resp.text, resp.status_code, resp.headers.items())
 
+		res_obj = json.loads(res[0])
 
-			res_obj = json.loads(res[0])
+		new_name = res_obj['name']
+		if env_obj.name != new_name:
+			print(new_name)
+			print(env_obj.name)
+			Env.objects.filter(pk=env_obj.id).update(name=new_name)
 
-			new_name = res_obj['name']
-
-			if env_obj.name != new_name:
-				print(new_name)
-				print(env_obj.name)
-				Env.objects.filter(pk=env_obj.id).update(name=new_name)
-
-			lst.append(getD + new_name)
-		except Exception as e:
-			lst.append(getD + str(e))
+		lst.append(getD + new_name)

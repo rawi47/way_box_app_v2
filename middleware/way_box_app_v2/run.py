@@ -86,6 +86,8 @@ def _run_main_prog():
 
 	try:
 		httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
+
+
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",
 			"iptables-restore < /etc/iptables.ipv4.nat"
