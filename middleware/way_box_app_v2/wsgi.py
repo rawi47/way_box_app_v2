@@ -18,6 +18,8 @@ application = get_wsgi_application()
 print("#############################################################################################")
 import way_box_app_v2.run as rn
 
+
+
 try:
     rn._config_main_prog()
     t = _thread.start_new_thread( rn._run_main_prog, () )

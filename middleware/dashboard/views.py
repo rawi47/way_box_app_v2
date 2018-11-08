@@ -83,7 +83,7 @@ def get_name(request):
 
             for line in lst:
                 print(lst)
-            return HttpResponseRedirect('/dashboard/')
+            return HttpResponseRedirect('/')
 
 
     # if a GET (or any other method) we'll create a blank form

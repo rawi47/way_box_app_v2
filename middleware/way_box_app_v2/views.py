@@ -12,8 +12,8 @@ from django.shortcuts import render
 from django.template import loader
 from SystemStatus.models import SystemStatus,SystemStatusSerializer
 from requests import Request, Session
-
-
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 def sign(public_key, secret_key, data):
@@ -26,9 +26,10 @@ def sign(public_key, secret_key, data):
 
 @csrf_exempt
 def catch_all(request,path):
+    print("catch_all")
     env_obj = Env.objects.order_by('api_key')[0]
     API_HOST = env_obj.api_host
-    API_URL = 'https://' + API_HOST + '/'
+    API_URL = 'http://' + API_HOST + '/'
     API_KEY = env_obj.api_key
     API_SECRET = env_obj.api_secret
     if path == 'box':
@@ -39,7 +40,7 @@ def catch_all(request,path):
     params = {}
     data = {}
 
-
+    print(url)
 
     if request.method == 'GET':
         for key, value in request.GET:
@@ -64,6 +65,7 @@ def catch_all(request,path):
     headers['X-API-Sign'] = signature
 
 
+
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
 
     resp = requests.Session().send(esreq.prepare())
@@ -74,11 +76,32 @@ def catch_all(request,path):
     for key, value in resp.headers.items():
         res[key] = value
 
-
+    print(resp.headers)
     return res
 
 def connection_status(Request):
 
+    response_data,infos = _save_status()
+    _post_to_server(response_data)
+
+    return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
+
+
+def _error(request):
+        template = loader.get_template('dashboard/error.html')
+        systemStatusSerializer = {"internet_connection_message": ""}
+
+        systemStatus_obj = SystemStatus.objects.latest('id')
+        if systemStatus_obj:
+            systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
+            systemStatusSerializer = systemStatusSerializer.data
+        context = {
+        'res' : systemStatusSerializer
+        }
+        return HttpResponse(template.render(context, request))
+
+
+def _save_status():
     cmd = Cmd()
     user_obj = User.objects.order_by('id')[0]
     infos = {}
@@ -93,8 +116,8 @@ def connection_status(Request):
                 param = ln.split(":")
                 message[param[0]] = param[1]
         active = False
-        if "active" in message:
-            if "inactive" not in message["Active"]:
+        if "Active" in message:
+            if "running" in message["Active"]:
                 active = True
         infos[line] = active,message
 
@@ -111,10 +134,11 @@ def connection_status(Request):
     active = False
     connected = 0
 
-    if "active" in message:
-        active = True
+
+
 
     if "Current clients" in message:
+        active = True
         connected = message["Current clients"]
 
     infos["nodogsplash"] = active,message,connected
@@ -141,64 +165,9 @@ def connection_status(Request):
     systemStatusSerializer = SystemStatusSerializer(systemStatus)
     response_data = systemStatusSerializer.data
 
-    return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
-
-
-def _error(request):
-        template = loader.get_template('dashboard/error.html')
-        systemStatusSerializer = {"internet_connection_message": ""}
-
-        systemStatus_obj = SystemStatus.objects.latest('id')
-        if systemStatus_obj:
-            systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
-            systemStatusSerializer = systemStatusSerializer.data
-        context = {
-        'res' : systemStatusSerializer
-        }
-        return HttpResponse(template.render(context, request))
+    return response_data,infos
 
 @csrf_exempt
-def _post_to_server(path):
-    env_obj = Env.objects.order_by('api_key')[0]
-    API_HOST = env_obj.api_host
-    API_URL = 'https://localhost/'
-    API_KEY = env_obj.api_key
-    API_SECRET = env_obj.api_secret
-
-    url = "https://" + API_HOST
-    url = API_URL + path
-    data = {}
-    headers = {}
-    s = Session()
-    systemStatusSerializer = {"internet_connection_message": ""}
-
-    systemStatus_obj = SystemStatus.objects.latest('id')
-    if systemStatus_obj:
-        systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
-        systemStatusSerializer = systemStatusSerializer.data
-
-    signature = sign(API_KEY, API_SECRET, systemStatusSerializer)
-
-    headers['Host'] = API_HOST
-    headers['X-API-Key'] = API_KEY
-    headers['X-API-Sign'] = signature
-
-    req = Request('POST', url, data=data, headers=headers)
-    prepped = req.prepare()
-
-    # do something with prepped.body
-    prepped.body = systemStatusSerializer
-
-
-
-    resp = s.send(prepped)
-
-def _save_status(url):
-    session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=0.5)
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
-
-
-    resp = session.get(url)
+def _post_to_server(response_data):
+    API_ENDPOINT = "http://127.0.0.1:8000/box/log"
+    r = requests.post(url = API_ENDPOINT, data = response_data)

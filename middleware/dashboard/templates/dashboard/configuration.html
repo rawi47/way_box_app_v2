@@ -53,6 +53,7 @@
 		Run
 	</button>
 
+
 	<button type="button" class="btn btn-danger" id="reboot">
 		<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
 		Reboot
@@ -72,7 +73,7 @@
 			$.getJSON('/run_config',
 			function (data) {
 
-				$(".output").html();
+				$(".output").html("");
 				$.each(data, function (index, value) {
 					$(".output").append("<p>" + value + "</p>");
 
@@ -83,7 +84,7 @@
 		});
 
 		$( "#run" ).click(function() {
-			$(".output").html();
+			$(".output").html("");
 			$(".output").html("wait...");
 			$.getJSON('/run_prog',
 			function (data) {
@@ -112,6 +113,7 @@
 			});
 
 		});
+
 
 	});
 

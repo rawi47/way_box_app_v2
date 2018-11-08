@@ -54,15 +54,21 @@ class Cmd(models.Model):
 		command = shlex.split(command)
 		try:
 			cmd1 = subprocess.Popen(['echo',sudo_password], stdout=subprocess.PIPE)
-			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,shell=shell)
+			popen = subprocess.Popen(['sudo','-S'] + command, stdin=cmd1.stdout, stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=shell)
 			while True:
 				line = popen.stdout.readline()
+				line_err = popen.stderr.readline()
 
 				if len(line) > 0:
 					getD = ""
 					if getDate:
 						getD = str(datetime.datetime.now()) + " - "
 					lst.append(getD + line.decode().strip() )
+				elif  len(line_err) > 0:
+					getD = ""
+					if getDate:
+						getD = str(datetime.datetime.now()) + " - "
+					lst.append(getD + line_err.decode().strip() )
 				else:
 					break
 

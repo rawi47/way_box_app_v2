@@ -87,7 +87,6 @@ def _run_main_prog():
 	try:
 		httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
 
-
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",
 			"iptables-restore < /etc/iptables.ipv4.nat"
@@ -95,10 +94,12 @@ def _run_main_prog():
 
 		commands = []
 
+
 		commands.append("nodogsplash")
 
 
 		for cmd_sh in commands_sh:
+
 			lst.append(cmd_sh)
 			src = static_path + 'temp.sh'
 			Cmd._create_file(src,cmd_sh,"w")
@@ -111,7 +112,6 @@ def _run_main_prog():
 		for cmmd in commands:
 			lst.append(cmmd)
 			cmd.run(cmmd,user_obj,lst)
-
 
 
 	except Exception as e:
