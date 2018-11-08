@@ -82,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'way_box_app_v2.wsgi.application'
-
+DB_PATH = "/etc/middleware"
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

@@ -7,7 +7,6 @@ For more information on this file, see
 https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 """
 import os
-import requests
 import  _thread, time,threading
 
 from django.core.wsgi import get_wsgi_application
@@ -18,7 +17,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 application = get_wsgi_application()
 print("#############################################################################################")
 import way_box_app_v2.run as rn
+
 try:
+    rn._config_main_prog()
     t = _thread.start_new_thread( rn._run_main_prog, () )
 except Exception as e:
     print("Python exception : " + str(e))

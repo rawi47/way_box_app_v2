@@ -11,6 +11,7 @@ from utils.cmd import Cmd
 from django.shortcuts import render
 from django.template import loader
 from SystemStatus.models import SystemStatus,SystemStatusSerializer
+from requests import Request, Session
 
 
 
@@ -35,10 +36,6 @@ def catch_all(request,path):
 
 
     url = API_URL + path
-    data = {}
-
-
-
     params = {}
     data = {}
 
@@ -68,7 +65,9 @@ def catch_all(request,path):
 
 
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
-    resp = requests.Session().send(esreq.prepare())
+
+    resp = requests.Session().send(esreq)
+
 
     res = HttpResponse(resp.text, status= resp.status_code)
 
@@ -157,3 +156,49 @@ def _error(request):
         'res' : systemStatusSerializer
         }
         return HttpResponse(template.render(context, request))
+
+@csrf_exempt
+def _post_to_server(path):
+    env_obj = Env.objects.order_by('api_key')[0]
+    API_HOST = env_obj.api_host
+    API_URL = 'https://localhost/'
+    API_KEY = env_obj.api_key
+    API_SECRET = env_obj.api_secret
+
+    url = "https://" + API_HOST
+    url = API_URL + path
+    data = {}
+    headers = {}
+    s = Session()
+    systemStatusSerializer = {"internet_connection_message": ""}
+
+    systemStatus_obj = SystemStatus.objects.latest('id')
+    if systemStatus_obj:
+        systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
+        systemStatusSerializer = systemStatusSerializer.data
+
+    signature = sign(API_KEY, API_SECRET, systemStatusSerializer)
+
+    headers['Host'] = API_HOST
+    headers['X-API-Key'] = API_KEY
+    headers['X-API-Sign'] = signature
+
+    req = Request('POST', url, data=data, headers=headers)
+    prepped = req.prepare()
+
+    # do something with prepped.body
+    prepped.body = systemStatusSerializer
+
+
+
+    resp = s.send(prepped)
+
+def _save_status(url):
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
+
+    resp = session.get(url)
