@@ -11,10 +11,7 @@ from utils.cmd import Cmd
 from django.shortcuts import render
 from django.template import loader
 from SystemStatus.models import SystemStatus,SystemStatusSerializer
-from utils.httpHandler import HttpHandler
 
-
-httpHandler = HttpHandler()
 
 def sign(public_key, secret_key, data):
     h = hmac.new(
