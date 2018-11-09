@@ -33,6 +33,7 @@ class Env(models.Model):
 
 	git_repo = models.CharField(max_length=200,default="")
 	branche = models.CharField(max_length=200,default="master")
+	hash_code = models.CharField(max_length=200,default="")
 	portal_url = models.CharField(max_length=200,default="portal.way-connect.com")
 
 
