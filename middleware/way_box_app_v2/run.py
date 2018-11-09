@@ -88,6 +88,7 @@ def _run_main_prog():
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 
 	try:
+		webFunctions._set_establichement_name(lst)
 
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",

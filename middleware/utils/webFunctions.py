@@ -1,7 +1,6 @@
 from django.db import models
 import hmac, hashlib, json
 import requests
-from way_box_app_v2 import views
 from env_config.models import Env
 import datetime
 import requests
