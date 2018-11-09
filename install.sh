@@ -10,10 +10,10 @@ cd ..
 
 pip3 install -r requirements.txt
 
-sudo cp -rf opt/config/* /etc/
-sudo cp -rf opt/w.zone/ /var/www/
-sudo cp -rf opt/settings/nginx/sites-available/* /etc/nginx/sites-available
-sudo cp -rf opt/settings/systemd/system/middleware.service /etc/systemd/system/middleware.service
+sudo cp -R opt/config/* /etc/
+sudo cp -R opt/w.zone/ /var/www/
+sudo cp -R opt/settings/nginx/sites-available/* /etc/nginx/sites-available
+sudo cp -R opt/settings/systemd/system/middleware.service /etc/systemd/system/middleware.service
 
 sudo ln -s /etc/nginx/sites-available/middleware /etc/nginx/sites-enabled
 sudo ln -s /etc/nginx/sites-available/w.club /etc/nginx/sites-enabled
