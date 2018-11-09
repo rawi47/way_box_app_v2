@@ -10,7 +10,8 @@ import  _thread, time,threading
 import datetime
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
+import git
+from git import Repo
 
 root_dir = ""
 app_dir = ""
@@ -31,7 +32,7 @@ with conn:
 
 try:
         repo = Repo(".")
-        urepo.git.checkout(branche)
+        repo.git.checkout(branche)
 
 except AssertionError as e:
     print(str(e))
