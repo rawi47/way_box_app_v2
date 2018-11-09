@@ -8,6 +8,7 @@ class BoxesStatus(models.Model):
 
 
     date = models.DateTimeField(auto_now_add=True, blank=True)
+    date_update = models.DateTimeField(auto_now_add=True, blank=True)
 
     dhcpcd = models.BooleanField(default=False)
     dhcpcd_message = models.TextField(default="")

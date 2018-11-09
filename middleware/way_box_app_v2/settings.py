@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'utils.apps.UtilsConfig',
     'dashboard.apps.DashboardConfig',
-    'BoxesStatus.apps.BoxesStatusConfig',
+    'BoxesStatus.apps.BoxesstatusConfig',
     'django_crontab',
     'bootstrap3',
     'jquery',
