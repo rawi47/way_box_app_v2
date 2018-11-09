@@ -26,19 +26,15 @@ class Env(models.Model):
 	api_host = models.CharField(max_length=200,default="api.way-connect.com")
 	api_key = models.CharField(max_length=200)
 	api_secret = models.CharField(max_length=200)
-	api_port = models.IntegerField(default=80)
+	api_port = models.IntegerField(default=5000)
 
 	root_dir = models.CharField(max_length=200,default=str(Path.home()))
-	version = models.CharField(max_length=200,default="0.0.1")
-	patch = models.CharField(max_length=200,default="0.0.1")
-	app_dir = models.CharField(max_length=200,default="Way-Connect_Box")
+	app_dir = models.CharField(max_length=200,default="way_box_app_v2")
 
 	git_repo = models.CharField(max_length=200,default="")
-	git_repo_update = models.CharField(max_length=200,default="")
-	repo_dir_update = models.CharField(max_length=200,default="")
-	repo_dir = models.CharField(max_length=200,default="")
-	middleware_dir = models.CharField(max_length=200,default="middleware")
-	databases_backup_dir = models.CharField(max_length=200,default="databases_backups")
+	branche = models.CharField(max_length=200,default="master")
+
+
 	config_dir = models.CharField(max_length=200,default="opt/config/")
 	origin_config_dir = models.CharField(max_length=200,default="opt/original files/")
 	etc_dir = models.CharField(max_length=200,default="/etc")
@@ -48,6 +44,7 @@ class Env(models.Model):
 	ftp_password = models.CharField(max_length=200,default="password")
 
 	ssid_prefix = models.CharField(max_length=200,default="_FREE_WIFI")
+	run_on_start = models.BooleanField(default=True)
 
 
 	api_mode = models.CharField(
@@ -63,4 +60,4 @@ class Env(models.Model):
 class EnvSerializer(serializers.ModelSerializer):
     class Meta:
         model = Env
-        fields = '__all__'
+        exclude = ('id',)

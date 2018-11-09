@@ -42,3 +42,10 @@ class HttpHandler(models.Model):
 			Env.objects.filter(pk=env_obj.id).update(name=new_name)
 
 		lst.append(getD + new_name)
+
+
+	def _make_request(self,url,method,data,params):
+		if method == "POST":
+			r = requests.post(url = url, data = data, params = params)
+		if method == "GET":
+			r = requests.get(url = url, data = data, params = params)

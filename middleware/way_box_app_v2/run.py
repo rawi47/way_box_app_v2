@@ -16,9 +16,12 @@ cmd = Cmd()
 httpHandler = HttpHandler()
 
 def _config_main_prog():
+
 	lst = []
 	user_obj = User.objects.order_by('id')[0]
 	env_obj = Env.objects.order_by('api_key')[0]
+	if not env_obj.run_on_start:
+		return
 	app_mode = env_obj.api_mode
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 	origin_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.origin_config_dir)
@@ -78,6 +81,8 @@ def _run_main_prog():
 	lst = []
 	user_obj = User.objects.order_by('id')[0]
 	env_obj = Env.objects.order_by('api_key')[0]
+	if not env_obj.run_on_start:
+		return
 	app_mode = env_obj.api_mode
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 	API_HOST = env_obj.api_host

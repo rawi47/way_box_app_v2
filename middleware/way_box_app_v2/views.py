@@ -11,10 +11,10 @@ from utils.cmd import Cmd
 from django.shortcuts import render
 from django.template import loader
 from SystemStatus.models import SystemStatus,SystemStatusSerializer
-from requests import Request, Session
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from utils.httpHandler import HttpHandler
 
+
+httpHandler = HttpHandler()
 
 def sign(public_key, secret_key, data):
     h = hmac.new(
@@ -40,16 +40,15 @@ def catch_all(request,path):
     params = {}
     data = {}
 
-    print(url)
-
     if request.method == 'GET':
         for key, value in request.GET:
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
         if len(request.body) > 1:
+            print(request.body)
             if len(json.loads(request.body.decode('utf-8'))) > 3:
-                data = request.body.decode('utf-8')
+                data = json.loads(request.body.decode('utf-8'))
         signature = sign(API_KEY, API_SECRET, data)
     else:
         dataOpt = {}
@@ -76,13 +75,15 @@ def catch_all(request,path):
     for key, value in resp.headers.items():
         res[key] = value
 
-    print(resp.headers)
     return res
 
 def connection_status(Request):
 
     response_data,infos = _save_status()
-    _post_to_server(response_data)
+    url = "http://127.0.0.1:8000/box/log"
+    params = {}
+    data = response_data
+    httpHandler._make_request(url,"POST",data,params)
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
@@ -166,8 +167,3 @@ def _save_status():
     response_data = systemStatusSerializer.data
 
     return response_data,infos
-
-@csrf_exempt
-def _post_to_server(response_data):
-    API_ENDPOINT = "http://127.0.0.1:8000/box/log"
-    r = requests.post(url = API_ENDPOINT, data = response_data)
