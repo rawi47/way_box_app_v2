@@ -51,7 +51,7 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def _pull_git(rbranche):
+def _pull_git(branche):
     try:
         repo = Repo(".")
         repo.git.checkout(branche)
