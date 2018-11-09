@@ -55,7 +55,9 @@ def _pull_git(branche):
     try:
         repo = Repo(".")
         repo.git.checkout(branche)
-        repo.pull()
+
+        g = git.Git(".")
+        g.pull()
 
     except FileExistsError as e:
         print(e)
