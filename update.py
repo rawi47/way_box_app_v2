@@ -16,7 +16,6 @@ root_dir = ""
 app_dir = ""
 git_repo = ""
 branche = ""
-password = ""
 
 database = settings.DATABASES['default']['NAME']
 
@@ -28,11 +27,11 @@ with conn:
         'env_config_env',
         "root_dir,app_dir,git_repo,branche"
         )[0]
-    password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
+
 
 try:
-        origin_dir = os.path.join(root_dir , app_dir)
-        utils.pull_git(origin_dir,branche)
+        repo = Repo(".")
+        urepo.git.checkout(branche)
 
 except AssertionError as e:
     print(str(e))
