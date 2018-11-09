@@ -80,7 +80,6 @@ def connection_status(Request):
     url = "http://127.0.0.1:8000/box/log"
     params = {}
     data = response_data
-    #httpHandler._make_request(url,"POST",data,params)
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
