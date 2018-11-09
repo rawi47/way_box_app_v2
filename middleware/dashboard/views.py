@@ -11,7 +11,7 @@ from user.models import User
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
-from utils.httpHandler import HttpHandler
+from utils.webFunctions import WebFunctions
 from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
 
 import os
@@ -23,7 +23,7 @@ from os import path
 log = logging.getLogger(__name__)
 
 cmd = Cmd()
-httpHandler = HttpHandler()
+webFunctions = WebFunctions()
 
 
 
@@ -75,7 +75,7 @@ def get_name(request):
                 name=form.cleaned_data['name'],
                 api_mode=form.cleaned_data['api_mode']
                 )
-            httpHandler._set_establichement_name(env_obj.api_host,env_obj.api_key,env_obj.api_secret,lst)
+            webFunctions._set_establichement_name(env_obj.api_host,env_obj.api_key,env_obj.api_secret,lst)
 
             if old_mode != new_mode:
                 run._config_main_prog()

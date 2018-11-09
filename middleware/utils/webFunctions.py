@@ -8,7 +8,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-class HttpHandler(models.Model):
+class WebFunctions(models.Model):
 
 	def _set_establichement_name(self,lst):
 		env_obj = Env.objects.order_by('api_key')[0]

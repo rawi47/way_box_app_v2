@@ -8,13 +8,13 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 log = logging.getLogger(__name__)
 from utils.cmd import Cmd
-from utils.httpHandler import HttpHandler
+from utils.webFunctions import WebFunctions
 from django.shortcuts import render
 from django.template import loader
 from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
 import re
 
-httpHandler  = HttpHandler()
+webFunctions  = WebFunctions()
 
 def sign(public_key, secret_key, data):
     h = hmac.new(
@@ -89,7 +89,7 @@ def connection_status(Request):
     method = "POST"
     params = {}
 
-    res = httpHandler._make_request(url,method,response_data,params)
+    res = webFunctions._make_request(url,method,response_data,params)
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 

@@ -1,7 +1,7 @@
 from os import path,walk
 from utils.ftp import FtpUtils
 from utils.cmd import Cmd
-from utils.httpHandler import HttpHandler
+from utils.webFunctions import WebFunctions
 from env_config.models import EnvSerializer,Env
 
 
@@ -13,7 +13,7 @@ import  _thread, time,threading
 import datetime
 
 cmd = Cmd()
-httpHandler = HttpHandler()
+webFunctions = WebFunctions()
 
 def _config_main_prog():
 
@@ -32,7 +32,7 @@ def _config_main_prog():
 	etc_dir = env_obj.etc_dir
 	portal = env_obj.portal_url
 	do_hostapd = True
-	
+
 	if app_mode == "wlan":
 		interface = "wlan0"
 		command = "systemctl enable hostapd"
@@ -41,7 +41,7 @@ def _config_main_prog():
 		command = "systemctl disable hostapd"
 		cmd.run(command,user_obj,lst)
 	try:
-		httpHandler._set_establichement_name(lst)
+		webFunctions._set_establichement_name(lst)
 		files =[
 			("ipset.ipv4.nat",True),
 			("iptables.ipv4.nat",True),
@@ -88,7 +88,7 @@ def _run_main_prog():
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 
 	try:
-		httpHandler._set_establichement_name(lst)
+		webFunctions._set_establichement_name(lst)
 
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",
