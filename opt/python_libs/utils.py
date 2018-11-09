@@ -3,7 +3,7 @@ import os
 import subprocess
 import datetime
 import git
-from git import repo
+from git import Repo
 from shutil import copy2
 
 
