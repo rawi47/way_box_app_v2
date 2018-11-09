@@ -32,7 +32,7 @@ with conn:
 
 try:
         origin_dir = os.path.join(root_dir , app_dir)
-        utils.pull_git(origin_dir)
+        utils.pull_git(origin_dir,branche)
 
 except AssertionError as e:
     print(str(e))

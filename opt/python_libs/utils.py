@@ -51,13 +51,10 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def pull_git(repo_dir):
+def pull_git(repo_dir,branche):
     try:
-        g = git.cmd.Git(repo_dir)
-        g.pull()
-        print("Done!")
-
-
+        g = git.Git(repo_dir)
+        g.pull('origin',branche)
 
     except FileExistsError as e:
         print(e)
