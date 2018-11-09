@@ -31,8 +31,7 @@ with conn:
 
 
 try:
-        repo = Repo(".")
-        repo.git.checkout(branche)
+    utils._pull_git(branche)
 
 except AssertionError as e:
     print(str(e))
