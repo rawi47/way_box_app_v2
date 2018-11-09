@@ -54,7 +54,7 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 def pull_git(repo_dir):
     try:
         g = git.cmd.Git(repo_dir)
-        g.pull("--rebase")
+        g.pull()
         print("Done!")
 
 
