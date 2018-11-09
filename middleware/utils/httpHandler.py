@@ -5,35 +5,28 @@ from way_box_app_v2 import views
 from env_config.models import Env
 import datetime
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 class HttpHandler(models.Model):
 
-	def _set_establichement_name(self,API_HOST,API_KEY,API_SECRET,lst):
+	def _set_establichement_name(self,lst):
 		env_obj = Env.objects.order_by('api_key')[0]
+		api_port = env_obj.api_port
 		getD = str(datetime.datetime.now()) + " - "
+
 		path = "/customers/establishment"
-		url = "http://" + API_HOST + path
+
+		url = "http://127.0.0.1:" + str(api_port) + path
 		method = "GET"
 		data = {}
 		params = {}
 
-		headers = {}
-		signature = views.sign(API_KEY, API_SECRET, params)
 
+		res = self._make_request(url,method,data,params)
 
-		headers['Host'] = API_HOST
-		headers['X-API-Key'] = API_KEY
-		headers['X-API-Sign'] = signature
+		res_obj = json.loads(res.text)
 
-
-
-
-		esreq = requests.Request(method=method, url=url, data=data, params=params, headers=headers)
-		resp = requests.Session().send(esreq.prepare())
-
-		res = (resp.text, resp.status_code, resp.headers.items())
-
-		res_obj = json.loads(res[0])
 
 		new_name = res_obj['name']
 		if env_obj.name != new_name:
@@ -44,8 +37,30 @@ class HttpHandler(models.Model):
 		lst.append(getD + new_name)
 
 
+	def _requests_retry_session(
+		self,
+	    retries=3,
+	    backoff_factor=0.3,
+	    status_forcelist=(500, 502, 504),
+	    session=None,
+	):
+	    session = session or requests.Session()
+	    retry = Retry(
+	        total=retries,
+	        read=retries,
+	        connect=retries,
+	        backoff_factor=backoff_factor,
+	        status_forcelist=status_forcelist,
+	    )
+	    adapter = HTTPAdapter(max_retries=retry)
+	    session.mount('http://', adapter)
+	    session.mount('https://', adapter)
+	    return session
+
 	def _make_request(self,url,method,data,params):
-		if method == "POST":
-			r = requests.post(url = url, data = data, params = params)
 		if method == "GET":
-			r = requests.get(url = url, data = data, params = params)
+		    res = self._requests_retry_session().get(url)
+		elif method == "POST":
+			data = json.dumps(data)
+			res = self._requests_retry_session().post(url,data=data)
+		return res

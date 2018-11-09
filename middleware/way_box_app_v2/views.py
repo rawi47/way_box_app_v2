@@ -8,10 +8,13 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 log = logging.getLogger(__name__)
 from utils.cmd import Cmd
+from utils.httpHandler import HttpHandler
 from django.shortcuts import render
 from django.template import loader
-from SystemStatus.models import SystemStatus,SystemStatusSerializer
+from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
+import re
 
+httpHandler  = HttpHandler()
 
 def sign(public_key, secret_key, data):
     h = hmac.new(
@@ -23,7 +26,6 @@ def sign(public_key, secret_key, data):
 
 @csrf_exempt
 def catch_all(request,path):
-    print("catch_all")
     env_obj = Env.objects.order_by('api_key')[0]
     API_HOST = env_obj.api_host
     API_URL = 'http://' + API_HOST + '/'
@@ -37,22 +39,23 @@ def catch_all(request,path):
     params = {}
     data = {}
 
+    regex = re.compile('^HTTP_')
+    headers = dict((regex.sub('', header), value) for (header, value)
+           in request.META.items() if header.startswith('HTTP_'))
+
     if request.method == 'GET':
         for key, value in request.GET:
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
         if len(request.body) > 1:
-            print(request.body)
-            if len(json.loads(request.body.decode('utf-8'))) > 3:
-                data = json.loads(request.body.decode('utf-8'))
-        signature = sign(API_KEY, API_SECRET, data)
+            signature = sign(API_KEY, API_SECRET, data)
     else:
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
     headers = {}
-    for key, value in request.META.items():
+    for key, value in headers.items():
         headers[key] = str(value)
 
 
@@ -66,34 +69,41 @@ def catch_all(request,path):
 
     resp = requests.Session().send(esreq.prepare())
 
-
     res = HttpResponse(resp.text, status= resp.status_code)
 
-    for key, value in resp.headers.items():
-        res[key] = value
 
+    for key, value in resp.headers.items():
+        if key not in ["Connection"]:
+            res[key] = value
     return res
 
 def connection_status(Request):
+    env_obj = Env.objects.order_by('api_key')[0]
+    api_port = env_obj.api_port
 
     response_data,infos = _save_status()
-    url = "http://127.0.0.1:8000/box/log"
+
+    path = "/boxes/status"
+
+    url = "http://127.0.0.1:" + str(api_port) + path
+    method = "POST"
     params = {}
-    data = response_data
+
+    res = httpHandler._make_request(url,method,response_data,params)
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
 
 def _error(request):
         template = loader.get_template('dashboard/error.html')
-        systemStatusSerializer = {"internet_connection_message": ""}
+        BoxesStatusSerializer = {"internet_connection_message": ""}
 
-        systemStatus_obj = SystemStatus.objects.latest('id')
-        if systemStatus_obj:
-            systemStatusSerializer = SystemStatusSerializer(systemStatus_obj)
-            systemStatusSerializer = systemStatusSerializer.data
+        BoxesStatus_obj = BoxesStatus.objects.latest('id')
+        if BoxesStatus_obj:
+            BoxesStatusSerializer = BoxesStatusSerializer(BoxesStatus_obj)
+            BoxesStatusSerializer = BoxesStatusSerializer.data
         context = {
-        'res' : systemStatusSerializer
+        'res' : BoxesStatusSerializer
         }
         return HttpResponse(template.render(context, request))
 
@@ -145,7 +155,7 @@ def _save_status():
     infos["internet_connection"] = internet_connection,internet_connection_message
 
 
-    systemStatus = SystemStatus(
+    BoxesStatus = BoxesStatus(
         dhcpcd= infos["dhcpcd"][0],
         dhcpcd_message= infos["dhcpcd"][1],
         dnsmasq= infos["dnsmasq"][0],
@@ -158,8 +168,8 @@ def _save_status():
         internet_connection= infos["internet_connection"][0],
         internet_connection_message= infos["internet_connection"][1]
     )
-    systemStatus.save()
-    systemStatusSerializer = SystemStatusSerializer(systemStatus)
-    response_data = systemStatusSerializer.data
+    BoxesStatus.save()
+    BoxesStatusSerializer = BoxesStatusSerializer(BoxesStatus)
+    response_data = BoxesStatusSerializer.data
 
     return response_data,infos

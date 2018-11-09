@@ -16,22 +16,38 @@ from git import Repo
 root_dir = ""
 app_dir = ""
 git_repo = ""
-branche = ""
+branch = ""
+api_port = 5000
 
 database = settings.DATABASES['default']['NAME']
 
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
 with conn:
-    root_dir,app_dir,git_repo,branche = sqlite3_lib.select_all_by(
+    root_dir,app_dir,git_repo,branch,api_port = sqlite3_lib.select_all_by(
         conn,
         'env_config_env',
-        "root_dir,app_dir,git_repo,branche"
+        "root_dir,app_dir,git_repo,branch,api_port"
         )[0]
 
 
 try:
-    utils._pull_git(branche)
+
+    path = "/boxes"
+
+    url = "http://127.0.0.1:" + str(api_port) + path
+
+    method = "GET"
+    data = {}
+    params = {}
+
+
+    response = utils._make_request(url,method,data,params)
+
+    res_obj = json.loads(response.text)
+    if "commit_hash" in res_obj:
+        branch = res_obj["commit_hash"]
+    utils._pull_git(branch)
 
 except AssertionError as e:
     print(str(e))

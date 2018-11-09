@@ -32,8 +32,8 @@ class Env(models.Model):
 	app_dir = models.CharField(max_length=200,default="way_box_app_v2")
 
 	git_repo = models.CharField(max_length=200,default="")
-	branche = models.CharField(max_length=200,default="master")
-	hash_code = models.CharField(max_length=200,default="")
+	branch = models.CharField(max_length=200,default="master")
+	commit_hash = models.CharField(max_length=200,default="")
 	portal_url = models.CharField(max_length=200,default="portal.way-connect.com")
 
 

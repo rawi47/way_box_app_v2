@@ -28,12 +28,11 @@ def _config_main_prog():
 	getD = str(datetime.datetime.now()) + " - "
 	interface = "eth1"
 	ssid = env_obj.name.upper() + env_obj.ssid_prefix
-	API_HOST = env_obj.api_host
-	API_KEY = env_obj.api_key
-	API_SECRET = env_obj.api_secret
+
 	etc_dir = env_obj.etc_dir
 	portal = env_obj.portal_url
 	do_hostapd = True
+	
 	if app_mode == "wlan":
 		interface = "wlan0"
 		command = "systemctl enable hostapd"
@@ -42,7 +41,7 @@ def _config_main_prog():
 		command = "systemctl disable hostapd"
 		cmd.run(command,user_obj,lst)
 	try:
-		httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
+		httpHandler._set_establichement_name(lst)
 		files =[
 			("ipset.ipv4.nat",True),
 			("iptables.ipv4.nat",True),
@@ -87,12 +86,9 @@ def _run_main_prog():
 		return
 	app_mode = env_obj.api_mode
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
-	API_HOST = env_obj.api_host
-	API_KEY = env_obj.api_key
-	API_SECRET = env_obj.api_secret
 
 	try:
-		httpHandler._set_establichement_name(API_HOST,API_KEY,API_SECRET,lst)
+		httpHandler._set_establichement_name(lst)
 
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",

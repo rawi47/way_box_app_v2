@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework import serializers
 
-class SystemStatus(models.Model):
+class BoxesStatus(models.Model):
 
     def __str__(self):
         return str(self.date)
@@ -25,7 +25,7 @@ class SystemStatus(models.Model):
     internet_connection = models.BooleanField(default=False)
     internet_connection_message = models.TextField(default="")
 
-class SystemStatusSerializer(serializers.ModelSerializer):
+class BoxesStatusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SystemStatus
+        model = BoxesStatus
         exclude = ('id','date')
