@@ -1,7 +1,7 @@
 from os import path,walk
 from utils.ftp import FtpUtils
 from utils.cmd import Cmd
-from utils.webFunctions import WebFunctions
+from utils.webFunctions import Httphandler
 from env_config.models import EnvSerializer,Env
 
 
@@ -13,7 +13,7 @@ import  _thread, time,threading
 import datetime
 
 cmd = Cmd()
-webFunctions = WebFunctions()
+webFunctions = Httphandler()
 
 def _config_main_prog():
 

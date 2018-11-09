@@ -11,7 +11,7 @@ from user.models import User
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
-from utils.webFunctions import WebFunctions
+from utils.webFunctions import Httphandler
 from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
 
 import os
@@ -23,7 +23,7 @@ from os import path
 log = logging.getLogger(__name__)
 
 cmd = Cmd()
-webFunctions = WebFunctions()
+webFunctions = Httphandler()
 
 
 
