@@ -55,8 +55,6 @@ def _pull_git(branche):
     try:
         repo = Repo(".")
         repo.git.checkout(branche)
-        o = repo.remotes.origin
-        o.pull()
     except FileExistsError as e:
         print(e)
 def _rename_folder(old_name, new_name):
