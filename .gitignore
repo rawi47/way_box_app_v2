@@ -1,3 +1,13 @@
-middleware/db.sqlite3
-middleware/way_box_app_v2/__pycache__/
-opt/python_libs/__pycache__/
+__pycache__
+
+media/
+samples/
+
+.env/
+venv/
+
+*.pyc
+*.sqlite3
+
+gc_credentials.json
+
