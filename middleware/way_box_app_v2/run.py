@@ -83,35 +83,33 @@ def _run_main_prog():
 	app_mode = env_obj.api_mode
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 
-	try:
-		commands_sh = [
-			"ipset --restore < /etc/ipset.ipv4.nat",
-			"iptables-restore < /etc/iptables.ipv4.nat"
-		]
 
-		commands = []
+	commands_sh = [
+		"ipset --restore < /etc/ipset.ipv4.nat",
+		"iptables-restore < /etc/iptables.ipv4.nat"
+	]
 
-
-		commands.append("nodogsplash")
+	commands = []
 
 
-		for cmd_sh in commands_sh:
-
-			lst.append(cmd_sh)
-			src = static_path + 'temp.sh'
-			Cmd._create_file(src,cmd_sh,"w")
-			cmd.run("chmod +x " + src,user_obj,lst)
-			cmd.run_sh(src,user_obj,lst)
-			cmd.run("rm -rf " + src,user_obj,lst)
+	commands.append("nodogsplash")
 
 
+	for cmd_sh in commands_sh:
 
-		for cmmd in commands:
-			lst.append(cmmd)
-			cmd.run(cmmd,user_obj,lst)
+		lst.append(cmd_sh)
+		src = static_path + 'temp.sh'
+		Cmd._create_file(src,cmd_sh,"w")
+		cmd.run("chmod +x " + src,user_obj,lst)
+		cmd.run_sh(src,user_obj,lst)
+		cmd.run("rm -rf " + src,user_obj,lst)
 
 
-	except Exception as e:
-		lst.append(getD + str(e))
-		log.error(str(e))
+
+	for cmmd in commands:
+		lst.append(cmmd)
+		cmd.run(cmmd,user_obj,lst)
+
+
+
 	return lst
