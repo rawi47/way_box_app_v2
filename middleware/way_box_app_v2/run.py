@@ -11,6 +11,8 @@ import json
 from django.conf import settings
 import  _thread, time,threading
 import datetime
+import logging
+log = logging.getLogger(__name__)
 
 cmd = Cmd()
 webFunctions = Httphandler()
@@ -68,6 +70,7 @@ def _config_main_prog():
 
 	except Exception as e:
 		lst.append(getD + str(e))
+		log.error(str(e))
 	return lst
 
 def _run_main_prog():
