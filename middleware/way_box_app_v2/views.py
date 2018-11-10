@@ -66,6 +66,11 @@ def catch_all(request,path):
     headers['X-API-Key'] = API_KEY
     headers['X-API-Sign'] = signature
 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+
 
     log.error(url)
     log.error(request.method)
@@ -76,10 +81,13 @@ def catch_all(request,path):
 
     res = HttpResponse(resp.text, status= resp.status_code, content_type="text/html")
 
-    log.error(resp.headers)
+    headers['Accept'] =  'application/json'
+
+
     for key, value in resp.headers.items():
         if key not in ["Connection"]:
             res[key] = value
+    log.error(resp.headers)
     return res
 
 def connection_status(Request):
