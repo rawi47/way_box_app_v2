@@ -96,14 +96,14 @@ def connection_status(Request):
 
 def _error(request):
         template = loader.get_template('dashboard/error.html')
-        BoxesStatusSerializer = {"internet_connection_message": ""}
+        boxesStatusSerializer = {"internet_connection_message": ""}
 
         # BoxesStatus_obj = BoxesStatus.objects.latest('id')
         # # if BoxesStatus_obj:
         # #     BoxesStatusSerializer = BoxesStatusSerializer(BoxesStatus_obj)
         # #     BoxesStatusSerializer = BoxesStatusSerializer.data
         context = {
-        'res' : BoxesStatusSerializer
+        'res' : boxesStatusSerializer
         }
         return HttpResponse(template.render(context, request))
 
@@ -169,7 +169,7 @@ def _save_status():
         internet_connection_message= infos["internet_connection"][1]
     )
     boxesStatus.save()
-    BoxesStatusSerializer = BoxesStatusSerializer(boxesStatus)
-    response_data = BoxesStatusSerializer.data
+    boxesStatusSerializer = BoxesStatusSerializer(boxesStatus)
+    response_data = boxesStatusSerializer.data
 
     return response_data,infos
