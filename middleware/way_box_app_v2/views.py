@@ -40,6 +40,8 @@ def catch_all(request,path):
     params = {}
     data = {}
 
+    signature = sign(API_KEY, API_SECRET, data)
+
     regex = re.compile('^HTTP_')
     headers = dict((regex.sub('', header), value) for (header, value)
            in request.META.items() if header.startswith('HTTP_'))
