@@ -33,13 +33,6 @@ def _config_main_prog():
 	portal = env_obj.portal_url
 	do_hostapd = True
 
-	if app_mode == "wlan":
-		interface = "wlan0"
-		command = "systemctl enable hostapd"
-		cmd.run(command,user_obj,lst)
-	else:
-		command = "systemctl disable hostapd"
-		cmd.run(command,user_obj,lst)
 	try:
 		webFunctions._set_establichement_name(lst)
 		files =[
