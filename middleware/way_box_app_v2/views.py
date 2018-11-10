@@ -169,7 +169,7 @@ def _save_status():
         internet_connection_message= infos["internet_connection"][1]
     )
     boxesStatus.save()
-    BoxesStatusSerializer = BoxesStatusSerializer(BoxesStatus)
+    BoxesStatusSerializer = BoxesStatusSerializer(boxesStatus)
     response_data = BoxesStatusSerializer.data
 
     return response_data,infos
