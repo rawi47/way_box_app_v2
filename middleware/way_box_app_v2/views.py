@@ -29,23 +29,21 @@ def sign(public_key, secret_key, data):
 def catch_all(request,path):
     env_obj = Env.objects.order_by('api_key')[0]
     API_HOST = env_obj.api_host
-    API_URL = 'http://' + API_HOST + '/'
+    API_URL = 'https://' + API_HOST + '/'
     API_KEY = env_obj.api_key
     API_SECRET = env_obj.api_secret
     if path == 'box':
         return HttpResponse(API_KEY)
 
-
     url = API_URL + path
+    data = {}
+
+
+
     params = {}
     data = {}
 
-    signature = sign(API_KEY, API_SECRET, data)
 
-    regex = re.compile('^HTTP_')
-    headers = dict((regex.sub('', header), value) for (header, value)
-           in request.META.items() if header.startswith('HTTP_'))
-    headers = request.META
 
     if request.method == 'GET':
         for key, value in request.GET:
@@ -53,12 +51,15 @@ def catch_all(request,path):
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
         if len(request.body) > 1:
-            signature = sign(API_KEY, API_SECRET, data)
+            if len(json.loads(request.body.decode('utf-8'))) > 3:
+                data = request.body.decode('utf-8')
+        signature = sign(API_KEY, API_SECRET, data)
     else:
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
-    for key, value in headers.items():
+    headers = {}
+    for key, value in request.META.items():
         headers[key] = str(value)
 
 
@@ -67,20 +68,15 @@ def catch_all(request,path):
     headers['X-API-Sign'] = signature
 
 
-
-    log.error(url)
-    log.error(request.method)
-
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
-
     resp = requests.Session().send(esreq.prepare())
 
     res = HttpResponse(resp.text, status= resp.status_code)
 
     for key, value in resp.headers.items():
-        if key not in ["Connection"]:
-            res[key] = value
-    log.error(resp.headers)
+        res[key] = value
+
+
     return res
 
 def connection_status(Request):
