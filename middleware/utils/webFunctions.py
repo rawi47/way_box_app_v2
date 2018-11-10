@@ -19,7 +19,7 @@ class Httphandler(models.Model):
 
 			path = "/customers/establishment"
 
-			url = "http://127.0.0.1:" + str(api_port) + path
+			url = "http://raspberrypi.local:" + str(api_port) + path
 			method = "GET"
 			data = {}
 			params = {}
