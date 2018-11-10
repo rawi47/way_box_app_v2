@@ -35,6 +35,9 @@ def _config_main_prog():
 	portal = env_obj.portal_url
 	do_hostapd = True
 
+	if api_mode == "wlan":
+		interface = "wlan0"
+
 	try:
 		files =[
 			("ipset.ipv4.nat",True),
