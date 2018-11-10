@@ -58,11 +58,9 @@ def catch_all(request,path):
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
-    regex = re.compile('^HTTP_')
-    headers = dict((regex.sub('', header), value) for (header, value)
-           in request.META.items() if header.startswith('HTTP_'))
 
-    for key, value in headers.items():
+
+    for key, value in request.META.items():
         headers[key] = str(value)
 
 
