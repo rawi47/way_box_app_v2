@@ -36,7 +36,6 @@ def _config_main_prog():
 	do_hostapd = True
 
 	try:
-		webFunctions._set_establichement_name(lst)
 		files =[
 			("ipset.ipv4.nat",True),
 			("iptables.ipv4.nat",True),
