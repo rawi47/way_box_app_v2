@@ -81,15 +81,18 @@ def connection_status(Request):
     env_obj = Env.objects.order_by('api_key')[0]
     api_port = env_obj.api_port
 
-    # response_data,infos = _save_status()
-    #
-    # path = "/boxes/status"
-    #
-    # url = "http://127.0.0.1:" + str(api_port) + path
-    # method = "POST"
-    # params = {}
-    #
-    # res = webFunctions._make_request(url,method,response_data,params)
+    response_data,infos = _save_status()
+
+    path = "/boxes/status"
+
+    url = "http://raspberrypi.local:" + str(api_port) + path
+    method = "POST"
+    params = {}
+
+    try:
+        res = webFunctions._make_request(url,method,response_data,params)
+    except Exception as e:
+        log.error(str(e))
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
