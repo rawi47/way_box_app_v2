@@ -75,11 +75,17 @@ def get_name(request):
                 name=form.cleaned_data['name'],
                 api_mode=form.cleaned_data['api_mode']
                 )
-            webFunctions._set_establichement_name(lst)
+            try:
+                t = _thread.start_new_thread( webFunctions._set_establichement_name, (lst,) )
+            except Exception as e:
+                print("Python exception : " + str(e))
 
             if old_mode != new_mode:
                 run._config_main_prog()
-                print("diffrent")
+                try:
+                    t = _thread.start_new_thread( webFunrunctions._config_main_prog, () )
+                except Exception as e:
+                    print("Python exception : " + str(e))
 
             for line in lst:
                 print(lst)

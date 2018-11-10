@@ -39,6 +39,11 @@ def _config_main_prog():
 		interface = "wlan0"
 
 	try:
+	    t = _thread.start_new_thread( webFunctions._set_establichement_name, (lst,) )
+	except Exception as e:
+	    print("Python exception : " + str(e))
+
+	try:
 		files =[
 			("ipset.ipv4.nat",True),
 			("iptables.ipv4.nat",True),
