@@ -75,7 +75,7 @@ def get_name(request):
                 name=form.cleaned_data['name'],
                 api_mode=form.cleaned_data['api_mode']
                 )
-            webFunctions._set_establichement_name(env_obj.api_host,env_obj.api_key,env_obj.api_secret,lst)
+            webFunctions._set_establichement_name(lst)
 
             if old_mode != new_mode:
                 run._config_main_prog()
