@@ -46,6 +46,8 @@ def catch_all(request,path):
     headers = dict((regex.sub('', header), value) for (header, value)
            in request.META.items() if header.startswith('HTTP_'))
 
+    headers = request.META
+
     if request.method == 'GET':
         for key, value in request.GET:
             params[key] = value
