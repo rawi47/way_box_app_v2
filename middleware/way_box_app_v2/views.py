@@ -77,13 +77,9 @@ def catch_all(request,path):
 
     res = HttpResponse(resp.text, status= resp.status_code)
 
-    # resp.headers['Accept'] =  'application/json'
-    #
-    #
-    # for key, value in resp.headers.items():
-    #     if key not in ["Connection"]:
-    #         res[key] = value
-    # log.error(resp.headers)
+    for key, value in resp.headers.items():
+        res[key] = value
+    log.error(resp.headers)
     return res
 
 def connection_status(Request):
