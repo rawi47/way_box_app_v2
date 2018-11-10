@@ -75,15 +75,15 @@ def catch_all(request,path):
 
     resp = requests.Session().send(esreq.prepare())
 
-    res = HttpResponse(resp.text, status= resp.status_code, content_type="text/html")
+    res = HttpResponse(resp.text, status= resp.status_code)
 
-    resp.headers['Accept'] =  'application/json'
-
-
-    for key, value in resp.headers.items():
-        if key not in ["Connection"]:
-            res[key] = value
-    log.error(resp.headers)
+    # resp.headers['Accept'] =  'application/json'
+    #
+    #
+    # for key, value in resp.headers.items():
+    #     if key not in ["Connection"]:
+    #         res[key] = value
+    # log.error(resp.headers)
     return res
 
 def connection_status(Request):
