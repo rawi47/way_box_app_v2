@@ -96,7 +96,7 @@ def _run_main_prog():
 
 
 	for cmd_sh in commands_sh:
-
+		log.error(cmd_sh)
 		lst.append(cmd_sh)
 		src = static_path + 'temp.sh'
 		Cmd._create_file(src,cmd_sh,"w")
@@ -107,6 +107,7 @@ def _run_main_prog():
 
 
 	for cmmd in commands:
+		log.error(cmmd)
 		lst.append(cmmd)
 		cmd.run(cmmd,user_obj,lst)
 
