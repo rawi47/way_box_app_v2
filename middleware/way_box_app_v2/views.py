@@ -74,7 +74,7 @@ def catch_all(request,path):
 
     resp = requests.Session().send(esreq.prepare())
 
-    res = HttpResponse(json.dumps(resp.text), status= resp.status_code, content_type="application/json")
+    res = HttpResponse(resp.text, status= resp.status_code, content_type="text/html")
 
     log.error(resp.headers)
     for key, value in resp.headers.items():
