@@ -66,10 +66,6 @@ def catch_all(request,path):
     headers['X-API-Key'] = API_KEY
     headers['X-API-Sign'] = signature
 
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
 
 
     log.error(url)
