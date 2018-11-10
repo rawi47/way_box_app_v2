@@ -64,7 +64,8 @@ def catch_all(request,path):
     headers['X-API-Sign'] = signature
 
 
-
+    log.error(url)
+    log.error(request.method)
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
 
     resp = requests.Session().send(esreq.prepare())
@@ -83,16 +84,16 @@ def connection_status(Request):
 
     response_data,infos = _save_status()
 
-    # path = "/boxes/status"
-    #
-    # url = "http://raspberrypi.local:" + str(api_port) + path
-    # method = "POST"
-    # params = {}
-    #
-    # try:
-    #     res = webFunctions._make_request(url,method,response_data,params)
-    # except Exception as e:
-    #     log.error(str(e))
+    path = "/boxes/status"
+
+    url = "http://raspberrypi.local:" + str(api_port) + path
+    method = "POST"
+    params = {}
+
+    try:
+        t = _thread.start_new_thread( webFunctions._make_request, (url,method,response_data,params,) )
+    except Exception as e:
+        log.error("post request exception : " + str(e))
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
