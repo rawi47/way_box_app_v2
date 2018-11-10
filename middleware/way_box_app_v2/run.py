@@ -84,8 +84,6 @@ def _run_main_prog():
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 
 	try:
-		webFunctions._set_establichement_name(lst)
-
 		commands_sh = [
 			"ipset --restore < /etc/ipset.ipv4.nat",
 			"iptables-restore < /etc/iptables.ipv4.nat"
@@ -115,4 +113,5 @@ def _run_main_prog():
 
 	except Exception as e:
 		lst.append(getD + str(e))
+		log.error(str(e))
 	return lst
