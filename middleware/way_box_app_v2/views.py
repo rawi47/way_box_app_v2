@@ -46,8 +46,6 @@ def catch_all(request,path):
     headers = dict((regex.sub('', header), value) for (header, value)
            in request.META.items() if header.startswith('HTTP_'))
 
-    headers = request.META
-
     if request.method == 'GET':
         for key, value in request.GET:
             params[key] = value
@@ -59,7 +57,6 @@ def catch_all(request,path):
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
-    headers = {}
     for key, value in headers.items():
         headers[key] = str(value)
 
@@ -80,7 +77,8 @@ def catch_all(request,path):
     res = HttpResponse(resp.text, status= resp.status_code)
 
     for key, value in resp.headers.items():
-        res[key] = value
+        if key not in ["Connection"]:
+            res[key] = value
     log.error(resp.headers)
     return res
 
