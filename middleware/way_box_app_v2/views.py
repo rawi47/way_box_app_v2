@@ -77,7 +77,7 @@ def catch_all(request,path):
 
     res = HttpResponse(resp.text, status= resp.status_code, content_type="text/html")
 
-    headers['Accept'] =  'application/json'
+    resp.headers['Accept'] =  'application/json'
 
 
     for key, value in resp.headers.items():
