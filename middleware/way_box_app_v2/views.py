@@ -59,7 +59,7 @@ def catch_all(request,path):
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
 
-
+    headers = {}
     for key, value in request.META.items():
         headers[key] = str(value)
 
