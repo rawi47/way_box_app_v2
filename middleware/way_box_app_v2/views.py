@@ -155,7 +155,7 @@ def _save_status():
     infos["internet_connection"] = internet_connection,internet_connection_message
 
 
-    BoxesStatus = BoxesStatus(
+    boxesStatus = BoxesStatus(
         dhcpcd= infos["dhcpcd"][0],
         dhcpcd_message= infos["dhcpcd"][1],
         dnsmasq= infos["dnsmasq"][0],
