@@ -33,7 +33,7 @@ static_path = settings.STATICFILES_DIRS[0] + "/config/"
 def index(request):
     template = loader.get_template('dashboard/index.html')
 
-    BoxesStatus_obj = BoxesStatus.objects.order_by('id')[:10]
+    BoxesStatus_obj = BoxesStatus.objects.order_by('-id')[:10]
     x_data = []
     ctx_data = []
     for line in BoxesStatus_obj:
