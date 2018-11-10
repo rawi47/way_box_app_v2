@@ -6,34 +6,39 @@ import datetime
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+import logging
+log = logging.getLogger(__name__)
 
 class Httphandler(models.Model):
 
 	def _set_establichement_name(self,lst):
-		env_obj = Env.objects.order_by('api_key')[0]
-		api_port = env_obj.api_port
-		getD = str(datetime.datetime.now()) + " - "
+		try:
+			env_obj = Env.objects.order_by('api_key')[0]
+			api_port = env_obj.api_port
+			getD = str(datetime.datetime.now()) + " - "
 
-		path = "/customers/establishment"
+			path = "/customers/establishment"
 
-		url = "http://127.0.0.1:" + str(api_port) + path
-		method = "GET"
-		data = {}
-		params = {}
-
-
-		res = self._make_request(url,method,data,params)
-
-		res_obj = json.loads(res.text)
+			url = "http://127.0.0.1:" + str(api_port) + path
+			method = "GET"
+			data = {}
+			params = {}
 
 
-		new_name = res_obj['name']
-		if env_obj.name != new_name:
-			print(new_name)
-			print(env_obj.name)
-			Env.objects.filter(pk=env_obj.id).update(name=new_name)
+			res = self._make_request(url,method,data,params)
 
-		lst.append(getD + new_name)
+			res_obj = json.loads(res.text)
+
+
+			new_name = res_obj['name']
+			if env_obj.name != new_name:
+				print(new_name)
+				print(env_obj.name)
+				Env.objects.filter(pk=env_obj.id).update(name=new_name)
+
+			lst.append(getD + new_name)
+		except Exception as e:
+			log.error(str(e))
 
 
 	def _requests_retry_session(
