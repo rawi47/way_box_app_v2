@@ -69,13 +69,14 @@ def catch_all(request,path):
 
     log.error(url)
     log.error(request.method)
+
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
 
     resp = requests.Session().send(esreq.prepare())
 
     res = HttpResponse(json.dumps(resp.text), status= resp.status_code, content_type="application/json")
 
-
+    log.error(resp.headers)
     for key, value in resp.headers.items():
         if key not in ["Connection"]:
             res[key] = value
