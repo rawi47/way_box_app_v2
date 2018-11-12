@@ -45,7 +45,7 @@ try:
 
 
     try:
-        response = utils._make_request(url,method,data,params)response = utils._make_request(url,method,data,params)
+        response = utils._make_request(url,method,data,params)
         res_obj = json.loads(response.text)
     except Exception as e:
         print("Python exception : " + str(e))
