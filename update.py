@@ -36,15 +36,21 @@ try:
     path = "/boxes"
 
     url = "http://127.0.0.1:" + str(api_port) + path
+    res_obj = {"commit_hash":"master"}
 
     method = "GET"
     data = {}
     params = {}
 
 
-    response = utils._make_request(url,method,data,params)
 
-    res_obj = json.loads(response.text)
+    try:
+        response = utils._make_request(url,method,data,params)response = utils._make_request(url,method,data,params)
+        res_obj = json.loads(response.text)
+    except Exception as e:
+        print("Python exception : " + str(e))
+
+
     if "commit_hash" in res_obj:
         branch = res_obj["commit_hash"]
     utils._pull_git(branch)

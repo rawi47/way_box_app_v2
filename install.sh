@@ -20,3 +20,8 @@ sudo ln -s /etc/nginx/sites-available/w.club /etc/nginx/sites-enabled
 
 sudo systemctl daemon-reload
 sudo systemctl enable middleware
+
+# Cronjob that checks for upgrades
+echo "0 5 * * * python3 /home/pi/way_box_app_v2/update.py" >> cron
+crontab cron
+rm cron
