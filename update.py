@@ -50,10 +50,11 @@ try:
     except Exception as e:
         print("Python exception : " + str(e))
 
-
+    dir = os.path.join(root_dir , app_dir)
+    print(dir)
     if "commit_hash" in res_obj:
         branch = res_obj["commit_hash"]
-    utils._pull_git(branch)
+    utils._pull_git(dir)
     print("done !")
 
 except AssertionError as e:
