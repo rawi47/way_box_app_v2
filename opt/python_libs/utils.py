@@ -54,10 +54,10 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def _pull_git(repo,branch):
+def _pull_git(repo_dir,branch):
     try:
         repo.git.checkout(branch)
-        g = git.cmd.Git(repo)
+        g = git.cmd.Git(repo_dir)
         g.pull()
 
     except FileExistsError as e:
