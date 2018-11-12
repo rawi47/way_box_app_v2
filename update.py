@@ -54,6 +54,7 @@ try:
     if "commit_hash" in res_obj:
         branch = res_obj["commit_hash"]
     utils._pull_git(branch)
+    print("done !")
 
 except AssertionError as e:
     print(str(e))
