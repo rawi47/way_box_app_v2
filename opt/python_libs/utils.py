@@ -54,8 +54,9 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
     return
 
-def _pull_git(repo):
+def _pull_git(repo,branch):
     try:
+        repo.git.checkout(branch)
         g = git.cmd.Git(repo)
         g.pull()
 
