@@ -44,7 +44,7 @@ def catch_all(request,path):
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
-        data = request.json
+        data = {}
         try:
             data = json.loads(request.body.decode('utf-8'))
         except Exception as e:
