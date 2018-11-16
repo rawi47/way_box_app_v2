@@ -1,7 +1,6 @@
 from .models import BoxStatus
 from .models import Script
 from .models import Patches
-from .models import UpdateInformation
 from rest_framework import serializers
 
 
