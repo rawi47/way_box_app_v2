@@ -106,8 +106,8 @@ def _error(request):
         boxesStatus_Serializer = {"internet_connection_message": ""}
 
         boxesStatus_obj = BoxStatus.objects.latest('id')
-        if BoxesStatus_obj:
-             boxesStatusSerializer = BoxStatusSerializer(BoxesStatus_obj)
+        if boxesStatus_obj:
+             boxesStatusSerializer = BoxStatusSerializer(boxesStatus_obj)
              boxesStatus_Serializer = boxesStatusSerializer.data
         context = {
         'res' : boxesStatus_Serializer

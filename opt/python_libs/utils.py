@@ -55,11 +55,8 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
 def _pull_git(repo_dir,branch):
     try:
-        Repo.git.checkout(branch)
-        g = git.cmd.Git(repo_dir)
-        g.pull()
-
-    except FileExistsError as e:
+        cmd = "git pull origni " + branch 
+    except Exception as e:
         print(e)
 def _rename_folder(old_name, new_name):
     os.rename(old_name,new_name)
