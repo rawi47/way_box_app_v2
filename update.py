@@ -61,6 +61,7 @@ try:
     cmd = "git pull origin " + branch
     lst = []
     utils.run(cmd,password,lst)
+    print(len(lst))
     for li in lst:
         print(li)
     print("done !")
