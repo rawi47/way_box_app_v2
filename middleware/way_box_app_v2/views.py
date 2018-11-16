@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 log = logging.getLogger(__name__)
 from utils.cmd import Cmd
-from utils.webFunctions import Httphandler
+from utils.httpHandler import Httphandler
 from django.shortcuts import render
 from django.template import loader
 from boxes.models import BoxStatus

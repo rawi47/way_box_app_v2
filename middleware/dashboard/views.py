@@ -11,7 +11,7 @@ from user.models import User
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
-from utils.webFunctions import Httphandler
+from utils.httpHandler import Httphandler
 
 
 import os
