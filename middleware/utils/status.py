@@ -59,18 +59,18 @@ def _save_status():
     infos["internet_connection"] = internet_connection,internet_connection_message
 
     boxesStatus_obj = BoxStatus.objects.create(
-        dhcpcd= infos["dhcpcd"][0],
-        dhcpcd_message= infos["dhcpcd"][1],
-        dnsmasq= infos["dnsmasq"][0],
+        dhcpd_running= infos["dhcpcd"][0],
+        dhcpd_message= infos["dhcpcd"][1],
+        dnsmasq_running= infos["dnsmasq"][0],
         dnsmasq_message= infos["dnsmasq"][1],
-        hostapd= infos["hostapd"][0],
+        hostapd_running= infos["hostapd"][0],
         hostapd_message= infos["hostapd"][1],
-        nodogsplash= infos["nodogsplash"][0],
-        connected_clients= infos["nodogsplash"][2],
+        nodogsplash_running= infos["nodogsplash"][0],
+        connected_customers= infos["nodogsplash"][2],
         nodogsplash_message= infos["nodogsplash"][1],
-        internet_connection= infos["internet_connection"][0],
-        branch= env_obj.branch,
-        git_hash= env_obj.commit_hash
+
+        internet_connection_active= internet_connection,
+        internet_connection_message= internet_connection_message
 
     )
 

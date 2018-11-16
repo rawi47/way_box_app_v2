@@ -4,25 +4,23 @@ import django
 
 class BoxStatus(models.Model):
 
-    def __str__(self):
-        return str(self.date)
 
-    date = models.DateTimeField(auto_now_add=True, blank=True)
-    date_update = models.DateTimeField(auto_now_add=True, blank=True)
-    dhcpcd = models.BooleanField(default=False)
-    dhcpcd_message = models.TextField(default="")
-    dnsmasq = models.BooleanField(default="")
-    dnsmasq_message = models.TextField(default="")
-    hostapd = models.BooleanField(default=False)
-    hostapd_message = models.TextField(default="")
-    nodogsplash = models.BooleanField(default=False)
-    connected_clients = models.IntegerField(default=0)
-    nodogsplash_message = models.TextField(default="")
-    internet_connection = models.BooleanField(default=False)
-    internet_connection_message = models.TextField(default="")
-    patch_version = models.CharField(max_length=200, default="")
-    branch = models.CharField(max_length=200, default="")
-    git_hash = models.CharField(max_length=200, default="")
+    dhcpd_running = models.BooleanField(verbose_name='DHCPD')
+    dhcpd_message = models.CharField(max_length=65535, blank=True, null=True)
+
+    dnsmasq_running = models.BooleanField(verbose_name='DNSMASQ')
+    dnsmasq_message = models.CharField(max_length=65535, blank=True, null=True)
+
+    hostapd_running = models.BooleanField(verbose_name='HOSTAPD')
+    hostapd_message = models.CharField(max_length=65535, blank=True, null=True)
+
+    nodogsplash_running = models.BooleanField(verbose_name='NDS')
+    nodogsplash_message = models.CharField(max_length=65535, blank=True, null=True)  # noqa: E501
+
+    internet_connection_active = models.BooleanField(verbose_name='internet')
+    internet_connection_message = models.CharField(max_length=65535, blank=True, null=True)  # noqa: E501
+
+    connected_customers = models.PositiveIntegerField(verbose_name='customers')
 
 
 class Patches(models.Model):

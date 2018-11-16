@@ -40,7 +40,7 @@ def catch_all(request,path):
     params = {}
 
     if request.method == 'GET':
-        for key, value in request.GET:
+        for key, value in request.GETitems():
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
@@ -72,13 +72,21 @@ def catch_all(request,path):
 
     return res
 
-def connection_status(Request):
+def connection_status(request):
     env_obj = Env.objects.order_by('api_key')[0]
     internet_connection = False
     internet_connection_message = 500
-
+    force = False
+    params = {}
     internet_connection,internet_connection_message = cmd._is_connected("https://www.google.com")
-    if int(internet_connection_message) != 200:
+    if request.method == 'GET':
+        for key, value in request.GET.items():
+            params[key] = value
+
+    if "force" in params:
+        force = params['force']
+
+    if int(internet_connection_message) != 200 or bool(force):
         _save_status()
     return HttpResponse(json.dumps(internet_connection_message),status=int(internet_connection_message), content_type="application/json")
 
