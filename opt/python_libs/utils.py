@@ -1,7 +1,6 @@
 import os
 import subprocess
 import datetime
-import git
 from git import Repo
 from shutil import copy2
 import requests
@@ -55,7 +54,7 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
 def _pull_git(repo_dir,branch):
     try:
-        cmd = "git pull origni " + branch 
+        cmd = "git pull origni " + branch
     except Exception as e:
         print(e)
 def _rename_folder(old_name, new_name):
