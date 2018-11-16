@@ -62,7 +62,7 @@ try:
 
     if len(lst) > 3:
         lst = []
-        cmd = "python3 manage.py migrate "
+        cmd = "python3 middleware/manage.py migrate "
         utils.run(cmd,password,lst)
         cmd = "sudo reboot "
         utils.run(cmd,password,lst)
