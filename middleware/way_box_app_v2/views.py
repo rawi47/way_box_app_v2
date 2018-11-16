@@ -44,7 +44,11 @@ def catch_all(request,path):
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
+        data = {}
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except Exception as e:
+            log.error(str(e))
         signature = sign(API_KEY, API_SECRET, data)
     else:
         dataOpt = {}
@@ -68,8 +72,6 @@ def catch_all(request,path):
 
     for key, value in resp.headers.items():
         res[key] = value
-
-
 
     return res
 
