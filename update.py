@@ -23,7 +23,7 @@ with conn:
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
 try:
-    path = "/boxes/info"
+    path = "/portal/boxes/info"
 
     url = "http://127.0.0.1:" + str(api_port) + path
     res_obj = {"commit_hash":"master"}
