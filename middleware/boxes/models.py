@@ -25,7 +25,7 @@ class BoxStatus(models.Model):
     git_hash = models.CharField(max_length=200, default="")
 
 
-class Patches(SafeDeleteModel):
+class Patches(models.Model):
 
 
     def __str__(self):
