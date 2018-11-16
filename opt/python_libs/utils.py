@@ -19,7 +19,7 @@ def _create_dir(directory):
 def _copy_file(src, dst):
     copy2(src, dst)
 
-def run(command,sudo_password,printLog=True,getDate=True,shell=False):
+def run(command,sudo_password,printLog=True,shell=False):
 
     command = command.split()
     try:
@@ -30,15 +30,9 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
             line_err = popen.stderr.readline()
 
             if len(line) > 0:
-                getD = ""
-                if getDate:
-                    getD = str(datetime.datetime.now()) + " - "
-                print(getD + line.decode().strip() )
+                print(line.decode().strip() )
             elif  len(line_err) > 0:
-                getD = ""
-                if getDate:
-                    getD = str(datetime.datetime.now()) + " - "
-                print(getD + line_err.decode().strip() )
+                print(line_err.decode().strip() )
             else:
                 break
 
