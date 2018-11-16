@@ -61,10 +61,16 @@ try:
     cmd = "git pull origin " + branch
     lst = []
     utils.run(cmd,password,lst)
-    print(len(lst))
+
     for li in lst:
         print(li)
     print("done !")
+
+    if len(lst) > 3:
+        cmd = "sudo reboot "
+        lst = []
+        utils.run(cmd,password,lst)
+
 
 except AssertionError as e:
     print(str(e))
