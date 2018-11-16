@@ -18,6 +18,7 @@ app_dir = ""
 git_repo = ""
 branch = ""
 api_port = 5000
+password = ""
 
 database = settings.DATABASES['default']['NAME']
 
@@ -29,6 +30,7 @@ with conn:
         'env_config_env',
         "root_dir,app_dir,git_repo,branch,api_port"
         )[0]
+    password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
 
 
 try:
@@ -51,11 +53,11 @@ try:
         print("Python exception : " + str(e))
 
     dir = os.path.join(root_dir , app_dir)
-    print(dir)
+
     if "commit_hash" in res_obj:
         branch = res_obj["commit_hash"]
-
-    utils._pull_git(dir,branch)
+    cmd = "git pull origin " + branch
+    utils.run(cmd,password)
     print("done !")
 
 except AssertionError as e:
