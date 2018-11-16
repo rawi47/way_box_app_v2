@@ -70,6 +70,8 @@ def catch_all(request,path):
     for key, value in resp.headers.items():
         res[key] = value
 
+    log.error(headers)
+
     return res
 
 def connection_status(request):
