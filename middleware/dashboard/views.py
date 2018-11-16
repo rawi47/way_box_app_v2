@@ -2,21 +2,17 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from env_config.models import EnvSerializer,Env
-from itertools import groupby
 from django.contrib.auth.decorators import login_required
 from .forms import ConfigForm
 from utils.cmd import Cmd
 from django.http import HttpResponseRedirect
 from user.models import User
 from django.conf import settings
-from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from utils.httpHandler import Httphandler
 
-
-import os
-from memory_profiler import memory_usage
-import json
+import os,json
+import  _thread, time,threading
 from way_box_app_v2 import run
 import logging
 from os import path

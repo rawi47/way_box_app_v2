@@ -25,5 +25,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('connection_status/', views.connection_status),
     path('error', views._error),
-    path('<path:path>', views.catch_all),
+    path('portal/<path:path>', views.catch_all),
 ]

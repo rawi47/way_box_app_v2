@@ -35,18 +35,9 @@ def catch_all(request,path):
     API_URL = 'https://' + API_HOST + '/'
     API_KEY = env_obj.api_key
     API_SECRET = env_obj.api_secret
-    if path == 'box':
-        return HttpResponse(API_KEY)
-
     url = API_URL + path
     data = {}
-
-
-
     params = {}
-    data = {}
-
-
 
     if request.method == 'GET':
         for key, value in request.GET:

@@ -17,9 +17,9 @@ class Httphandler(models.Model):
 			api_port = env_obj.api_port
 			getD = str(datetime.datetime.now()) + " - "
 
-			path = "/customers/establishment"
+			path = "/portal/customers/establishment"
 
-			url = "http://localhost:" + str(api_port) + path
+			url = "http://127.0.0.1:" + str(api_port) + path
 			method = "GET"
 			data = {}
 			params = {}
