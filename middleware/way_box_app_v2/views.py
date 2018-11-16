@@ -93,10 +93,10 @@ def connection_status(Request):
     method = "POST"
     params = {}
 
-    # try:
-    #     t = _thread.start_new_thread( webFunctions._make_request, (url,method,response_data,params,) )
-    # except Exception as e:
-    #     log.error("post request exception : " + str(e))
+    try:
+        t = _thread.start_new_thread( webFunctions._make_request, (url,method,response_data,params,) )
+    except Exception as e:
+        log.error("post request exception : " + str(e))
 
     return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
 
