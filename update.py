@@ -17,6 +17,7 @@ root_dir = ""
 app_dir = ""
 git_repo = ""
 branch = ""
+commit_hash = ""
 api_port = 5000
 password = ""
 
@@ -54,7 +55,8 @@ try:
 
     dir = os.path.join(root_dir , app_dir)
 
-
+    if "commit_hash" in res_obj:
+        commit_hash = res_obj["commit_hash"]
     cmd = "git pull origin " + branch
     utils.run(cmd,password)
     print("done !")
