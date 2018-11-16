@@ -40,7 +40,7 @@ def catch_all(request,path):
     params = {}
 
     if request.method == 'GET':
-        for key, value in request.GETitems():
+        for key, value in request.GET.items():
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
