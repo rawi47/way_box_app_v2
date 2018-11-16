@@ -1,6 +1,5 @@
 from django.db import models
 import django
-from safedelete.models import SafeDeleteModel, SOFT_DELETE
 
 
 class BoxStatus(models.Model):
@@ -28,7 +27,6 @@ class BoxStatus(models.Model):
 
 class Patches(SafeDeleteModel):
 
-    _safedelete_policy = SOFT_DELETE
 
     def __str__(self):
         return self.name
@@ -49,14 +47,3 @@ class Script(models.Model):
     code = models.FileField(upload_to='uploads/')
     sequence = models.PositiveIntegerField(default=0)
     patches_id = models.ForeignKey(Patches, on_delete=models.CASCADE)
-
-
-class UpdateInformation(models.Model):
-
-    def __str__(self):
-        return str(self.branch)
-
-    date = models.DateTimeField(auto_now_add=True, blank=True)
-    branch = models.CharField(max_length=200, default="")
-    git_hash = models.CharField(max_length=200, default="")
-    patches_id = models.OneToOneField(Patches, on_delete=models.CASCADE)
