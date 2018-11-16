@@ -38,32 +38,17 @@ def catch_all(request,path):
     url = API_URL + path
     data = {}
     params = {}
-
+    log.error(request.method)
     if request.method == 'GET':
         for key, value in request.GET.items():
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     else:
         if request.body:
+            log.error(request.method)
             try:
-                data = {
-                    'dhcpd_running': True,
-                    'dhcpd_message': "a",
-
-                    'dnsmasq_running': True,
-                    'dnsmasq_message': "b",
-
-                    'hostapd_running': True,
-                    'hostapd_message': "c",
-
-                    'nodogsplash_running': True,
-                    'nodogsplash_message': "d",
-
-                    'internet_connection_active': True,
-                    'internet_connection_message': "e",
-
-                    'connected_customers': 3
-                }
+                data = json.loads(request.body.decode('utf-8'))
+                log.error(data)
             except json.JSONDecodeException:
                 data = {}
 
