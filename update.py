@@ -45,7 +45,6 @@ try:
     params = {}
 
 
-
     try:
         response = utils._make_request(url,method,data,params)
         res_obj = json.loads(response.text)
@@ -53,13 +52,16 @@ try:
         print("Python exception : " + str(e))
 
     dir = os.path.join(root_dir , app_dir)
-    
+
     os.chdir(dir)
 
     if "commit_hash" in res_obj:
         commit_hash = res_obj["commit_hash"]
     cmd = "git pull origin " + branch
-    utils.run(cmd,password)
+    lst = []
+    utils.run(cmd,password,lst)
+    for li in lst:
+        print(li)
     print("done !")
 
 except AssertionError as e:
