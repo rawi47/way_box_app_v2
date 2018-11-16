@@ -47,7 +47,7 @@ def catch_all(request,path):
         if len(request.body) > 1:
             if len(json.loads(request.body.decode('utf-8'))) > 3:
                 data = json.loads(request.body.decode('utf-8'))
-        signature = sign(API_KEY, API_SECRET, data)
+        signature = sign(API_KEY, API_SECRET, {})
     else:
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
