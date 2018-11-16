@@ -1,7 +1,6 @@
 import os
 import subprocess
 import datetime
-from git import Repo
 from shutil import copy2
 import requests
 from requests.adapters import HTTPAdapter
