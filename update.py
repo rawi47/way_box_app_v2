@@ -56,8 +56,7 @@ try:
     lst = []
     utils.run(cmd,password,lst)
 
-    for li in lst:
-        print(li)
+
     print("done !")
 
     if len(lst) > 3:
@@ -66,6 +65,9 @@ try:
         utils.run(cmd,password,lst)
         cmd = "sudo reboot "
         utils.run(cmd,password,lst)
+        
+    for li in lst:
+        print(li)
 
 
 except AssertionError as e:
