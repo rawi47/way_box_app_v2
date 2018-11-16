@@ -52,9 +52,12 @@ try:
     print("done !")
 
     if len(lst) > 3:
-        cmd = "sudo reboot "
         lst = []
+        cmd = "python3 manage.py migrate "
         utils.run(cmd,password,lst)
-        
+        cmd = "sudo reboot "
+        utils.run(cmd,password,lst)
+
+
 except AssertionError as e:
     print(str(e))
