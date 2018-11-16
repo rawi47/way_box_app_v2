@@ -35,7 +35,7 @@ with conn:
 
 try:
 
-    path = "/boxes"
+    path = "/boxes/info"
 
     url = "http://127.0.0.1:" + str(api_port) + path
     res_obj = {"commit_hash":"master"}
@@ -54,8 +54,7 @@ try:
 
     dir = os.path.join(root_dir , app_dir)
 
-    if "commit_hash" in res_obj:
-        branch = res_obj["commit_hash"]
+
     cmd = "git pull origin " + branch
     utils.run(cmd,password)
     print("done !")
