@@ -137,12 +137,12 @@ class Cmd(models.Model):
 	def _is_connected(self,hostname):
 		try:
 			session = requests.Session()
-			retry = Retry(connect=3, backoff_factor=0.5)
+			retry = Retry(connect=1, backoff_factor=0.5)
 			adapter = HTTPAdapter(max_retries=retry)
 			session.mount('http://', adapter)
 			session.mount('https://', adapter)
 
 			resp = session.get(hostname)
 			return True,resp.status_code
-		except Exception as e:
-			return False,str(e)
+		except Exception:
+			return False,500

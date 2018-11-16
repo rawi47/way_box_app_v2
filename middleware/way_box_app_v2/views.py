@@ -5,9 +5,8 @@ import requests
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-import logging
-log = logging.getLogger(__name__)
 from utils.cmd import Cmd
+from utils.status import _save_status
 from utils.httpHandler import Httphandler
 from django.shortcuts import render
 from django.template import loader
@@ -15,8 +14,11 @@ from boxes.models import BoxStatus
 from boxes.serializers import BoxStatusSerializer
 import re
 import  _thread, time,threading
+import logging
+log = logging.getLogger(__name__)
 
 webFunctions  = Httphandler()
+cmd = Cmd()
 
 def sign(public_key, secret_key, data):
     h = hmac.new(
@@ -64,7 +66,6 @@ def catch_all(request,path):
     for key, value in request.META.items():
         headers[key] = str(value)
 
-
     headers['Host'] = API_HOST
     headers['X-API-Key'] = API_KEY
     headers['X-API-Sign'] = signature
@@ -78,27 +79,17 @@ def catch_all(request,path):
     for key, value in resp.headers.items():
         res[key] = value
 
-
     return res
 
 def connection_status(Request):
     env_obj = Env.objects.order_by('api_key')[0]
-    api_port = env_obj.api_port
+    internet_connection = False
+    internet_connection_message = 500
 
-    response_data,infos = _save_status()
-
-    path = "/boxes/status"
-
-    url = "http://raspberrypi.local:" + str(api_port) + path
-    method = "POST"
-    params = {}
-
-    try:
-        t = _thread.start_new_thread( webFunctions._make_request, (url,method,response_data,params,) )
-    except Exception as e:
-        log.error("post request exception : " + str(e))
-
-    return HttpResponse(json.dumps(response_data),status=infos["internet_connection"][1], content_type="application/json")
+    internet_connection,internet_connection_message = cmd._is_connected("https://www.google.com")
+    if int(internet_connection_message) != 200:
+        _save_status()
+    return HttpResponse(json.dumps(internet_connection_message),status=int(internet_connection_message), content_type="application/json")
 
 
 def _error(request):
@@ -113,70 +104,3 @@ def _error(request):
         'res' : boxesStatus_Serializer
         }
         return HttpResponse(template.render(context, request))
-
-
-def _save_status():
-    cmd = Cmd()
-    user_obj = User.objects.order_by('id')[0]
-    infos = {}
-    pkgs = ["dhcpcd","dnsmasq","hostapd"]
-    for line in pkgs:
-        res = []
-        cmd._systemctl_status(line,user_obj,res)
-
-        message = {}
-        for ln in res:
-            if ":" in ln:
-                param = ln.split(":")
-                message[param[0]] = param[1]
-        active = False
-        if "Active" in message:
-            if "running" in message["Active"]:
-                active = True
-        infos[line] = active,message
-
-
-    lst = []
-    cmd._ndsctl_status(user_obj,lst)
-
-    message = {}
-    for ln in lst:
-        if ":" in ln:
-            param = ln.split(":")
-            message[param[0]] = param[1]
-
-    active = False
-    connected = 0
-
-
-
-
-    if "Current clients" in message:
-        active = True
-        connected = message["Current clients"]
-
-    infos["nodogsplash"] = active,message,connected
-
-
-    internet_connection,internet_connection_message = cmd._is_connected("https://www.google.com")
-    infos["internet_connection"] = internet_connection,internet_connection_message
-
-
-    boxesStatus = BoxStatus(
-        dhcpcd= infos["dhcpcd"][0],
-        dhcpcd_message= infos["dhcpcd"][1],
-        dnsmasq= infos["dnsmasq"][0],
-        dnsmasq_message= infos["dnsmasq"][1],
-        hostapd= infos["hostapd"][0],
-        hostapd_message= infos["hostapd"][1],
-        nodogsplash= infos["nodogsplash"][0],
-        connected_clients= infos["nodogsplash"][2],
-        nodogsplash_message= infos["nodogsplash"][1],
-        internet_connection= infos["internet_connection"][0],
-        internet_connection_message= infos["internet_connection"][1]
-    )
-    boxesStatus.save()
-    boxesStatusSerializer = BoxStatusSerializer(boxesStatus)
-    response_data = boxesStatusSerializer.data
-
-    return response_data,infos
