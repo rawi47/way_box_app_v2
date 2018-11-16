@@ -53,6 +53,8 @@ try:
         print("Python exception : " + str(e))
 
     dir = os.path.join(root_dir , app_dir)
+    
+    os.chdir(dir)
 
     if "commit_hash" in res_obj:
         commit_hash = res_obj["commit_hash"]
