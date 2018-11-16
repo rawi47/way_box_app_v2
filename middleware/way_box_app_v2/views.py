@@ -44,10 +44,8 @@ def catch_all(request,path):
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     elif request.method == 'POST':
-        if len(request.body) > 1:
-            if len(json.loads(request.body.decode('utf-8'))) > 3:
-                data = json.loads(request.body.decode('utf-8'))
-        signature = sign(API_KEY, API_SECRET, {})
+        data = json.loads(request.body.decode('utf-8'))
+        signature = sign(API_KEY, API_SECRET, data)
     else:
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
