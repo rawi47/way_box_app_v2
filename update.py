@@ -44,6 +44,7 @@ try:
     data = {}
     params = {}
 
+    print(url)
 
     try:
         response = utils._make_request(url,method,data,params)
