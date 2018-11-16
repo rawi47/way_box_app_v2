@@ -1,16 +1,7 @@
-import os
+import json, os
 import middleware.way_box_app_v2.settings as settings
 from  opt.python_libs import sqlite3 as sqlite3_lib
 from  opt.python_libs import utils as utils
-import base64
-import requests
-import configparser
-import json
-import  _thread, time,threading
-import datetime
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-
 
 root_dir = ""
 app_dir = ""
@@ -31,10 +22,7 @@ with conn:
         "root_dir,app_dir,git_repo,branch,api_port"
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
-
-
 try:
-
     path = "/boxes/info"
 
     url = "http://127.0.0.1:" + str(api_port) + path
@@ -43,9 +31,6 @@ try:
     method = "GET"
     data = {}
     params = {}
-
-    print(url)
-
     try:
         response = utils._make_request(url,method,data,params)
         res_obj = json.loads(response.text)
@@ -70,7 +55,6 @@ try:
         cmd = "sudo reboot "
         lst = []
         utils.run(cmd,password,lst)
-
-
+        
 except AssertionError as e:
     print(str(e))
