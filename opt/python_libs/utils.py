@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 import datetime
@@ -56,7 +55,7 @@ def run(command,sudo_password,printLog=True,getDate=True,shell=False):
 
 def _pull_git(repo_dir,branch):
     try:
-        repo.git.checkout(branch)
+        Repo.git.checkout(branch)
         g = git.cmd.Git(repo_dir)
         g.pull()
 
