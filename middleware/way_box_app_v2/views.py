@@ -52,6 +52,7 @@ def catch_all(request,path):
         dataOpt = {}
         signature = sign(API_KEY, API_SECRET, dataOpt)
 
+    log.error(data)
 
     headers = {}
     for key, value in request.META.items():
@@ -62,7 +63,7 @@ def catch_all(request,path):
     headers['X-API-Sign'] = signature
 
 
-    esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
+    esreq = requests.Request(method=request.method, url=url, data=data, params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
 
     res = HttpResponse(resp.text, status= resp.status_code)
@@ -70,7 +71,7 @@ def catch_all(request,path):
     for key, value in resp.headers.items():
         res[key] = value
 
-    log.error(headers)
+
 
     return res
 
