@@ -79,7 +79,7 @@ def _save_status():
          response_data = boxesStatusSerializer.data
 
 
-    path = "/portal/boxes/status"
+    path = "/portal/boxes/status/"
     api_port = env_obj.api_port
 
     url = "http://127.0.0.1:" + str(api_port) + path
