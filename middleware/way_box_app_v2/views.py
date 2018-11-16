@@ -11,7 +11,8 @@ from utils.cmd import Cmd
 from utils.webFunctions import Httphandler
 from django.shortcuts import render
 from django.template import loader
-from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
+from boxes.models import BoxStatus
+from boxes.serializers import BoxStatusSerializer
 import re
 import  _thread, time,threading
 
@@ -104,9 +105,9 @@ def _error(request):
         template = loader.get_template('dashboard/error.html')
         boxesStatus_Serializer = {"internet_connection_message": ""}
 
-        boxesStatus_obj = BoxesStatus.objects.latest('id')
+        boxesStatus_obj = BoxStatus.objects.latest('id')
         if BoxesStatus_obj:
-             boxesStatusSerializer = BoxesStatusSerializer(BoxesStatus_obj)
+             boxesStatusSerializer = BoxStatusSerializer(BoxesStatus_obj)
              boxesStatus_Serializer = boxesStatusSerializer.data
         context = {
         'res' : boxesStatus_Serializer
@@ -161,7 +162,7 @@ def _save_status():
     infos["internet_connection"] = internet_connection,internet_connection_message
 
 
-    boxesStatus = BoxesStatus(
+    boxesStatus = BoxStatus(
         dhcpcd= infos["dhcpcd"][0],
         dhcpcd_message= infos["dhcpcd"][1],
         dnsmasq= infos["dnsmasq"][0],
@@ -175,7 +176,7 @@ def _save_status():
         internet_connection_message= infos["internet_connection"][1]
     )
     boxesStatus.save()
-    boxesStatusSerializer = BoxesStatusSerializer(boxesStatus)
+    boxesStatusSerializer = BoxStatusSerializer(boxesStatus)
     response_data = boxesStatusSerializer.data
 
     return response_data,infos

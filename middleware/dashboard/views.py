@@ -12,7 +12,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from utils.webFunctions import Httphandler
-from BoxesStatus.models import BoxesStatus,BoxesStatusSerializer
+
 
 import os
 from memory_profiler import memory_usage
@@ -33,12 +33,9 @@ static_path = settings.STATICFILES_DIRS[0] + "/config/"
 def index(request):
     template = loader.get_template('dashboard/index.html')
 
-    BoxesStatus_obj = BoxesStatus.objects.order_by('id')[:10]
     x_data = []
     ctx_data = []
-    for line in BoxesStatus_obj:
-        x_data.append(line.date.strftime("%Y-%m-%d %H:%M:%S"))
-        ctx_data.append(line.connected_clients)
+
 
     label = "Connected clients"
     env_obj = Env.objects.order_by('api_key')

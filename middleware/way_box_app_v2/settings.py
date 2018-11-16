@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'utils.apps.UtilsConfig',
     'dashboard.apps.DashboardConfig',
-    'BoxesStatus.apps.BoxesstatusConfig',
+    'boxes',
     'django_crontab',
     'bootstrap3',
     'jquery',
@@ -141,7 +141,9 @@ CRONJOBS = [
     ('*/30 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),
 ]
 
-LOGIN_REDIRECT_URL = '/dashboard'
+LOGIN_REDIRECT_URL = '/'
 
 #allow cors origins
 CORS_ORIGIN_ALLOW_ALL = True
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "static")
