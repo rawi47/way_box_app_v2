@@ -49,7 +49,7 @@ def catch_all(request,path):
             try:
                 data = json.loads(request.body.decode('utf-8'))
                 log.error(type(data))
-            except json.JSONDecodeException:
+            except Exception:
                 data = {}
 
         else:
@@ -69,10 +69,10 @@ def catch_all(request,path):
     log.error(request.body)
     log.error(url)
 
-    esreq = requests.Request(method=request.method, url=url, data=json.dumps(data, sort_keys=True), params=params, headers=headers)
+    esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
 
-    log.error(resp.text)
+    log.error(url)
     res = HttpResponse(resp.text, status= resp.status_code)
 
     for key, value in resp.headers.items():
