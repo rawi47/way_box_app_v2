@@ -48,18 +48,21 @@ def catch_all(request,path):
         if request.body:
             try:
                 data = json.loads(request.body.decode('utf-8'))
-                log.error(type(data))
-            except Exception:
+            except json.JSONDecodeError:
                 data = {}
-
         else:
             data = {}
+
+        import pprint
+        print("data")
+        pprint.pprint(data)
+        print()
         signature = sign(API_KEY, API_SECRET, data)
 
 
-    headers = {}
-    for key, value in request.META.items():
-        headers[key] = str(value)
+    headers = {
+        k: v for k, v in request.META.items() if k.startswith('HTTP')
+    }
 
     headers['Host'] = API_HOST
     headers['X-API-Key'] = API_KEY
@@ -69,8 +72,17 @@ def catch_all(request,path):
     log.error(request.body)
     log.error(url)
 
-    esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
+    # esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
+    esreq = requests.Request(method=request.method, url=url, json=data, headers=headers)
     resp = requests.Session().send(esreq.prepare())
+
+    print("data", data)
+    print("res", resp.text, resp.status_code)
+    print("sig2", sign(API_KEY, API_SECRET, data))
+
+    print("headers")
+    print(headers)
+    print("\n\n\n")
 
     log.error(url)
     res = HttpResponse(resp.text, status= resp.status_code)
