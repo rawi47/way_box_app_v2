@@ -22,53 +22,56 @@ with conn:
         "root_dir,app_dir,git_repo,branch,api_port"
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
+
+path = "/portal/boxes/info"
+url = "http://127.0.0.1:" + str(api_port) + path
+res_obj = {"commit_hash":"master"}
+
+method = "GET"
+data = {}
+params = {}
 try:
-    path = "/portal/boxes/info"
-    url = "http://127.0.0.1:" + str(api_port) + path
-    res_obj = {"commit_hash":"master"}
+    response = utils._make_request(url,method,data,params)
+    res_obj = json.loads(response.text)
+except Exception as e:
+    print("Python exception : " + str(e))
 
-    method = "GET"
-    data = {}
-    params = {}
-    try:
-        response = utils._make_request(url,method,data,params)
-        res_obj = json.loads(response.text)
-    except Exception as e:
-        print("Python exception : " + str(e))
+path = "/connection_status/"
+url = "http://127.0.0.1:" + str(api_port) + path
+method = "GET"
 
-    path = "/connection_status/"
-    url = "http://127.0.0.1:" + str(api_port) + path
-    method = "GET"
+try:
+    params = {"force":"True"}
+    response = utils._make_request(url,method,data,params)
+except Exception as e:
+    print("Python exception : " + str(e))
 
-    try:
-        params = {"force":"True"}
-        response = utils._make_request(url,method,data,params)
-    except Exception as e:
-        print("Python exception : " + str(e))
+dir = os.path.join(root_dir , app_dir)
 
-    dir = os.path.join(root_dir , app_dir)
+os.chdir(dir)
 
-    os.chdir(dir)
-
-    if "commit_hash" in res_obj:
-        commit_hash = res_obj["commit_hash"]
+if "commit_hash" in res_obj:
+    commit_hash = res_obj["commit_hash"]
+try:
     cmd = "git pull origin " + branch
     lst = []
     utils.run(cmd,password,lst)
+except Exception as e:
+    print("Python exception : " + str(e))
 
+print("done !")
 
-    print("done !")
-
-    if len(lst) > 3:
+if len(lst) > 3:
+    try:
         lst = []
         cmd = "python3 middleware/manage.py migrate "
         utils.run(cmd,password,lst)
         cmd = "sudo reboot "
         utils.run(cmd,password,lst)
+    except Exception as e:
+        print("Python exception : " + str(e))
 
-    for li in lst:
-        print(li)
 
 
-except AssertionError as e:
-    print(str(e))
+for li in lst:
+    print(li)
