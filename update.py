@@ -41,7 +41,7 @@ try:
     method = "GET"
 
     try:
-        params = {"force":True}
+        params = {"force":"True"}
         response = utils._make_request(url,method,data,params)
     except Exception as e:
         print("Python exception : " + str(e))
@@ -65,7 +65,7 @@ try:
         utils.run(cmd,password,lst)
         cmd = "sudo reboot "
         utils.run(cmd,password,lst)
-        
+
     for li in lst:
         print(li)
 

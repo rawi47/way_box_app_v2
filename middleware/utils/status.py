@@ -84,6 +84,8 @@ def _save_status():
 
     url = "http://127.0.0.1:" + str(api_port) + path
 
+    log.error(path)
+    log.error(response_data)
     method = "POST"
     params = {}
 
