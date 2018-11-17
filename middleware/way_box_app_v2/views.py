@@ -88,6 +88,7 @@ def connection_status(request):
 
     if "force" in params:
         force = params['force']
+    log.error("in connection status")
     log.error(force)
     log.error(params)
     log.error(bool(force))

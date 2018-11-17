@@ -23,20 +23,10 @@ with conn:
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
 
-path = "/portal/boxes/info"
-url = "http://127.0.0.1:" + str(api_port) + path
-res_obj = {"commit_hash":"master"}
 
-method = "GET"
+res_obj = {"commit_hash":"master"}
 data = {}
 params = {}
-
-try:
-    response = utils._make_request(url,method,data,params)
-    if response:
-        res_obj = json.loads(response.text)
-except Exception as e:
-    print("Python exception : " + str(e))
 
 path = "/connection_status/"
 url = "http://127.0.0.1:" + str(api_port) + path
@@ -45,6 +35,7 @@ method = "GET"
 try:
     params = {"force":"True"}
     response = utils._make_request(url,method,data,params)
+    print(url)
     print(params)
     print(response)
 except Exception as e:
