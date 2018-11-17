@@ -91,15 +91,11 @@ def _save_status():
     params = {}
 
 
-    log.error("in save status")
-    log.error(url)
-    log.error(data)
-
     str_data = json.dumps(data)
 
     data = str_data.encode('utf-8')
 
-    log.error(data)
+
 
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
