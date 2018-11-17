@@ -33,7 +33,7 @@ url = "http://127.0.0.1:" + str(api_port) + path
 method = "GET"
 
 try:
-    params = {"force":"True"}
+    params = {"force":True}
     response = utils._make_request(url,method,data,params)
     print(url)
     print(params)

@@ -8,6 +8,9 @@ from boxes.serializers import BoxStatusSerializer
 from utils.cmd import Cmd
 from utils.httpHandler import Httphandler
 
+import logging
+log = logging.getLogger(__name__)
+
 webFunctions  = Httphandler()
 cmd = Cmd()
 
