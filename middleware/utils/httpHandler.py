@@ -65,6 +65,6 @@ class Httphandler(models.Model):
 		if method == "GET":
 		    res = self._requests_retry_session().get(url)
 		elif method == "POST":
-			data = json.dumps(data)
+			# data = json.dumps(data)
 			res = self._requests_retry_session().post(url,data=data)
 		return res
