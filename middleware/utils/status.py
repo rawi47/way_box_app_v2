@@ -97,9 +97,10 @@ def _save_status():
 
     str = json.dumps(data)
 
-    data = str.encode(str)
+    data = str.encode('utf-8')
 
-
+    log.error(data)
+    
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
     except Exception as e:
