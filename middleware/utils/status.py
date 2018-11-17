@@ -95,6 +95,10 @@ def _save_status():
     log.error(url)
     log.error(data)
 
+    str = json.dumps(data)
+
+    data = str.encode(str)
+
 
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
