@@ -90,6 +90,12 @@ def _save_status():
     method = "POST"
     params = {}
 
+
+    log.error("in save status")
+    log.error(url)
+    log.error(data)
+
+
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
     except Exception as e:

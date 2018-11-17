@@ -88,11 +88,7 @@ def connection_status(request):
 
     if "force" in params:
         force = params['force']
-    log.error("in connection status")
-    log.error(force)
-    log.error(params)
-    log.error(bool(force))
-
+    
     if int(internet_connection_message) != 200 or bool(force):
         _save_status()
     return HttpResponse(json.dumps(internet_connection_message),status=int(internet_connection_message), content_type="application/json")
