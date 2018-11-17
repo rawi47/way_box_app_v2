@@ -1,5 +1,5 @@
 import  _thread, time,threading
-
+import json
 from boxes.models import BoxStatus
 from env_config.models import Env
 from user.models import User
@@ -83,13 +83,19 @@ def _save_status():
     api_port = env_obj.api_port
 
     url = "http://127.0.0.1:" + str(api_port) + path
-
+    data = dict_to_binary(response_data)
     log.error(path)
-    log.error(response_data)
+    log.error(data)
     method = "POST"
     params = {}
 
     try:
-        t = _thread.start_new_thread( webFunctions._make_request, (url,method,response_data,params,) )
+        t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
     except Exception as e:
         log.error("post request exception : " + str(e))
+
+
+def dict_to_binary(the_dict):
+    str = json.dumps(the_dict)
+    binary = ' '.join(format(ord(letter), 'b') for letter in str)
+    return binary
