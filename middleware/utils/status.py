@@ -95,19 +95,13 @@ def _save_status():
     log.error(url)
     log.error(data)
 
-    str = json.dumps(data)
+    str_data = json.dumps(data)
 
-    data = str.encode('utf-8')
+    data = str_data.encode('utf-8')
 
     log.error(data)
-    
+
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
     except Exception as e:
         log.error("post request exception : " + str(e))
-
-
-def dict_to_binary(the_dict):
-    str = json.dumps(the_dict)
-    binary = ' '.join(format(ord(letter), 'b') for letter in str)
-    return binary

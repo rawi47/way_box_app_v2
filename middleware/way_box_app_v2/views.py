@@ -48,6 +48,7 @@ def catch_all(request,path):
         if request.body:
             try:
                 data = json.loads(request.body.decode('utf-8'))
+                log.error(type(data))
             except json.JSONDecodeException:
                 data = {}
 
@@ -64,6 +65,7 @@ def catch_all(request,path):
     headers['X-API-Key'] = API_KEY
     headers['X-API-Sign'] = signature
 
+    log.error(type(request.body))
 
     esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
@@ -88,7 +90,7 @@ def connection_status(request):
 
     if "force" in params:
         force = params['force']
-    
+
     if int(internet_connection_message) != 200 or bool(force):
         _save_status()
     return HttpResponse(json.dumps(internet_connection_message),status=int(internet_connection_message), content_type="application/json")
