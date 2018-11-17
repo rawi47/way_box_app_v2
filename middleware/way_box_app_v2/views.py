@@ -69,7 +69,7 @@ def catch_all(request,path):
     log.error(request.body)
     log.error(url)
 
-    esreq = requests.Request(method=request.method, url=url, data=json.dump(data, sort_keys=True), params=params, headers=headers)
+    esreq = requests.Request(method=request.method, url=url, data=json.dumps(data, sort_keys=True), params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
 
     log.error(resp.text)
