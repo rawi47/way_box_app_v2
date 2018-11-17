@@ -28,12 +28,11 @@ res_obj = {"commit_hash":"master"}
 data = {}
 params = {}
 
-path = "/connection_status/"
+path = "/connection_status/?force=True"
 url = "http://127.0.0.1:" + str(api_port) + path
 method = "GET"
-
+params = {}
 try:
-    params = {"force":True}
     response = utils._make_request(url,method,data,params)
     print(url)
     print(params)

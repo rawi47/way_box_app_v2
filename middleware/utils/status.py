@@ -86,9 +86,7 @@ def _save_status():
     api_port = env_obj.api_port
 
     url = "http://127.0.0.1:" + str(api_port) + path
-    data = dict_to_binary(response_data)
-    log.error(path)
-    log.error(data)
+    data = response_data
     method = "POST"
     params = {}
 
