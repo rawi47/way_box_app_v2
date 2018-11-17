@@ -38,6 +38,7 @@ def catch_all(request,path):
     url = API_URL + path
     data = {}
     params = {}
+    sent_data = {}
 
     if request.method == 'GET':
         for key, value in request.GET.items():
@@ -54,10 +55,6 @@ def catch_all(request,path):
             data = {}
         signature = sign(API_KEY, API_SECRET, data)
 
-    log.error(data)
-    log.error(type(data))
-    log.error(request.body)
-    log.error(type(request.body))
 
     headers = {}
     for key, value in request.META.items():
