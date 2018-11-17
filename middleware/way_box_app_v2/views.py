@@ -88,6 +88,9 @@ def connection_status(request):
 
     if "force" in params:
         force = params['force']
+    log.error(force)
+    log.error(params)
+    log.error(bool(force))
 
     if int(internet_connection_message) != 200 or bool(force):
         _save_status()

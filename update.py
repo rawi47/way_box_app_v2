@@ -45,12 +45,15 @@ method = "GET"
 try:
     params = {"force":"True"}
     response = utils._make_request(url,method,data,params)
+    print(params)
+    print(response)
 except Exception as e:
     print("Python exception : " + str(e))
 
 dir = os.path.join(root_dir , app_dir)
 
 os.chdir(dir)
+print(dir)
 
 if "commit_hash" in res_obj:
     commit_hash = res_obj["commit_hash"]
