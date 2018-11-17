@@ -111,7 +111,7 @@ def _save_status():
 
     str_data = json.dumps(data)
 
-    data = str_data.encode('utf-8')
+    data = bytes(data)
 
 
 
