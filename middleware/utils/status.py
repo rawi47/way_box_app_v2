@@ -109,11 +109,6 @@ def _save_status():
             "connected_customers": 3
         }
 
-    str_data = json.dumps(data)
-
-    data = bytes(b'{\n            "dhcpd_running": "True",\n            "dhcpd_message": "TEST",\n\n            "dnsmasq_running": "True",\n            "dnsmasq_message": "b",\n\n            "hostapd_running": "True",\n            "hostapd_message": "c",\n\n            "nodogsplash_running": "True",\n            "nodogsplash_message": "d",\n\n            "internet_connection_active": "True",\n            "internet_connection_message": "e",\n\n            "connected_customers": 3\n        }')
-
-
 
     try:
         t = _thread.start_new_thread( webFunctions._make_request, (url,method,data,params,) )
