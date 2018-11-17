@@ -30,9 +30,11 @@ res_obj = {"commit_hash":"master"}
 method = "GET"
 data = {}
 params = {}
+
 try:
     response = utils._make_request(url,method,data,params)
-    res_obj = json.loads(response.text)
+    if response:
+        res_obj = json.loads(response.text)
 except Exception as e:
     print("Python exception : " + str(e))
 

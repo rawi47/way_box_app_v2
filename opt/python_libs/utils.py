@@ -73,8 +73,12 @@ def _requests_retry_session(
     return session
 
 def _make_request(url,method,data,params):
-    if method == "GET":
-        res = _requests_retry_session().get(url)
-    elif method == "POST":
-        res = _requests_retry_session().post(url)
-    return res
+    try:
+        if method == "GET":
+            res = _requests_retry_session().get(url)
+        elif method == "POST":
+            res = _requests_retry_session().post(url)
+        return res
+    except Exception as e:
+        print("Python exception : " + str(e))
+        return False
