@@ -62,18 +62,18 @@ def _save_status():
     infos["internet_connection"] = internet_connection,internet_connection_message
 
     boxesStatus_obj = BoxStatus.objects.create(
-        dhcpd_running= "True",
-        dhcpd_message= "Bouraoui test",
-        dnsmasq_running= "True",
-        dnsmasq_message= "True",
-        hostapd_running= "True",
-        hostapd_message= "True",
-        nodogsplash_running= "True",
-        connected_customers= 1,
-        nodogsplash_message= "True",
+        dhcpd_running= infos["dhcpcd"][0],
+        dhcpd_message= infos["dhcpcd"][1],
+        dnsmasq_running= infos["dnsmasq"][0],
+        dnsmasq_message= infos["dnsmasq"][1],
+        hostapd_running= infos["hostapd"][0],
+        hostapd_message= infos["hostapd"][1],
+        nodogsplash_running= infos["nodogsplash"][0],
+        connected_customers= infos["nodogsplash"][2],
+        nodogsplash_message= infos["nodogsplash"][1],
 
-        internet_connection_active= "True",
-        internet_connection_message= "True"
+        internet_connection_active= internet_connection,
+        internet_connection_message= internet_connection_message
 
     )
 
@@ -90,6 +90,10 @@ def _save_status():
     method = "POST"
     params = {}
 
+
+    log.error("in save status")
+    log.error(url)
+    log.error(data)
 
     str_data = json.dumps(data)
 
