@@ -38,17 +38,15 @@ def catch_all(request,path):
     url = API_URL + path
     data = {}
     params = {}
-    log.error(request.method)
+
     if request.method == 'GET':
         for key, value in request.GET.items():
             params[key] = value
         signature = sign(API_KEY, API_SECRET, params)
     else:
         if request.body:
-            log.error(request.method)
             try:
                 data = json.loads(request.body.decode('utf-8'))
-                log.error(data)
             except json.JSONDecodeException:
                 data = {}
 
@@ -57,6 +55,9 @@ def catch_all(request,path):
         signature = sign(API_KEY, API_SECRET, data)
 
     log.error(data)
+    log.error(type(data))
+    log.error(request.body)
+    log.error(type(request.body))
 
     headers = {}
     for key, value in request.META.items():
@@ -67,7 +68,7 @@ def catch_all(request,path):
     headers['X-API-Sign'] = signature
 
 
-    esreq = requests.Request(method=request.method, url=url, data=data, params=params, headers=headers)
+    esreq = requests.Request(method=request.method, url=url, data=request.body, params=params, headers=headers)
     resp = requests.Session().send(esreq.prepare())
 
     res = HttpResponse(resp.text, status= resp.status_code)
