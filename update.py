@@ -1,4 +1,4 @@
-import json, os
+import json, os, requests
 import middleware.way_box_app_v2.settings as settings
 from  opt.python_libs import sqlite3 as sqlite3_lib
 from  opt.python_libs import utils as utils
@@ -24,49 +24,42 @@ with conn:
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
 
 
-res_obj = {"commit_hash":"master"}
+
 data = {}
 params = {}
 
 path = "/connection_status/?force=True"
 url = "http://127.0.0.1:" + str(api_port) + path
-method = "GET"
-params = {}
+
 try:
-    response = utils._make_request(url,method,data,params)
-    print(url)
-    print(params)
-    print(response)
-except Exception as e:
-    print("Python exception : " + str(e))
+    response = requests.get(url)
+except requests.ConnectionError:
+    print("connection error")
+
 
 dir = os.path.join(root_dir , app_dir)
-
 os.chdir(dir)
-print(dir)
 
-if "commit_hash" in res_obj:
-    commit_hash = res_obj["commit_hash"]
-try:
-    cmd = "git pull origin " + branch
-    lst = []
-    utils.run(cmd,password,lst)
-except Exception as e:
-    print("Python exception : " + str(e))
+
+# cmd = "git pull origin " + branch
+cmd_remote = 'git log -1 --format=%H'
+cmd_local = 'git rev-parse HEAD'
+lst = []
+
+utils.run(cmd_remote,password,lst)
+utils.run(cmd_local,password,lst)
+
+for line in lst:
+    print(line)
 
 print("done !")
 
-if len(lst) > 3:
-    try:
-        lst = []
-        cmd = "python3 middleware/manage.py migrate "
-        utils.run(cmd,password,lst)
-        cmd = "sudo reboot "
-        utils.run(cmd,password,lst)
-    except Exception as e:
-        print("Python exception : " + str(e))
-
-
-
-for li in lst:
-    print(li)
+# if len(lst) > 3:
+#     try:
+#         lst = []
+#         cmd = "python3 middleware/manage.py migrate "
+#         utils.run(cmd,password,lst)
+#         cmd = "sudo reboot "
+#         utils.run(cmd,password,lst)
+#     except Exception as e:
+#         print("Python exception : " + str(e))

@@ -92,7 +92,8 @@ def connection_status(request):
 
 
 def _error(request):
-    template = loader.get_template('dashboard/error.html')
+    template = loader.get_template('error.html')
+    status = {"internet_connection_message" : 200 }
     context = {
     'res' : status
     }

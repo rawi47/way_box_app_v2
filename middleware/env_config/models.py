@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 
 modes = (
-	('commun','commun'),
 	('wlan','wlan'),
 	('eth','eth')
 )

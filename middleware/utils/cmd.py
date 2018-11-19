@@ -16,8 +16,7 @@ log = logging.getLogger(__name__)
 
 class Cmd(models.Model):
 
-
-	def run(self,command,user,lst):
+	def run(self,command,user,lst=[]):
 		sudo_password = user.password
 		command = command.split()
 		try:
@@ -72,36 +71,12 @@ class Cmd(models.Model):
 		except:
 		    log.error("Error > ")
 
-		return
-
-	def _create_file_conf(self,source,content,right):
-		file = open(source,right)
-		env_obj = Env.objects.order_by('api_key')[0]
-		for line in content.splitlines():
-			if "WAY_BOX" in line:
-				env_obj = Env.objects.order_by('api_key')[0]
-				file.write("ssid=" + env_obj.name.upper() + env_obj.ssid_prefix + "\n")
-			else:
-				file.write(line + "\n")
-		file.close()
-
-	def _create_file(source,content,right):
-		file = open(source,right)
-		file.write(content)
-		file.close()
-
 	def _create_dir(self,directory):
-	    if not os.path.exists(directory):
-	        os.makedirs(directory)
+		if not os.path.exists(directory):
+		    os.makedirs(directory)
 
 	def _copy_file(self,source,dst):
 		copy2(source, dst)
-
-	def _list_dir(self,mypath):
-		f = []
-		for (dirpath, dirnames, filenames) in walk(mypath):
-		    f.extend(filenames)
-		return f
 
 	def _edit_files(self,filename,text_to_search,replacement_text):
 		with fileinput.FileInput(filename, inplace=True) as file:
@@ -115,7 +90,7 @@ class Cmd(models.Model):
 	def _ndsctl_status(self,user,lst):
 		cmd = "ndsctl status"
 		self.run(cmd,user,lst)
-
+		
 	def _is_connected(self,hostname):
 		try:
 			resp = requests.get(hostname)

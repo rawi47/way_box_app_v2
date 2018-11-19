@@ -3,9 +3,6 @@ from utils.cmd import Cmd
 from utils.httpHandler import Httphandler
 from env_config.models import Env
 import json
-from django.conf import settings
-import  _thread, time,threading
-import datetime
 import logging
 log = logging.getLogger(__name__)
 
@@ -14,14 +11,12 @@ webFunctions = Httphandler()
 
 def _config_main_prog():
 
-
 	env_obj = Env.objects.order_by('api_key')[0]
 	if not env_obj.run_on_start:
 		return
 	app_mode = env_obj.api_mode
 	static_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.config_dir)
 	origin_path = path.join(env_obj.root_dir,env_obj.app_dir,env_obj.origin_config_dir)
-	getD = str(datetime.datetime.now()) + " - "
 	interface = "eth1"
 	ssid = env_obj.name.upper() + env_obj.ssid_prefix
 
@@ -32,10 +27,8 @@ def _config_main_prog():
 	if app_mode == "wlan":
 		interface = "wlan0"
 
-	try:
-	    t = _thread.start_new_thread( webFunctions._set_establichement_name, () )
-	except Exception as e:
-	    print("Python exception : " + str(e))
+	webFunctions._set_establichement_name()
+
 
 	try:
 		files =[
@@ -85,10 +78,7 @@ def _run_main_prog():
 	]
 
 	commands = []
-
-
 	commands.append("nodogsplash")
-
 
 	for cmd_sh in commands_sh:
 		log.error(cmd_sh)
@@ -98,8 +88,5 @@ def _run_main_prog():
 		cmd.run_sh(src,env_obj)
 		cmd.run("rm -rf " + src,env_obj)
 
-
-
 	for cmmd in commands:
-		log.error(cmmd)
 		cmd.run(cmmd,env_obj)
