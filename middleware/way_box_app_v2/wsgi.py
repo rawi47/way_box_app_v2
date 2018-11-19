@@ -12,3 +12,6 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'way_box_app_v2.settings')
 application = get_wsgi_application()
+import utils.run as rn
+
+rn._run_main_prog()
