@@ -1,9 +1,11 @@
 from django.db import models
-import json, requests
+import json
+import requests
 from env_config.models import Env
 
 import logging
 log = logging.getLogger(__name__)
+
 
 class Httphandler(models.Model):
 

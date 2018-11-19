@@ -3,6 +3,7 @@ from safedelete.admin import SafeDeleteAdmin
 from .models import Env
 import utils.run as rn
 
+
 @admin.register(Env)
 class EnvAdmin(admin.ModelAdmin):
     readonly_fields = ["name"]

@@ -1,6 +1,7 @@
+from safedelete.models import SafeDeleteModel, SOFT_DELETE
 from django.db import models
 import django
-from safedelete.models import SafeDeleteModel, SOFT_DELETE
+
 
 class Patch(SafeDeleteModel):
 
@@ -11,9 +12,11 @@ class Patch(SafeDeleteModel):
 
     name = models.CharField(max_length=200, default="")
     created_at = models.DateTimeField(default=django.utils.timezone.now)
+
     @property
     def scripts(self):
-    	return self.script_set.all()
+        return self.script_set.all()
+
 
 class Script(models.Model):
 
