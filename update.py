@@ -38,7 +38,7 @@ dir = os.path.join(root_dir , app_dir)
 os.chdir(dir)
 
 cmd_pull = "git pull origin " + branch
-cmd_remote = 'git log -1 --format=%H'
+cmd_remote = 'git log --format=%H'
 cmd_local = 'git rev-parse HEAD'
 cmd_migrate = "python3 middleware/manage.py migrate "
 cmd_reboot = "sudo reboot "
