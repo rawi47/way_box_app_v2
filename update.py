@@ -60,4 +60,6 @@ if git_hash_remote != git_hash_local:
     utils.run(cmd_migrate,password,lst)
     utils.run(cmd_reboot,password,lst)
 
+
+
 print("done !")
