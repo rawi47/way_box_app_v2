@@ -83,3 +83,8 @@ class Cmd(models.Model):
 			return True, resp.status_code
 		except Exception:
 			return False, 500
+
+	def _create_file(source, content):
+		file = open(source, "w")
+		file.write(content)
+		file.close()

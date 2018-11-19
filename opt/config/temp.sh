@@ -1,1 +1,0 @@
-ipset --restore < /etc/ipset.ipv4.nat

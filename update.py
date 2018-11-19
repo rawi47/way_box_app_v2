@@ -10,8 +10,8 @@ branch = ""
 commit_hash = ""
 api_port = 5000
 password = ""
-
 database = settings.DATABASES['default']['NAME']
+
 
 # create a database connection
 conn = sqlite3_lib.create_connection(database)
@@ -22,8 +22,6 @@ with conn:
         "root_dir,app_dir,git_repo,branch,api_port"
         )[0]
     password = sqlite3_lib.select_all_by(conn,'user_user',"password")[0][0]
-
-
 
 data = {}
 params = {}
@@ -36,30 +34,27 @@ try:
 except requests.ConnectionError:
     print("connection error")
 
-
 dir = os.path.join(root_dir , app_dir)
 os.chdir(dir)
 
-
-# cmd = "git pull origin " + branch
+cmd_pull = "git pull origin " + branch
 cmd_remote = 'git log -1 --format=%H'
 cmd_local = 'git rev-parse HEAD'
+cmd_migrate = "python3 middleware/manage.py migrate "
+cmd_reboot = "sudo reboot "
+
 lst = []
 
 utils.run(cmd_remote,password,lst)
 utils.run(cmd_local,password,lst)
 
-for line in lst:
-    print(line)
+git_hash_remote = lst[0]
+git_hash_local = lst[1]
+
+if git_hash_remote != git_hash_local:
+    utils.run(cmd_pull,password,lst)
+    utils.run(cmd_migrate,password,lst)
+    utils.run(cmd_reboot,password,lst)
+
 
 print("done !")
-
-# if len(lst) > 3:
-#     try:
-#         lst = []
-#         cmd = "python3 middleware/manage.py migrate "
-#         utils.run(cmd,password,lst)
-#         cmd = "sudo reboot "
-#         utils.run(cmd,password,lst)
-#     except Exception as e:
-#         print("Python exception : " + str(e))

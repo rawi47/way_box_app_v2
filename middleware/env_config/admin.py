@@ -16,4 +16,5 @@ class EnvAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if change:
             rn._config_main_prog()
+            rn._run_main_prog()
         super().save_model(request, obj, form, change)
