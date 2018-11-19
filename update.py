@@ -51,7 +51,11 @@ utils.run(cmd_local,password,lst)
 git_hash_remote = lst[0]
 git_hash_local = lst[1]
 
+print(git_hash_remote)
+print(git_hash_local)
+
 if git_hash_remote != git_hash_local:
+    print("inside")
     utils.run(cmd_pull,password,lst)
     utils.run(cmd_migrate,password,lst)
     utils.run(cmd_reboot,password,lst)
