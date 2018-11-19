@@ -41,9 +41,6 @@ class Env(models.Model):
 	origin_config_dir = models.CharField(max_length=200,default="opt/original files/")
 	etc_dir = models.CharField(max_length=200,default="/etc")
 
-	ftp_host = models.CharField(max_length=200,default="127.0.0.1")
-	ftp_user = models.CharField(max_length=200,default="user")
-	ftp_password = models.CharField(max_length=200,default="password")
 
 	ssid_prefix = models.CharField(max_length=200,default="_FREE_WIFI")
 	run_on_start = models.BooleanField(default=True)
@@ -57,6 +54,7 @@ class Env(models.Model):
 	    choices=ts,
 	    default=30
 	)
+	password = models.CharField(max_length=200,default="")
 
 
 class EnvSerializer(serializers.ModelSerializer):

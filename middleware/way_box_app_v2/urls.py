@@ -16,13 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
-from . import views,run
-from django.conf.urls import handler404, handler500
+from utils import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('connection_status/', views.connection_status),
     path('error', views._error),
     path('portal/<path:path>', views.catch_all),

@@ -1,12 +1,7 @@
 from os import path,walk
-from utils.ftp import FtpUtils
 from utils.cmd import Cmd
 from utils.httpHandler import Httphandler
-from env_config.models import EnvSerializer,Env
-
-
-
-from user.models import User
+from env_config.models import Env
 import json
 from django.conf import settings
 import  _thread, time,threading
@@ -19,8 +14,7 @@ webFunctions = Httphandler()
 
 def _config_main_prog():
 
-	lst = []
-	user_obj = User.objects.order_by('id')[0]
+
 	env_obj = Env.objects.order_by('api_key')[0]
 	if not env_obj.run_on_start:
 		return
@@ -39,7 +33,7 @@ def _config_main_prog():
 		interface = "wlan0"
 
 	try:
-	    t = _thread.start_new_thread( webFunctions._set_establichement_name, (lst,) )
+	    t = _thread.start_new_thread( webFunctions._set_establichement_name, () )
 	except Exception as e:
 	    print("Python exception : " + str(e))
 
@@ -72,18 +66,12 @@ def _config_main_prog():
 			if ln:
 
 				command = "ln -sf " + dest + " " + config_dst
-				lst.append(command)
-				cmd.run(command,user_obj,lst)
+				cmd.run(command,env_obj)
 
 	except Exception as e:
-		lst.append(getD + str(e))
 		log.error(str(e))
-	return lst
 
 def _run_main_prog():
-	getD = str(datetime.datetime.now()) + " - "
-	lst = []
-	user_obj = User.objects.order_by('id')[0]
 	env_obj = Env.objects.order_by('api_key')[0]
 	if not env_obj.run_on_start:
 		return
@@ -104,20 +92,14 @@ def _run_main_prog():
 
 	for cmd_sh in commands_sh:
 		log.error(cmd_sh)
-		lst.append(cmd_sh)
 		src = static_path + 'temp.sh'
 		Cmd._create_file(src,cmd_sh,"w")
-		cmd.run("chmod +x " + src,user_obj,lst)
-		cmd.run_sh(src,user_obj,lst)
-		cmd.run("rm -rf " + src,user_obj,lst)
+		cmd.run("chmod +x " + src,env_obj)
+		cmd.run_sh(src,env_obj)
+		cmd.run("rm -rf " + src,env_obj)
 
 
 
 	for cmmd in commands:
 		log.error(cmmd)
-		lst.append(cmmd)
-		cmd.run(cmmd,user_obj,lst)
-
-
-
-	return lst
+		cmd.run(cmmd,env_obj)

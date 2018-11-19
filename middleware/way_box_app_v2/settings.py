@@ -26,7 +26,7 @@ SECRET_KEY = 'du6828i+vd3^0t)3d7a--_1n(o3tpv(faw_hv9xy38@ad85n3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,17 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'env_config.apps.EnvConfigConfig',
-    'user.apps.UserConfig',
-    'utils.apps.UtilsConfig',
-    'dashboard.apps.DashboardConfig',
+    'corsheaders',
     'boxes',
-    'django_crontab',
-    'bootstrap3',
-    'jquery',
-    'crispy_forms',
-    'widget_tweaks',
-    'corsheaders'
+    'env_config',
+    'utils'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'way_box_app_v2.wsgi.application'
-DB_PATH = "/etc/middleware"
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -134,11 +126,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-]
-LOG_DIR = os.path.join(BASE_DIR, "static/log"),
-
-CRONJOBS = [
-    ('*/30 * * * *', 'way_box_app_v2.cron._initiate',  '>> file.log'),
 ]
 
 LOGIN_REDIRECT_URL = '/'
