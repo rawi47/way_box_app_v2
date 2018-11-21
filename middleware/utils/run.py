@@ -78,7 +78,6 @@ def _run_main_prog():
 	for cmd_sh in commands_sh:
 		log.error(cmd_sh)
 		src = static_path + 'temp.sh'
-		print(src)
 		Cmd._create_file(src, cmd_sh)
 		cmd.run("chmod +x " + src, env_obj)
 		cmd.run_sh(src, env_obj)

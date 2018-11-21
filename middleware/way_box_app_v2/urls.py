@@ -19,7 +19,7 @@ from utils import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('connection_status/', views.connection_status),
+    path('connection_status/', views.connection_status, name="connection_status"),
     path('error', views._error),
-    path('portal/<path:path>', views.catch_all),
+    path('portal/<path:path>', views.catch_all, name="catch_all"),
 ]
