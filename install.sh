@@ -1,18 +1,27 @@
-apt-get update
-apt-get -y upgrade
-apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get install -y hostapd ipset dnsmasq libmicrohttpd-dev python3 python3-dev python3-pip nginx-common nginx gunicorn  libpq-dev python-dev
 
-cd nodogsplash/
-make && make install
-cd ../
 
-cd middleware/
+
+cd opt/nodogsplash/
+sudo make && make install
+cd ..
+
 pip3 install -r requirements.txt
-cd ../
 
-cp -R middleware/static/config/* /etc/
-cp -R w.zone/ /var/www/
-ln -s /etc/nginx/sites-available/middleware.conf /etc/nginx/sites-enabled
-ln -s /etc/nginx/sites-available/wc.com.conf /etc/nginx/sites-enabled
-systemctl daemon-reload
-systemctl enable middleware
+sudo cp -R opt/config/* /etc/
+sudo cp -R opt/w.zone/ /var/www/
+sudo cp -R opt/settings/nginx/sites-available/* /etc/nginx/sites-available
+sudo cp -R opt/settings/systemd/system/middleware.service /etc/systemd/system/middleware.service
+
+sudo ln -s /etc/nginx/sites-available/middleware /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/w.club /etc/nginx/sites-enabled
+
+sudo systemctl daemon-reload
+sudo systemctl enable middleware
+
+# Cronjob that checks for upgrades
+echo "0 5 * * * /home/pi/way_box_app_v2/update.sh" >> cron
+sudo crontab cron
+sudo rm cron

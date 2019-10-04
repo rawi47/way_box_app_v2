@@ -1,0 +1,13 @@
+[Unit]
+Description=Unicorn Daemon for middleware
+After=network.target
+
+[Service]
+User=pi
+Group=www-data
+WorkingDirectory=/home/pi/way_box_app_v2/middleware
+ExecStart=/usr/bin/gunicorn3 way_box_app_v2.wsgi
+
+
+[Install]
+WantedBy=multi-user.target

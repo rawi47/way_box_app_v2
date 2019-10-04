@@ -1,0 +1,14 @@
+gunicorn
+django
+django_crontab
+djangorestframework
+netifaces
+memory_profiler
+requests
+django-bootstrap3
+django-jquery
+django-crispy-forms
+django-widget-tweaks
+django-cors-headers
+GitPython
+threaded
